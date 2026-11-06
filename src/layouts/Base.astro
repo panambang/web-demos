@@ -12,9 +12,11 @@ interface Props {
   themeColor?: string;
   /** Hide the demo notice bar (used on the demo index page). */
   bare?: boolean;
+  /** Keep search engines away (default). Set false for real pages like the pricelist. */
+  noindex?: boolean;
 }
 
-const { title, description, bodyClass = '', themeColor = '#0f172a', bare = false } = Astro.props;
+const { title, description, bodyClass = '', themeColor = '#0f172a', bare = false, noindex = true } = Astro.props;
 ---
 
 <!doctype html>
@@ -25,7 +27,7 @@ const { title, description, bodyClass = '', themeColor = '#0f172a', bare = false
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="theme-color" content={themeColor} />
-    <meta name="robots" content="noindex" />
+    {noindex && <meta name="robots" content="noindex" />}
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />

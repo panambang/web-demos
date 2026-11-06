@@ -8,6 +8,8 @@ Three demo sites for fictional Indonesian businesses, used as portfolio samples 
 | `/catering` | Dapur Sehari: healthy catering | Landing Page |
 | `/toko` | Kopi Lereng: coffee roastery | Toko Online |
 
+Also `/harga`: the real pricelist for the website service (prices in `src/data/harga.ts`). It's the only indexable page. Set `WA_NUMBER` in that file to route its WhatsApp buttons to your number.
+
 Stack: Astro 7 + Tailwind 4, static output, no images (all art is inline SVG), so it loads fast on mobile data.
 
 ## Run
@@ -29,4 +31,4 @@ To serve under a sub-path (e.g. `/demos` on the portfolio), build with `BASE_PAT
 - **Store payment:** the QRIS code and VA numbers are fake, and "Simulasikan pembayaran berhasil" stands in for the payment gateway webhook. In production, use Midtrans/Xendit Snap with the client's own merchant account.
 - **Maps:** an SVG illustration. In production, embed Google Maps.
 
-All names, people, prices and reviews are fictional. Each page shows a DEMO bar saying so.
+All names, people, prices and reviews in the three demos are fictional. Each page shows a DEMO bar saying so.
