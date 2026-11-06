@@ -4,6 +4,8 @@
   --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
   --font-jakarta: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, sans-serif;
   --font-serif: 'Fraunces Variable', ui-serif, Georgia, serif;
+  --font-display: 'Anton', Impact, ui-sans-serif, sans-serif;
+  --font-marker: 'Permanent Marker', 'Comic Sans MS', cursive;
 }
 
 @layer base {

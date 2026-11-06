@@ -1,0 +1,560 @@
+---
+import '@fontsource/anton';
+import '@fontsource/permanent-marker';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { url, rupiah, wa } from '../../lib/util';
+import { img, stats, ticker, kegiatan, videos, kru, jadwal, rutin, spot, peralatan, pesta, galeri, testimoni } from '../../data/mancing';
+
+const HOOK = 'M15 3v9a5 5 0 0 1-10 0V9l3 3';
+const PIN = 'M12 21s-7-6.2-7-11.5A7 7 0 0 1 19 9.5C19 14.8 12 21 12 21zM12 11.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4z';
+const CAL = 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4';
+const FISH = 'M2 12c3-5 9-6 13-3l5-3v12l-5-3c-4 3-10 2-13-3zM15.5 11.5h.01';
+const NAV = [
+  ['kegiatan', 'Kegiatan'],
+  ['kru', 'Kru'],
+  ['jadwal', 'Jadwal'],
+  ['spot', 'Spot'],
+  ['alat', 'Peralatan'],
+  ['pesta', 'After Mancing'],
+];
+const initials = (n: string) => n.split(' ').map((w) => w[0]).slice(0, 2).join('');
+const ikut = (t: string, d: string) => wa(`Halo Joran Senja! Saya mau ikut "${t}" tanggal ${d}. Masih ada tempat?`);
+const tilts = ['-rotate-3', 'rotate-2', '-rotate-1', 'rotate-3', 'rotate-1', '-rotate-2', 'rotate-2', '-rotate-3'];
+---
+
+<Base
+  title="Joran Senja — Komunitas Mancing Jabodetabek"
+  description="Komunitas mancing yang rasanya seperti keluarga: trip laut, mancing keluarga, kelas pemula, dan bakar ikan bareng setelahnya."
+  bodyClass="bg-[#07121c] font-sans text-slate-300 selection:bg-orange-500 selection:text-white"
+  themeColor="#07121c"
+>
+  <div class="grain pointer-events-none fixed inset-0 z-[60] opacity-[0.07] mix-blend-overlay" aria-hidden="true"></div>
+
+  <!-- Header -->
+  <header id="top-nav" class="fixed inset-x-0 top-8 z-40 transition-all duration-300">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-5 py-3">
+      <a href="#" class="flex items-center gap-2 text-white">
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-[#07121c]">
+          <Icon d={HOOK} class="h-5 w-5" />
+        </span>
+        <span class="font-display text-2xl tracking-wide uppercase">Joran Senja</span>
+      </a>
+      <nav class="hidden items-center gap-6 text-sm font-medium text-white/80 lg:flex">
+        {NAV.map(([id, label]) => <a href={`#${id}`} class="hover:text-orange-400">{label}</a>)}
+      </nav>
+      <a href="#gabung" class="rounded-full bg-orange-500 px-5 py-2.5 text-sm font-bold text-[#07121c] hover:bg-orange-400">
+        Gabung Kru
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="relative flex min-h-[100svh] items-end overflow-hidden">
+      <Image src={img.heroImg} alt="" widths={[640, 1280, 1600]} sizes="100vw" loading="eager" class="absolute inset-0 h-full w-full object-cover" />
+      <video
+        id="hero-video"
+        class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-1000"
+        data-src={url('mancing/hero.mp4')}
+        muted
+        loop
+        playsinline
+        aria-hidden="true"
+      ></video>
+      <div class="absolute inset-0 bg-gradient-to-t from-[#07121c] via-[#07121c]/40 to-[#07121c]/30"></div>
+      <div class="absolute inset-0 bg-gradient-to-r from-[#07121c]/70 to-transparent"></div>
+
+      <div class="relative mx-auto w-full max-w-7xl px-5 pt-40 pb-16 sm:pb-24">
+        <p class="font-marker text-lg text-orange-400 sm:text-xl">Komunitas mancing sejak 2017</p>
+        <h1 class="mt-3 max-w-4xl font-display text-6xl leading-[0.95] text-white uppercase sm:text-8xl lg:text-9xl">
+          Mancing bareng,<br /><span class="text-orange-500">pulang jadi keluarga.</span>
+        </h1>
+        <p class="mt-6 max-w-xl text-lg leading-relaxed text-white/80">
+          Kami 127 orang dari Jabodetabek yang ketagihan suara reel berputar. Dari subuh di dermaga sampai bakar ikan di
+          pinggir pantai, selalu ada kursi buat kamu.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#jadwal" class="inline-flex items-center gap-2 rounded-full bg-orange-500 px-6 py-3.5 font-bold text-[#07121c] hover:bg-orange-400">
+            <Icon d={CAL} class="h-5 w-5" /> Lihat jadwal trip
+          </a>
+          <a href="#cuplikan" class="inline-flex items-center gap-2 rounded-full border border-white/30 px-6 py-3.5 font-semibold text-white backdrop-blur hover:bg-white/10">
+            ▶ Tonton cuplikan
+          </a>
+        </div>
+        <dl class="mt-14 grid max-w-3xl grid-cols-2 gap-6 border-t border-white/15 pt-8 sm:grid-cols-4">
+          {
+            stats.map((s) => (
+              <div>
+                <dt class="sr-only">{s.label}</dt>
+                <dd class="font-display text-4xl text-white sm:text-5xl">{s.value}</dd>
+                <dd class="mt-1 text-sm text-white/60">{s.label}</dd>
+              </div>
+            ))
+          }
+        </dl>
+      </div>
+    </section>
+
+    <!-- Ticker -->
+    <div class="relative -rotate-1 overflow-hidden border-y-2 border-[#07121c] bg-orange-500 py-3 text-[#07121c]">
+      <div class="ticker flex w-max gap-8 font-display text-2xl whitespace-nowrap uppercase">
+        {
+          [...ticker, ...ticker].map((t) => (
+            <span class="flex items-center gap-8">
+              {t} <Icon d={FISH} class="h-6 w-6" />
+            </span>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Kegiatan -->
+    <section id="kegiatan" class="mx-auto max-w-7xl px-5 py-24">
+      <div class="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
+        <div>
+          <p class="font-marker text-orange-400">Apa yang kita lakukan</p>
+          <h2 class="mt-2 font-display text-5xl text-white uppercase sm:text-6xl">Bukan cuma soal ikan</h2>
+        </div>
+        <p class="text-lg leading-relaxed text-slate-400">
+          Ada yang datang buat rekor, ada yang datang buat kopi dan obrolan. Semua kegiatan terbuka untuk pemula, dan
+          biayanya patungan, bukan cari untung.
+        </p>
+      </div>
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {
+          kegiatan.map((k) => (
+            <article class="group relative aspect-[4/5] overflow-hidden rounded-3xl">
+              <Image src={k.image} alt={k.title} widths={[480, 800]} sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw" class="absolute inset-0 h-full w-full object-cover transition duration-700 group-hover:scale-105" />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#07121c] via-[#07121c]/30 to-transparent"></div>
+              <span class="absolute top-4 left-4 rounded-full bg-white/90 px-3 py-1 text-xs font-bold text-[#07121c]">{k.tag}</span>
+              <div class="absolute inset-x-0 bottom-0 p-6">
+                <h3 class="font-display text-3xl text-white uppercase">{k.title}</h3>
+                <p class="mt-2 text-sm leading-relaxed text-white/75">{k.desc}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Video -->
+    <section id="cuplikan" class="bg-[#0b1b29] py-24">
+      <div class="mx-auto max-w-7xl px-5">
+        <p class="font-marker text-orange-400">Cuplikan trip</p>
+        <h2 class="mt-2 font-display text-5xl text-white uppercase sm:text-6xl">Rekaman kru</h2>
+        <div class="mt-12 grid gap-5 md:grid-cols-[1fr_1.4fr] md:grid-rows-2">
+          {
+            videos.map((v) => (
+              <figure class={`group relative overflow-hidden rounded-3xl bg-black ${v.vertical ? 'aspect-[9/16] max-h-[80svh] md:aspect-auto md:max-h-none md:row-span-2' : 'aspect-video'}`}>
+                <video
+                  class="lazy-video absolute inset-0 h-full w-full object-cover"
+                  data-src={url(v.src)}
+                  poster={v.poster.src}
+                  muted
+                  loop
+                  playsinline
+                  preload="none"
+                  aria-label={v.title}
+                ></video>
+                <figcaption class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/90 to-transparent p-5 pt-16">
+                  <p class="font-display text-2xl text-white uppercase">{v.title}</p>
+                  <p class="mt-1 flex items-center gap-1.5 text-sm text-white/70">
+                    <Icon d={PIN} class="h-4 w-4" /> {v.place}
+                  </p>
+                </figcaption>
+                <span class="absolute top-4 right-4 flex items-center gap-1.5 rounded-full bg-red-600 px-2.5 py-1 text-xs font-bold text-white">
+                  <span class="h-1.5 w-1.5 animate-pulse rounded-full bg-white"></span> REC
+                </span>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Kru -->
+    <section id="kru" class="mx-auto max-w-7xl px-5 py-24">
+      <div class="flex flex-wrap items-end justify-between gap-6">
+        <div>
+          <p class="font-marker text-orange-400">Kenalan dulu</p>
+          <h2 class="mt-2 font-display text-5xl text-white uppercase sm:text-6xl">Kru inti</h2>
+        </div>
+        <p class="max-w-md text-slate-400">
+          Delapan orang yang paling sering ada di dermaga. Sisanya? 119 anggota lain yang siap berbagi umpan.
+        </p>
+      </div>
+      <div class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          kru.map((m) => (
+            <article class="group rounded-3xl border border-white/10 bg-white/[0.03] p-5 transition hover:-translate-y-1 hover:border-orange-500/60">
+              <div class="flex items-center gap-4">
+                <div class={`relative flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br ${m.color}`}>
+                  <span class="font-display text-2xl text-white">{initials(m.name)}</span>
+                  <svg viewBox="0 0 40 16" class="absolute -top-3.5 left-1/2 w-12 -translate-x-1/2 text-[#f4ead8] drop-shadow" aria-hidden="true">
+                    <path d="M2 14c4-1 6-1 8-1 1-6 4-11 10-11s9 5 10 11c2 0 4 0 8 1z" fill="currentColor" />
+                  </svg>
+                </div>
+                <div class="min-w-0">
+                  <p class="font-marker text-orange-400">"{m.nick}"</p>
+                  <h3 class="truncate font-semibold text-white">{m.name}</h3>
+                  <p class="text-xs text-slate-500">{m.role} · sejak {m.since}</p>
+                </div>
+              </div>
+              <dl class="mt-5 space-y-2 border-t border-white/10 pt-4 text-sm">
+                <div class="flex justify-between gap-3">
+                  <dt class="text-slate-500">Tangkapan terbaik</dt>
+                  <dd class="text-right font-semibold text-white">{m.best}</dd>
+                </div>
+                <div class="flex justify-between gap-3">
+                  <dt class="text-slate-500">Joran andalan</dt>
+                  <dd class="text-right text-slate-200">{m.rod}</dd>
+                </div>
+              </dl>
+              <p class="mt-4 text-sm leading-relaxed text-slate-400 italic">{m.fact}</p>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Jadwal -->
+    <section id="jadwal" class="bg-[#f4ead8] py-24 text-[#07121c]">
+      <div class="mx-auto max-w-7xl px-5">
+        <div class="flex flex-wrap items-end justify-between gap-6">
+          <div>
+            <p class="font-marker text-orange-600">Catat di kalender</p>
+            <h2 class="mt-2 font-display text-5xl uppercase sm:text-6xl">Jadwal trip</h2>
+          </div>
+          <p class="max-w-md text-[#07121c]/70">Biaya sudah termasuk kapal, umpan, es, dan makan. Kursi terbatas, siapa cepat dia dapat.</p>
+        </div>
+
+        <div class="mt-12 divide-y divide-[#07121c]/15 border-y-2 border-[#07121c]">
+          {
+            jadwal.map((j) => (
+              <div class="grid gap-4 py-6 md:grid-cols-[10rem_1fr_auto] md:items-center">
+                <div>
+                  <p class="font-display text-3xl uppercase">{j.date}</p>
+                  <p class="text-sm text-[#07121c]/60">{j.day}</p>
+                </div>
+                <div>
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h3 class="text-xl font-bold">{j.title}</h3>
+                    <span class="rounded-full bg-[#07121c] px-2.5 py-0.5 text-xs font-semibold text-[#f4ead8]">{j.type}</span>
+                  </div>
+                  <p class="mt-1.5 flex flex-wrap gap-x-4 gap-y-1 text-sm text-[#07121c]/70">
+                    <span class="inline-flex items-center gap-1"><Icon d={PIN} class="h-4 w-4" /> {j.spot}</span>
+                    <span>Kumpul: {j.meet}</span>
+                    <span class="font-semibold text-orange-700">{j.quota}</span>
+                  </p>
+                </div>
+                <div class="flex items-center gap-4 md:justify-end">
+                  <p class="font-display text-2xl">{j.cost === 0 ? 'GRATIS' : rupiah(j.cost)}</p>
+                  <a href={ikut(j.title, j.date)} target="_blank" rel="noopener" class="rounded-full bg-[#07121c] px-5 py-2.5 text-sm font-bold whitespace-nowrap text-white hover:bg-orange-600">
+                    Ikut →
+                  </a>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+
+        <div class="mt-10 grid gap-4 md:grid-cols-3">
+          {
+            rutin.map((r) => (
+              <div class="rounded-2xl bg-[#07121c] p-5 text-white">
+                <p class="font-marker text-orange-400">{r.when}</p>
+                <p class="mt-1 text-white/85">{r.what}</p>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Spot -->
+    <section id="spot" class="mx-auto max-w-7xl px-5 py-24">
+      <p class="font-marker text-orange-400">Tempat kita mancing</p>
+      <h2 class="mt-2 font-display text-5xl text-white uppercase sm:text-6xl">Spot favorit</h2>
+      <div class="mt-12 grid gap-5 md:grid-cols-2 lg:grid-cols-3">
+        {
+          spot.map((s, i) => (
+            <article class="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03]">
+              <div class="relative aspect-[16/10] overflow-hidden">
+                <Image src={s.image} alt={s.name} widths={[480, 800]} sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw" class="h-full w-full object-cover transition duration-700 hover:scale-105" />
+                <span class="absolute top-3 left-3 font-display text-5xl text-white/90 drop-shadow">{String(i + 1).padStart(2, '0')}</span>
+                <span class={`absolute top-4 right-4 rounded-full px-3 py-1 text-xs font-bold ${s.level === 'Mahir' ? 'bg-red-500 text-white' : s.level === 'Menengah' ? 'bg-amber-400 text-[#07121c]' : 'bg-emerald-400 text-[#07121c]'}`}>{s.level}</span>
+              </div>
+              <div class="p-5">
+                <h3 class="font-display text-2xl text-white uppercase">{s.name}</h3>
+                <p class="flex items-center gap-1 text-sm text-slate-500"><Icon d={PIN} class="h-4 w-4" /> {s.area}</p>
+                <p class="mt-3 text-sm"><span class="text-slate-500">Target:</span> <span class="text-slate-200">{s.target}</span></p>
+                <p class="mt-1 text-sm text-slate-400">{s.note}</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Peralatan -->
+    <section id="alat" class="bg-[#0b1b29] py-24">
+      <div class="mx-auto max-w-7xl px-5">
+        <div class="grid gap-6 lg:grid-cols-[1fr_1.2fr] lg:items-end">
+          <div>
+            <p class="font-marker text-orange-400">Isi tas pancing</p>
+            <h2 class="mt-2 font-display text-5xl text-white uppercase sm:text-6xl">Peralatan</h2>
+          </div>
+          <p class="text-lg leading-relaxed text-slate-400">
+            Belum punya alat? Tenang. Komunitas punya <strong class="text-white">perpustakaan alat</strong>: 15 set joran
+            dan reel yang bisa dipinjam gratis untuk anggota baru selama tiga trip pertama.
+          </p>
+        </div>
+        <div class="mt-12 grid gap-5 lg:grid-cols-3">
+          {
+            peralatan.map((p) => (
+              <article class="overflow-hidden rounded-3xl bg-[#07121c]">
+                <div class="relative h-48 overflow-hidden">
+                  <Image src={p.image} alt={p.title} widths={[480, 800]} sizes="(min-width: 1024px) 33vw, 100vw" class="h-full w-full object-cover" />
+                  <div class="absolute inset-0 bg-gradient-to-t from-[#07121c] to-transparent"></div>
+                  <h3 class="absolute bottom-4 left-5 font-display text-3xl text-white uppercase">{p.title}</h3>
+                </div>
+                <ul class="divide-y divide-white/10 px-5 pb-3">
+                  {p.items.map((it) => (
+                    <li class="py-4">
+                      <div class="flex items-baseline justify-between gap-3">
+                        <p class="font-semibold text-white">{it.name}</p>
+                        {it.spec && <p class="text-right text-xs text-orange-400">{it.spec}</p>}
+                      </div>
+                      <p class="mt-1 text-sm text-slate-400">{it.use}</p>
+                    </li>
+                  ))}
+                </ul>
+              </article>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- After mancing -->
+    <section id="pesta" class="relative overflow-hidden bg-gradient-to-b from-[#1a0d06] via-[#2a1208] to-[#07121c] py-24">
+      <div class="absolute -top-40 left-1/2 h-96 w-[60rem] -translate-x-1/2 rounded-full bg-orange-600/25 blur-3xl" aria-hidden="true"></div>
+      <div class="relative mx-auto max-w-7xl px-5">
+        <div class="grid gap-12 lg:grid-cols-2 lg:items-center">
+          <div>
+            <p class="font-marker text-xl text-orange-400">Bagian favorit semua orang</p>
+            <h2 class="mt-2 font-display text-6xl leading-none text-white uppercase sm:text-7xl">
+              After mancing:<br /><span class="text-orange-500">bakar &amp; bersulang</span>
+            </h2>
+            <p class="mt-6 text-lg leading-relaxed text-white/75">
+              Dapat banyak atau cuma dapat cerita, semua berakhir di tempat yang sama: api unggun, ikan bakar, minuman
+              dingin, dan gitar yang senarnya kurang satu. Di sini anggota baru jadi saudara.
+            </p>
+            <div class="mt-8 rounded-3xl border border-orange-500/30 bg-black/30 p-6 backdrop-blur">
+              <p class="font-display text-xl text-orange-400 uppercase">Menu wajib</p>
+              <ul class="mt-3 grid gap-2 text-white/85 sm:grid-cols-2">
+                {pesta.menu.map((m) => <li class="flex gap-2"><span class="text-orange-500">✦</span>{m}</li>)}
+              </ul>
+            </div>
+          </div>
+          <div class="grid grid-cols-6 grid-rows-[repeat(6,4.5rem)] gap-3 sm:grid-rows-[repeat(6,6rem)]">
+            <Image src={pesta.photos[0]} alt="Ikan dibakar di atas bara" widths={[480, 800]} sizes="(min-width: 1024px) 30vw, 60vw" class="col-span-4 row-span-3 h-full w-full rounded-3xl object-cover" />
+            <Image src={pesta.photos[1]} alt="Bersulang bersama" widths={[400, 600]} sizes="(min-width: 1024px) 15vw, 35vw" class="col-span-2 row-span-2 h-full w-full rounded-3xl object-cover" />
+            <Image src={pesta.photos[3]} alt="Ikan bakar dengan jeruk nipis" widths={[400, 600]} sizes="(min-width: 1024px) 15vw, 35vw" class="col-span-2 row-span-2 h-full w-full rounded-3xl object-cover" />
+            <Image src={pesta.photos[2]} alt="Kumpul di api unggun pinggir danau" widths={[480, 800]} sizes="(min-width: 1024px) 30vw, 60vw" class="col-span-4 row-span-3 h-full w-full rounded-3xl object-cover" />
+            <Image src={pesta.photos[4]} alt="Botol diangkat saat matahari terbenam" widths={[400, 600]} sizes="(min-width: 1024px) 15vw, 35vw" class="col-span-2 row-span-2 h-full w-full rounded-3xl object-cover" />
+          </div>
+        </div>
+
+        <div class="mt-16 rounded-3xl border-2 border-dashed border-orange-500/50 p-6 sm:p-8">
+          <p class="font-display text-2xl text-white uppercase">Aturan main di api unggun</p>
+          <ul class="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+            {pesta.rules.map((r, i) => (
+              <li class="flex gap-3 text-sm text-white/80">
+                <span class="font-display text-2xl text-orange-500">{i + 1}</span>
+                {r}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Galeri -->
+    <section id="galeri" class="overflow-hidden py-24">
+      <div class="mx-auto max-w-7xl px-5">
+        <p class="font-marker text-orange-400">Album kru</p>
+        <h2 class="mt-2 font-display text-5xl text-white uppercase sm:text-6xl">Galeri</h2>
+        <div class="mt-14 grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-8 md:grid-cols-4">
+          {
+            galeri.map((g, i) => (
+              <figure class={`${tilts[i % tilts.length]} bg-[#f4ead8] p-2.5 pb-3 shadow-2xl shadow-black/50 transition duration-300 hover:z-10 hover:scale-105 hover:rotate-0 sm:p-3`}>
+                <Image src={g.image} alt={g.caption} widths={[320, 560]} sizes="(min-width: 768px) 25vw, 50vw" class="aspect-square w-full object-cover" />
+                <figcaption class="mt-2 text-center font-marker text-sm text-[#07121c] sm:text-base">{g.caption}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- Testimoni -->
+    <section class="mx-auto max-w-7xl px-5 pb-24">
+      <div class="grid gap-5 md:grid-cols-3">
+        {
+          testimoni.map((t) => (
+            <blockquote class="rounded-3xl bg-white/[0.04] p-7">
+              <p class="font-display text-5xl leading-none text-orange-500">“</p>
+              <p class="mt-2 text-lg leading-relaxed text-white/85">{t.quote}</p>
+              <footer class="mt-5 text-sm text-slate-500">{t.name}</footer>
+            </blockquote>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Gabung -->
+    <section id="gabung" class="relative overflow-hidden">
+      <Image src={img.dockSunset} alt="" widths={[800, 1600]} sizes="100vw" class="absolute inset-0 h-full w-full object-cover" />
+      <div class="absolute inset-0 bg-[#07121c]/80"></div>
+      <div class="relative mx-auto grid max-w-7xl gap-12 px-5 py-24 lg:grid-cols-2 lg:items-center">
+        <div>
+          <p class="font-marker text-xl text-orange-400">Kursimu sudah disiapkan</p>
+          <h2 class="mt-2 font-display text-6xl leading-none text-white uppercase sm:text-7xl">Gabung kru</h2>
+          <ul class="mt-8 space-y-3 text-lg text-white/85">
+            <li class="flex gap-3"><span class="text-orange-500">✓</span> Gratis gabung, biaya trip patungan</li>
+            <li class="flex gap-3"><span class="text-orange-500">✓</span> Pinjam alat gratis untuk tiga trip pertama</li>
+            <li class="flex gap-3"><span class="text-orange-500">✓</span> Pemula, keluarga, dan anak-anak disambut</li>
+            <li class="flex gap-3"><span class="text-orange-500">✓</span> Grup WhatsApp yang ramai info spot dan meme ikan</li>
+          </ul>
+        </div>
+        <form id="join-form" class="rounded-3xl bg-[#f4ead8] p-6 text-[#07121c] shadow-2xl sm:p-8">
+          <p class="font-display text-3xl uppercase">Kenalan dulu, yuk</p>
+          <div class="mt-6 grid gap-4">
+            <label class="grid gap-1.5 text-sm font-semibold">
+              Nama panggilan
+              <input name="nama" required class="rounded-xl border-2 border-[#07121c]/15 bg-white px-4 py-3 font-normal focus:border-orange-500 focus:outline-none" placeholder="Contoh: Bayu" />
+            </label>
+            <label class="grid gap-1.5 text-sm font-semibold">
+              Domisili
+              <input name="kota" required class="rounded-xl border-2 border-[#07121c]/15 bg-white px-4 py-3 font-normal focus:border-orange-500 focus:outline-none" placeholder="Contoh: Bekasi" />
+            </label>
+            <label class="grid gap-1.5 text-sm font-semibold">
+              Pengalaman mancing
+              <select name="level" class="rounded-xl border-2 border-[#07121c]/15 bg-white px-4 py-3 font-normal focus:border-orange-500 focus:outline-none">
+                <option>Belum pernah sama sekali</option>
+                <option>Pernah beberapa kali</option>
+                <option>Rutin mancing</option>
+                <option>Sudah sering trip laut</option>
+              </select>
+            </label>
+            <fieldset class="grid gap-2 text-sm">
+              <legend class="mb-1.5 font-semibold">Paling tertarik ikut</legend>
+              <div class="flex flex-wrap gap-2">
+                {['Trip laut', 'Mancing keluarga', 'Kelas pemula', 'Bersih pantai', 'After mancing'].map((m) => (
+                  <label class="cursor-pointer">
+                    <input type="checkbox" name="minat" value={m} class="peer sr-only" />
+                    <span class="inline-block rounded-full border-2 border-[#07121c]/15 px-3 py-1.5 peer-checked:border-[#07121c] peer-checked:bg-[#07121c] peer-checked:text-white peer-focus-visible:ring-2 peer-focus-visible:ring-orange-500">{m}</span>
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <button class="mt-2 rounded-full bg-orange-500 px-6 py-4 font-bold text-[#07121c] hover:bg-orange-600 hover:text-white">
+              Kirim lewat WhatsApp →
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-white/10">
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-5 py-10 text-sm text-slate-500">
+      <div class="flex items-center gap-2 text-white">
+        <span class="font-display text-xl uppercase">Joran Senja</span>
+        <span class="text-slate-500">· Basecamp: Muara Angke, Jakarta Utara</span>
+      </div>
+      <p>Foto: Unsplash · Video: Pexels · Demo oleh Purbo Panambang</p>
+    </div>
+  </footer>
+</Base>
+
+<style is:global>
+  .grain {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  .ticker {
+    animation: ticker 40s linear infinite;
+  }
+  @keyframes ticker {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+  #top-nav.scrolled {
+    top: 0;
+    background: rgb(7 18 28 / 0.85);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 1px 0 rgb(255 255 255 / 0.08);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .ticker {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  import { wa } from '../../lib/util';
+
+  // Header: solid background once the hero is scrolled past.
+  const nav = document.getElementById('top-nav')!;
+  const onScroll = () => nav.classList.toggle('scrolled', scrollY > 60);
+  addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Skip autoplaying video for people on data saver or who prefer less motion.
+  const conn = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection;
+  const lowData = conn?.saveData || matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  const hero = document.getElementById('hero-video') as HTMLVideoElement;
+  if (!lowData) {
+    hero.src = hero.dataset.src!;
+    hero.addEventListener('canplay', () => hero.classList.remove('opacity-0'), { once: true });
+    hero.play().catch(() => {});
+  }
+
+  // Clips load only when scrolled into view, and pause when they leave it.
+  const io = new IntersectionObserver(
+    (entries) => {
+      for (const e of entries) {
+        const v = e.target as HTMLVideoElement;
+        if (e.isIntersecting) {
+          if (!v.src) v.src = v.dataset.src!;
+          if (!lowData) v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      }
+    },
+    { threshold: 0.35 },
+  );
+  document.querySelectorAll<HTMLVideoElement>('.lazy-video').forEach((v) => {
+    io.observe(v);
+    if (lowData) {
+      v.controls = true;
+    }
+  });
+
+  // Join form: build a WhatsApp message.
+  const form = document.getElementById('join-form') as HTMLFormElement;
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const d = new FormData(form);
+    const minat = d.getAll('minat').join(', ') || '-';
+    const msg = `Halo Joran Senja! Saya mau gabung kru.\n\nNama: ${d.get('nama')}\nDomisili: ${d.get('kota')}\nPengalaman: ${d.get('level')}\nTertarik: ${minat}`;
+    window.open(wa(msg), '_blank');
+  });
+</script>

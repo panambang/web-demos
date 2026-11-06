@@ -27,6 +27,14 @@ const demos = [
     features: ['Keranjang', 'Ongkir per kurir', 'Simulasi QRIS & VA', 'Checkout WhatsApp'],
     swatch: 'from-amber-700 to-stone-800',
   },
+  {
+    href: 'mancing',
+    name: 'Joran Senja',
+    type: 'Website Komunitas',
+    desc: 'Website komunitas mancing: video latar, profil kru, jadwal trip, spot favorit, peralatan, galeri foto, dan form gabung via WhatsApp.',
+    features: ['Video & galeri', 'Profil anggota', 'Jadwal trip', 'Form gabung → WA'],
+    swatch: 'from-orange-500 to-sky-900',
+  },
 ];
 ---
 
@@ -42,7 +50,7 @@ const demos = [
       Website cepat dan aman untuk bisnis Indonesia
     </h1>
     <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-400">
-      Tiga contoh situs untuk bisnis fiktif. Semua dibuat ringan untuk HP Android dan internet seluler, dengan
+      Empat contoh situs untuk bisnis dan komunitas fiktif. Semua dibuat ringan untuk HP Android dan internet seluler, dengan
       Cloudflare di depannya, dan bisa terhubung ke WhatsApp, QRIS, Virtual Account, serta ongkir kurir lokal.
     </p>
 
@@ -53,7 +61,7 @@ const demos = [
       Lihat daftar harga →
     </a>
 
-    <div class="mt-14 grid gap-6 md:grid-cols-3">
+    <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {
         demos.map((d) => (
           <a
@@ -79,7 +87,7 @@ const demos = [
     </div>
 
     <p class="mt-16 text-sm text-slate-500">
-      Semua nama bisnis, orang, harga, dan ulasan di ketiga demo ini fiktif. Dibuat oleh
+      Semua nama bisnis, orang, harga, dan ulasan di keempat demo ini fiktif. Foto dan video komunitas mancing dari Unsplash dan Pexels. Dibuat oleh
       <a href={PORTFOLIO} class="text-slate-300 underline-offset-2 hover:underline">Purbo Panambang</a>.
     </p>
   </main>
