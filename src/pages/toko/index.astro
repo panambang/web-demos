@@ -1,0 +1,241 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProductArt from '../../components/ProductArt.astro';
+import { rupiah } from '../../lib/util';
+import { products, categories, grinds, cities, couriers, payments, FREE_SHIPPING_MIN, INSTANT_FLAT } from '../../data/toko';
+
+const config = { products, cities, couriers, payments, FREE_SHIPPING_MIN, INSTANT_FLAT };
+const input = 'mt-1.5 w-full rounded-xl border border-stone-200 bg-white px-4 py-2.5 font-normal outline-none focus:border-amber-600 focus:ring-4 focus:ring-amber-100';
+---
+
+<Base
+  title="Kopi Lereng — Kopi Nusantara Sangrai Segar"
+  description="Biji kopi Nusantara disangrai setiap minggu. Bayar QRIS, Virtual Account, atau e-wallet. Gratis ongkir Jabodetabek."
+  bodyClass="bg-[#f7f3ee] font-sans text-stone-600"
+  themeColor="#44403c"
+>
+  <header class="sticky top-0 z-40 border-b border-stone-200/70 bg-[#f7f3ee]/90 backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+      <a href="#" class="font-serif text-2xl font-semibold text-stone-900 italic">Kopi Lereng</a>
+      <nav class="hidden gap-8 text-sm font-medium md:flex">
+        <a href="#produk" class="hover:text-stone-900">Produk</a>
+        <a href="#tentang" class="hover:text-stone-900">Tentang</a>
+        <a href="#cara" class="hover:text-stone-900">Cara Pesan</a>
+      </nav>
+      <button id="cart-open" class="relative flex items-center gap-2 rounded-full bg-stone-900 px-4 py-2.5 text-sm font-semibold text-white hover:bg-stone-700">
+        <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6h15l-1.5 9h-12zM6 6L5 3H2M9 20a1 1 0 100-2 1 1 0 000 2zM18 20a1 1 0 100-2 1 1 0 000 2z" /></svg>
+        Keranjang
+        <span id="cart-count" class="flex h-5 min-w-5 items-center justify-center rounded-full bg-amber-400 px-1 text-xs font-bold text-stone-900">0</span>
+      </button>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="mx-auto grid max-w-6xl items-center gap-10 overflow-x-clip px-5 [&>*]:min-w-0 py-14 md:grid-cols-2 md:py-20">
+      <div>
+        <p class="text-sm font-semibold tracking-widest text-amber-700 uppercase">Roastery · Jakarta</p>
+        <h1 class="mt-4 font-serif text-4xl leading-[1.05] font-semibold text-stone-900 sm:text-6xl">
+          Kopi Nusantara, <em class="text-amber-700">disangrai minggu ini.</em>
+        </h1>
+        <p class="mt-5 max-w-md text-lg leading-relaxed">
+          Biji kopi dari petani Gayo sampai Flores, disangrai setiap Senin dan dikirim paling lambat Rabu. Segar sampai ke cangkir Anda.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#produk" class="rounded-full bg-stone-900 px-7 py-3.5 font-semibold text-white hover:bg-stone-700">Belanja Sekarang</a>
+          <a href="#cara" class="rounded-full px-7 py-3.5 font-semibold text-stone-900 ring-1 ring-stone-300 hover:ring-stone-500">Cara Pesan</a>
+        </div>
+      </div>
+      <div class="relative flex items-end justify-center gap-2">
+        <div class="absolute inset-x-10 bottom-0 top-10 rounded-[3rem] bg-amber-200/60"></div>
+        <ProductArt kind="bag" color="#c2410c" accent="#fed7aa" label="Kintamani" class="relative h-28 -rotate-6 sm:h-64" />
+        <ProductArt kind="bag" color="#7f1d1d" accent="#fca5a5" label="Gayo" class="relative h-40 sm:h-80" />
+        <ProductArt kind="bottle" color="#92400e" accent="#fef3c7" label="Cold Brew" class="relative h-24 rotate-6 sm:h-60" />
+      </div>
+    </section>
+
+    <!-- Value strip -->
+    <section class="border-y border-stone-200 bg-white">
+      <div class="mx-auto grid max-w-6xl gap-6 px-5 py-6 text-sm sm:grid-cols-3">
+        <p><span class="font-semibold text-stone-900">Sangrai setiap minggu</span><br />Tanggal sangrai tertulis di kemasan</p>
+        <p><span class="font-semibold text-stone-900">Gratis ongkir Jabodetabek</span><br />Untuk belanja mulai {rupiah(FREE_SHIPPING_MIN)}</p>
+        <p><span class="font-semibold text-stone-900">QRIS, Virtual Account, e-wallet</span><br />Pembayaran dicek otomatis</p>
+      </div>
+    </section>
+
+    <!-- Products -->
+    <section id="produk" class="mx-auto max-w-6xl px-5 py-16">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <h2 class="font-serif text-4xl font-semibold text-stone-900">Produk</h2>
+        <div id="filters" class="flex flex-wrap gap-2">
+          {
+            categories.map(([id, label], i) => (
+              <button data-filter={id} class:list={['rounded-full px-4 py-2 text-sm font-medium ring-1 transition', i === 0 ? 'bg-stone-900 text-white ring-stone-900' : 'bg-white ring-stone-200 hover:ring-stone-400']}>
+                {label}
+              </button>
+            ))
+          }
+        </div>
+      </div>
+
+      <div id="grid" class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          products.map((p) => (
+            <article data-category={p.category} class="product flex flex-col overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-stone-100">
+              <div class="relative flex h-52 items-center justify-center bg-stone-100/70">
+                {p.badge && <span class="absolute top-3 left-3 rounded-full bg-amber-400 px-2.5 py-1 text-xs font-bold text-stone-900">{p.badge}</span>}
+                <ProductArt kind={p.kind} color={p.color} accent={p.accent} label={p.name} class="h-40" />
+              </div>
+              <div class="flex flex-1 flex-col p-5">
+                <p class="text-xs text-stone-500">{p.origin}</p>
+                <h3 class="mt-1 font-serif text-xl font-semibold text-stone-900">{p.name}</h3>
+                <p class="mt-1 text-sm">{p.notes} · {p.size}</p>
+                {p.grind && (
+                  <select data-grind={p.id} aria-label={`Gilingan untuk ${p.name}`} class="mt-3 w-full rounded-lg border border-stone-200 bg-white px-3 py-2 text-sm outline-none focus:border-amber-600">
+                    {grinds.map((g) => <option>{g}</option>)}
+                  </select>
+                )}
+                <div class="mt-auto flex items-center justify-between gap-2 pt-4">
+                  <span class="text-lg font-bold text-stone-900">{rupiah(p.price)}</span>
+                  <button data-add={p.id} class="rounded-full bg-stone-900 px-3.5 py-2 text-sm font-semibold whitespace-nowrap text-white hover:bg-amber-700">+ Keranjang</button>
+                </div>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="tentang" class="bg-stone-900 text-stone-300">
+      <div class="mx-auto grid max-w-6xl gap-10 px-5 py-20 md:grid-cols-2">
+        <h2 class="font-serif text-4xl leading-tight font-semibold text-white">
+          Dari kebun di lereng gunung, <em class="text-amber-400">langsung ke rumah Anda.</em>
+        </h2>
+        <div class="space-y-4 leading-relaxed">
+          <p>Kami membeli langsung dari kelompok tani di Gayo, Toraja, Kintamani, Bajawa, Preanger, dan Temanggung, dengan harga di atas pasar supaya petani bisa terus menjaga kualitas.</p>
+          <p>Kopi disangrai dalam batch kecil setiap Senin. Tanggal sangrai tertulis di setiap kemasan, jadi Anda tahu kopi Anda benar-benar segar.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- How to order -->
+    <section id="cara" class="mx-auto max-w-6xl px-5 py-20">
+      <h2 class="font-serif text-4xl font-semibold text-stone-900">Cara pesan</h2>
+      <ol class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          [
+            ['Pilih kopi', 'Pilih produk dan jenis gilingan sesuai alat seduh Anda.'],
+            ['Isi alamat', 'Ongkir dihitung otomatis per kota dan kurir.'],
+            ['Bayar', 'QRIS, Virtual Account, atau e-wallet. Bisa juga pesan via WhatsApp.'],
+            ['Terima pesanan', 'Dikirim setiap Selasa–Rabu, nomor resi dikirim lewat WhatsApp.'],
+          ].map(([t, d], i) => (
+            <li class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-stone-100">
+              <span class="font-serif text-3xl text-amber-700 italic">0{i + 1}</span>
+              <h3 class="mt-3 font-semibold text-stone-900">{t}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed">{d}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+  </main>
+
+  <footer class="border-t border-stone-200 text-sm">
+    <div class="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 sm:flex-row sm:justify-between">
+      <p><span class="font-serif font-semibold text-stone-900 italic">Kopi Lereng</span> · Roastery, Jakarta</p>
+      <p>© 2026 · Situs demo, bisnis fiktif</p>
+    </div>
+  </footer>
+
+  <!-- Cart drawer -->
+  <dialog id="cart" class="fixed inset-y-0 right-0 left-auto m-0 h-dvh max-h-dvh w-full max-w-md bg-white p-0 shadow-2xl backdrop:bg-stone-950/50">
+    <div class="flex h-full flex-col">
+      <div class="flex items-center justify-between border-b border-stone-100 px-6 py-5">
+        <h2 class="font-serif text-2xl font-semibold text-stone-900">Keranjang</h2>
+        <button data-close class="rounded-full p-2 text-stone-500 hover:bg-stone-100" aria-label="Tutup">✕</button>
+      </div>
+      <ul id="cart-items" class="flex-1 divide-y divide-stone-100 overflow-y-auto px-6"></ul>
+      <div class="border-t border-stone-100 px-6 py-5">
+        <p id="free-hint" class="mb-3 rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-900"></p>
+        <div class="flex justify-between text-sm"><span>Subtotal</span><span id="cart-subtotal" class="font-bold text-stone-900">Rp0</span></div>
+        <button id="to-checkout" class="mt-4 w-full rounded-full bg-stone-900 py-3.5 font-semibold text-white hover:bg-stone-700 disabled:cursor-not-allowed disabled:opacity-40">Lanjut ke Checkout</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Checkout -->
+  <dialog id="checkout" class="m-auto max-h-[92dvh] w-[calc(100%-1.5rem)] max-w-3xl rounded-3xl bg-white p-0 shadow-2xl backdrop:bg-stone-950/60">
+    <div class="flex items-center justify-between border-b border-stone-100 px-6 py-5">
+      <h2 id="co-title" class="font-serif text-2xl font-semibold text-stone-900">Checkout</h2>
+      <button data-close class="rounded-full p-2 text-stone-500 hover:bg-stone-100" aria-label="Tutup">✕</button>
+    </div>
+
+    <!-- Step 1: details -->
+    <form id="co-form" class="grid gap-8 p-6 md:grid-cols-5">
+      <div class="space-y-4 md:col-span-3">
+        <label class="block text-sm font-medium text-stone-700">Nama penerima<input name="nama" required class={input} /></label>
+        <label class="block text-sm font-medium text-stone-700">No. WhatsApp<input name="hp" required inputmode="tel" pattern="[0-9+ \-]{9,16}" placeholder="08xx" class={input} /></label>
+        <label class="block text-sm font-medium text-stone-700">Alamat lengkap<textarea name="alamat" required rows="2" class={input}></textarea></label>
+        <label class="block text-sm font-medium text-stone-700">Kota tujuan
+          <select name="kota" class={input}>{cities.map((c, i) => <option value={i}>{c.name}</option>)}</select>
+        </label>
+        <fieldset>
+          <legend class="text-sm font-medium text-stone-700">Kurir</legend>
+          <div id="courier-list" class="mt-2 grid gap-2"></div>
+        </fieldset>
+        <fieldset>
+          <legend class="text-sm font-medium text-stone-700">Metode pembayaran</legend>
+          <div class="mt-2 grid gap-2">
+            {
+              payments.map((p, i) => (
+                <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-stone-200 px-4 py-3 has-[:checked]:border-amber-600 has-[:checked]:bg-amber-50">
+                  <input type="radio" name="bayar" value={p.id} checked={i === 0} class="mt-1 accent-amber-700" />
+                  <span class="text-sm"><span class="font-semibold text-stone-900">{p.name}</span><br /><span class="text-xs">{p.desc}</span></span>
+                </label>
+              ))
+            }
+          </div>
+        </fieldset>
+      </div>
+
+      <aside class="md:col-span-2">
+        <div class="rounded-2xl bg-stone-50 p-5 md:sticky md:top-0">
+          <h3 class="font-semibold text-stone-900">Ringkasan</h3>
+          <ul id="co-items" class="mt-3 space-y-2 text-sm"></ul>
+          <dl class="mt-4 space-y-1.5 border-t border-stone-200 pt-4 text-sm">
+            <div class="flex justify-between"><dt>Subtotal</dt><dd id="co-subtotal"></dd></div>
+            <div class="flex justify-between"><dt>Ongkir <span id="co-weight" class="text-xs text-stone-400"></span></dt><dd id="co-shipping"></dd></div>
+            <div class="flex justify-between pt-2 text-base font-bold text-stone-900"><dt>Total</dt><dd id="co-total"></dd></div>
+          </dl>
+          <button class="mt-5 w-full rounded-full bg-stone-900 py-3.5 font-semibold text-white hover:bg-stone-700">Bayar Sekarang</button>
+          <button type="button" id="co-wa" class="mt-2 w-full rounded-full bg-[#25D366] py-3 font-semibold text-white hover:brightness-95">Pesan via WhatsApp</button>
+          <p class="mt-3 text-[11px] leading-relaxed text-stone-400">Demo: ongkir memakai tarif contoh. Di toko klien, ongkir real-time dari Biteship/RajaOngkir dan pembayaran lewat Midtrans/Xendit.</p>
+        </div>
+      </aside>
+    </form>
+
+    <!-- Step 2: payment -->
+    <div id="co-pay" class="hidden p-6 text-center">
+      <p class="text-sm">Selesaikan pembayaran dalam <span id="pay-timer" class="font-bold text-stone-900">15:00</span></p>
+      <p class="mt-1 text-3xl font-bold text-stone-900" id="pay-total"></p>
+      <div id="pay-body" class="mx-auto mt-6 max-w-xs"></div>
+      <button id="pay-sim" class="mt-8 rounded-full bg-emerald-600 px-6 py-3 font-semibold text-white hover:bg-emerald-700">Simulasikan pembayaran berhasil</button>
+      <p class="mt-3 text-xs text-stone-400">Di toko sungguhan, status berubah otomatis lewat notifikasi (webhook) payment gateway.</p>
+    </div>
+
+    <!-- Step 3: success -->
+    <div id="co-done" class="hidden p-10 text-center">
+      <div class="mx-auto flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 text-3xl text-emerald-600">✓</div>
+      <h3 class="mt-5 font-serif text-3xl font-semibold text-stone-900">Pembayaran diterima</h3>
+      <p class="mt-2">Nomor pesanan <span id="order-no" class="font-mono font-semibold text-stone-900"></span>. Nomor resi akan dikirim via WhatsApp.</p>
+      <button data-close class="mt-8 rounded-full bg-stone-900 px-6 py-3 font-semibold text-white hover:bg-stone-700">Kembali belanja</button>
+    </div>
+  </dialog>
+
+  <script id="toko-config" type="application/json" set:html={JSON.stringify(config)} />
+</Base>
+
+<script>
+  import '../../scripts/toko';
+</script>

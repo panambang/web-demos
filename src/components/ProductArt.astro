@@ -1,0 +1,76 @@
+---
+// Simple SVG product illustrations so the demo needs no photos.
+import type { Kind } from '../data/toko';
+
+interface Props {
+  kind: Kind;
+  color: string;
+  accent: string;
+  label: string;
+  class?: string;
+}
+const { kind, color, accent, label, class: cls = 'h-40' } = Astro.props;
+const short = label.length > 12 ? label.split(' ')[0] : label;
+---
+
+<svg viewBox="0 0 120 140" class={cls} aria-hidden="true">
+  <ellipse cx="60" cy="132" rx="38" ry="5" fill="#000" opacity=".08"></ellipse>
+  {
+    kind === 'bag' && (
+      <g>
+        <path d="M28 22h64l6 106H22z" fill={color} />
+        <path d="M28 22h64v10H28z" fill="#000" opacity=".18" />
+        <path d="M30 14h60l2 8H28z" fill={color} />
+        <rect x="34" y="52" width="52" height="50" rx="4" fill={accent} />
+        <text x="60" y="72" text-anchor="middle" font-size="6" font-weight="700" letter-spacing="0.6" fill={color} font-family="Inter Variable, sans-serif">KOPI LERENG</text>
+        <text x="60" y="88" text-anchor="middle" font-size="10" font-style="italic" fill={color} font-family="Fraunces Variable, serif">{short}</text>
+        <circle cx="60" cy="40" r="4" fill={accent} opacity=".7" />
+      </g>
+    )
+  }
+  {
+    kind === 'drip' && (
+      <g>
+        <rect x="22" y="26" width="76" height="100" rx="8" fill={accent} />
+        <rect x="30" y="18" width="76" height="100" rx="8" fill={color} />
+        <path d="M44 50h48M44 58h36" stroke={accent} stroke-width="4" stroke-linecap="round" />
+        <text x="68" y="90" text-anchor="middle" font-size="11" font-style="italic" fill={accent} font-family="Fraunces Variable, serif">drip</text>
+        <text x="68" y="104" text-anchor="middle" font-size="6" font-weight="700" letter-spacing="1" fill={accent} font-family="Inter Variable, sans-serif">10 SACHET</text>
+      </g>
+    )
+  }
+  {
+    kind === 'bottle' && (
+      <g>
+        <rect x="48" y="8" width="24" height="12" rx="3" fill="#1c1917" />
+        <path d="M46 20h28v10c10 6 14 14 14 24v66a8 8 0 01-8 8H40a8 8 0 01-8-8V54c0-10 4-18 14-24z" fill={color} />
+        <rect x="36" y="64" width="48" height="40" rx="4" fill={accent} />
+        <text x="60" y="82" text-anchor="middle" font-size="9" font-style="italic" fill={color} font-family="Fraunces Variable, serif">cold brew</text>
+        <text x="60" y="95" text-anchor="middle" font-size="5.5" font-weight="700" letter-spacing="1" fill={color} font-family="Inter Variable, sans-serif">KOPI LERENG</text>
+        <path d="M40 40c4-4 8-6 12-6" stroke="#fff" stroke-width="3" stroke-linecap="round" opacity=".35" fill="none" />
+      </g>
+    )
+  }
+  {
+    kind === 'dripper' && (
+      <g>
+        <path d="M22 40h76L74 96H46z" fill={color} stroke={accent} stroke-width="3" />
+        <path d="M36 52l6 30M84 52l-6 30M60 50v34" stroke={accent} stroke-width="2" opacity=".6" />
+        <rect x="38" y="96" width="44" height="8" rx="3" fill={accent} />
+        <path d="M98 50h6a8 8 0 010 16h-8" stroke={accent} stroke-width="4" fill="none" />
+        <rect x="30" y="104" width="60" height="22" rx="6" fill="#e7e5e4" />
+      </g>
+    )
+  }
+  {
+    kind === 'grinder' && (
+      <g>
+        <rect x="42" y="40" width="36" height="86" rx="8" fill={color} />
+        <rect x="42" y="88" width="36" height="6" fill={accent} opacity=".5" />
+        <path d="M60 40V24h30" stroke={accent} stroke-width="5" stroke-linecap="round" fill="none" />
+        <circle cx="94" cy="24" r="7" fill="#a16207" />
+        <rect x="48" y="30" width="24" height="10" rx="3" fill={accent} />
+      </g>
+    )
+  }
+</svg>

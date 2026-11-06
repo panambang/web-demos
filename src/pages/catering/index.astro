@@ -1,0 +1,245 @@
+---
+import Base from '../../layouts/Base.astro';
+import { rupiah, wa } from '../../lib/util';
+import { pains, menu, packages, steps, testimonials, areas, faqs } from '../../data/catering';
+
+const orderLink = (pkg?: string) =>
+  wa(pkg ? `Halo Dapur Sehari, saya mau pesan paket ${pkg}. Alamat pengiriman saya: ` : 'Halo Dapur Sehari, saya mau tanya paket katering.');
+---
+
+<Base
+  title="Dapur Sehari — Katering Sehat Harian Jakarta"
+  description="Katering sehat harian diantar ke kantor atau rumah di Jakarta Selatan. Mulai Rp45 ribu per porsi."
+  bodyClass="bg-[#fffaf3] font-jakarta text-stone-600"
+  themeColor="#f97316"
+>
+  <header class="sticky top-0 z-40 bg-[#fffaf3]/90 backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
+      <a href="#" class="flex items-center gap-2 text-lg font-extrabold text-stone-900">
+        <span class="flex h-9 w-9 items-center justify-center rounded-full bg-orange-500 text-white">
+          <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M3 12h18a9 9 0 01-18 0zM8 8c0-2 2-2 2-4M13 8c0-2 2-2 2-4" /></svg>
+        </span>
+        Dapur Sehari
+      </a>
+      <a href={orderLink()} target="_blank" rel="noopener" class="rounded-full bg-stone-900 px-5 py-2.5 text-sm font-bold text-white hover:bg-orange-600">Pesan Sekarang</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="mx-auto grid max-w-6xl items-center gap-12 px-5 pt-10 pb-20 md:grid-cols-2 md:pt-16">
+      <div>
+        <span class="inline-flex rounded-full bg-lime-200 px-3 py-1 text-xs font-bold text-lime-900">Promo minggu pertama: gratis ongkir</span>
+        <h1 class="mt-5 text-4xl leading-[1.1] font-extrabold tracking-tight text-stone-900 sm:text-6xl">
+          Makan sehat tiap hari, <span class="text-orange-500">tanpa ribet masak.</span>
+        </h1>
+        <p class="mt-5 max-w-lg text-lg leading-relaxed">
+          Katering sehat harian yang enak beneran, diantar ke kantor atau rumah sebelum jam makan siang. Mulai{' '}
+          <strong class="text-stone-900">Rp45 ribu</strong> per porsi.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#paket" class="rounded-full bg-orange-500 px-7 py-3.5 font-bold text-white shadow-lg shadow-orange-500/30 hover:bg-orange-600">Lihat Paket</a>
+          <a href="#menu" class="rounded-full bg-white px-7 py-3.5 font-bold text-stone-800 ring-1 ring-stone-200 hover:ring-orange-300">Menu Minggu Ini</a>
+        </div>
+        <div class="mt-8 flex items-center gap-4 text-sm">
+          <div class="flex -space-x-2">
+            <span class="h-9 w-9 rounded-full bg-orange-300 ring-2 ring-[#fffaf3]"></span>
+            <span class="h-9 w-9 rounded-full bg-lime-300 ring-2 ring-[#fffaf3]"></span>
+            <span class="h-9 w-9 rounded-full bg-amber-300 ring-2 ring-[#fffaf3]"></span>
+          </div>
+          <p><strong class="text-stone-900">1.200+ pelanggan</strong> langganan tiap bulan · ★ 4,8</p>
+        </div>
+      </div>
+
+      <div class="relative mx-auto w-full max-w-md">
+        <div class="absolute inset-6 rounded-full bg-orange-200/70 blur-3xl"></div>
+        <svg viewBox="0 0 320 300" class="relative w-full" role="img" aria-label="Ilustrasi mangkuk makanan sehat">
+          <ellipse cx="160" cy="270" rx="120" ry="14" fill="#000" opacity=".06" />
+          <path d="M30 140h260a130 120 0 01-260 0z" fill="#fff" stroke="#fed7aa" stroke-width="4" />
+          <path d="M44 140h232a116 104 0 01-232 0z" fill="#fff7ed" />
+          <ellipse cx="110" cy="132" rx="52" ry="26" fill="#fef3c7" />
+          <circle cx="95" cy="126" r="5" fill="#fde68a" /><circle cx="118" cy="122" r="5" fill="#fde68a" /><circle cx="130" cy="134" r="5" fill="#fde68a" />
+          <path d="M160 110c20-14 52-14 70 2 10 9 6 24-8 26h-56c-14-2-18-18-6-28z" fill="#c2410c" />
+          <path d="M172 116l40 6M176 128l40 4" stroke="#9a3412" stroke-width="4" stroke-linecap="round" />
+          <circle cx="236" cy="128" r="16" fill="#84cc16" /><circle cx="250" cy="118" r="12" fill="#65a30d" />
+          <circle cx="70" cy="112" r="12" fill="#ef4444" /><path d="M70 100v-6" stroke="#16a34a" stroke-width="3" stroke-linecap="round" />
+          <path d="M140 96c4-10 14-12 18-6" stroke="#16a34a" stroke-width="4" stroke-linecap="round" fill="none" />
+          <path d="M120 60c0-14 10-14 10-28M150 60c0-14 10-14 10-28M180 60c0-14 10-14 10-28" stroke="#fdba74" stroke-width="5" stroke-linecap="round" fill="none" opacity=".7" />
+        </svg>
+        <div class="absolute top-8 -left-2 rounded-2xl bg-white px-4 py-3 shadow-xl sm:-left-6">
+          <p class="text-xs text-stone-500">Per porsi</p>
+          <p class="font-extrabold text-stone-900">450–560 kkal</p>
+        </div>
+        <div class="absolute right-0 bottom-10 rounded-2xl bg-stone-900 px-4 py-3 text-white shadow-xl sm:-right-4">
+          <p class="text-xs text-stone-400">Tiba</p>
+          <p class="font-extrabold">Sebelum 11.30</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pain points -->
+    <section class="bg-white">
+      <div class="mx-auto max-w-6xl px-5 py-20">
+        <h2 class="max-w-xl text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">Kenal dengan masalah ini?</h2>
+        <div class="mt-10 grid gap-5 md:grid-cols-3">
+          {
+            pains.map((p) => (
+              <div class="rounded-3xl bg-[#fffaf3] p-7">
+                <span class="text-3xl" aria-hidden="true">{p.emoji}</span>
+                <h3 class="mt-4 text-lg font-bold text-stone-900">{p.title}</h3>
+                <p class="mt-2 leading-relaxed">{p.desc}</p>
+              </div>
+            ))
+          }
+        </div>
+        <p class="mt-10 text-xl font-bold text-stone-900">
+          Dapur Sehari menyiapkan makan siang sehat, enak, dan terukur kalorinya, <span class="text-orange-500">diantar setiap hari kerja.</span>
+        </p>
+      </div>
+    </section>
+
+    <!-- Weekly menu -->
+    <section id="menu" class="mx-auto max-w-6xl px-5 py-20">
+      <div class="flex flex-wrap items-end justify-between gap-4">
+        <div>
+          <p class="text-sm font-bold tracking-widest text-orange-500 uppercase">Menu Minggu Ini</p>
+          <h2 class="mt-2 text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">Beda menu setiap hari</h2>
+        </div>
+        <p class="text-sm">Menu baru diumumkan setiap Jumat di Instagram & WhatsApp.</p>
+      </div>
+      <div class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {
+          menu.map((m) => (
+            <article class="overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-stone-100">
+              <div class={`flex h-28 items-center justify-center ${m.tone}`}>
+                <svg viewBox="0 0 80 50" class="h-16" aria-hidden="true">
+                  <path d="M6 20h68a34 28 0 01-68 0z" fill="#fff" />
+                  <ellipse cx="30" cy="20" rx="16" ry="7" fill="#fde68a" />
+                  <ellipse cx="52" cy="18" rx="14" ry="7" fill="#ea580c" opacity=".85" />
+                  <circle cx="62" cy="20" r="5" fill="#65a30d" />
+                </svg>
+              </div>
+              <div class="p-5">
+                <p class="text-xs font-bold tracking-wide text-orange-500 uppercase">{m.day}</p>
+                <h3 class="mt-1.5 text-sm leading-snug font-bold text-stone-900">{m.dish}</h3>
+                <p class="mt-3 text-xs">{m.kcal} kkal</p>
+              </div>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Packages -->
+    <section id="paket" class="bg-stone-900 text-stone-300">
+      <div class="mx-auto max-w-6xl px-5 py-20">
+        <div class="text-center">
+          <p class="text-sm font-bold tracking-widest text-lime-400 uppercase">Paket & Harga</p>
+          <h2 class="mt-2 text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Lebih hemat dari jajan siang</h2>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          {
+            packages.map((p) => (
+              <div class={`relative flex flex-col rounded-3xl p-8 ${p.highlight ? 'bg-orange-500 text-orange-50 shadow-2xl shadow-orange-500/30 md:-translate-y-3' : 'bg-white/5 ring-1 ring-white/10'}`}>
+                {p.highlight && (
+                  <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-lime-300 px-3 py-1 text-xs font-extrabold text-lime-950">PALING LARIS</span>
+                )}
+                <h3 class="text-lg font-bold text-white">{p.name}</h3>
+                <p class="text-sm opacity-80">{p.days}</p>
+                <p class="mt-5 text-4xl font-extrabold text-white">{rupiah(p.price)}</p>
+                <p class="mt-1 text-sm opacity-80">{rupiah(p.per)} per porsi</p>
+                <ul class="mt-6 flex-1 space-y-2.5 text-sm">
+                  {p.items.map((i) => (
+                    <li class="flex gap-2"><span class={p.highlight ? 'text-lime-200' : 'text-lime-400'}>✓</span>{i}</li>
+                  ))}
+                </ul>
+                <a
+                  href={orderLink(`${p.name} (${p.days})`)}
+                  target="_blank"
+                  rel="noopener"
+                  class={`mt-8 rounded-full px-6 py-3 text-center font-bold ${p.highlight ? 'bg-stone-900 text-white hover:bg-stone-800' : 'bg-white text-stone-900 hover:bg-orange-100'}`}
+                >
+                  Pesan via WhatsApp
+                </a>
+              </div>
+            ))
+          }
+        </div>
+        <p class="mt-8 text-center text-sm text-stone-400">Area antar: {areas.join(' · ')}</p>
+      </div>
+    </section>
+
+    <!-- How to order -->
+    <section class="mx-auto max-w-6xl px-5 py-20">
+      <h2 class="text-center text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">Cara pesan, 2 menit selesai</h2>
+      <ol class="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          steps.map(([title, desc], i) => (
+            <li class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-stone-100">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-orange-100 font-extrabold text-orange-600">{i + 1}</span>
+              <h3 class="mt-4 font-bold text-stone-900">{title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed">{desc}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="bg-lime-100/60">
+      <div class="mx-auto max-w-6xl px-5 py-20">
+        <h2 class="text-3xl font-extrabold tracking-tight text-stone-900 sm:text-4xl">Kata pelanggan</h2>
+        <div class="mt-10 grid gap-5 md:grid-cols-3">
+          {
+            testimonials.map((t) => (
+              <figure class="rounded-3xl bg-white p-7 shadow-sm">
+                <div class="text-orange-400" aria-label="5 bintang">★★★★★</div>
+                <blockquote class="mt-3 leading-relaxed text-stone-700">“{t.text}”</blockquote>
+                <figcaption class="mt-5 text-sm"><span class="font-bold text-stone-900">{t.name}</span><br />{t.role}</figcaption>
+              </figure>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mx-auto max-w-3xl px-5 py-20">
+      <h2 class="text-center text-3xl font-extrabold tracking-tight text-stone-900">Pertanyaan umum</h2>
+      <div class="mt-10 space-y-3">
+        {
+          faqs.map(([q, a]) => (
+            <details class="group rounded-2xl bg-white p-5 shadow-sm ring-1 ring-stone-100">
+              <summary class="flex items-center justify-between font-bold text-stone-900">
+                {q}<span class="ml-4 text-orange-500 transition group-open:rotate-45">+</span>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="px-5 pb-24">
+      <div class="mx-auto max-w-5xl rounded-[2rem] bg-orange-500 px-8 py-14 text-center text-orange-50 shadow-2xl shadow-orange-500/30">
+        <h2 class="text-3xl font-extrabold tracking-tight text-white sm:text-4xl">Mulai Senin depan?</h2>
+        <p class="mx-auto mt-3 max-w-lg">Coba 5 hari dulu, gratis ongkir. Kalau tidak cocok, tidak perlu lanjut.</p>
+        <a href={orderLink('Coba Dulu (5 hari)')} target="_blank" rel="noopener" class="mt-8 inline-flex rounded-full bg-stone-900 px-8 py-4 font-bold text-white hover:bg-stone-800">Pesan Paket Coba Dulu</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-stone-200 text-sm">
+    <div class="mx-auto flex max-w-6xl flex-col gap-2 px-5 py-8 sm:flex-row sm:justify-between">
+      <p><span class="font-bold text-stone-900">Dapur Sehari</span> · Katering sehat harian, Jakarta</p>
+      <p>© 2026 · Situs demo, bisnis fiktif</p>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp button -->
+  <a href={orderLink()} target="_blank" rel="noopener" class="fixed right-5 bottom-5 z-40 flex items-center gap-2 rounded-full bg-[#25D366] py-3 pr-5 pl-4 font-bold text-white shadow-xl hover:scale-105">
+    <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1112 20z" /></svg>
+    Chat Admin
+  </a>
+</Base>
