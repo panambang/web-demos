@@ -2,12 +2,14 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import { url, rupiah, PORTFOLIO } from '../../lib/util';
-import { kategori, included, addons, maintenance, steps, faqs, waTo } from '../../data/harga';
+import { kategori, included, addons, maintenance, steps, faqs, waTo, EMAIL, mailto } from '../../data/harga';
 
 const CHECK = 'M5 12.5l4.5 4.5L19 7.5';
 const ARROW = 'M5 12h14M13 6l6 6-6 6';
 const WA_ICON =
   'M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.6l-4.5.9zM9 8.5c0 3.5 3 6.5 6.5 6.5l1.2-1.4-1.9-1-1 .8c-1.2-.5-2.2-1.5-2.7-2.7l.8-1-1-1.9z';
+
+const MAIL_ICON = 'M3 6h18v12H3zM3 7l9 6 9-6';
 
 const consult = waTo('Halo, saya ingin berkonsultasi tentang pembuatan website.');
 const order = (cat: string, name: string) =>
@@ -254,14 +256,22 @@ const order = (cat: string, name: string) =>
         <p class="mt-3 max-w-xl text-slate-900/80">
           Ceritakan kebutuhan bisnis Anda, saya bantu memilihkan paket yang tepat. Konsultasi gratis dan tanpa komitmen.
         </p>
-        <a
-          href={consult}
-          target="_blank"
-          rel="noopener"
-          class="mt-7 inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-3 font-semibold text-white hover:bg-slate-800"
-        >
-          <Icon d={WA_ICON} class="h-5 w-5" /> Hubungi via WhatsApp
-        </a>
+        <div class="mt-7 flex flex-wrap items-center gap-3">
+          <a
+            href={consult}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 rounded-full bg-slate-950 px-6 py-3 font-semibold text-white hover:bg-slate-800"
+          >
+            <Icon d={WA_ICON} class="h-5 w-5" /> Hubungi via WhatsApp
+          </a>
+          <a
+            href={mailto('Konsultasi pembuatan website')}
+            class="inline-flex items-center gap-2 rounded-full border-2 border-slate-950 px-6 py-2.5 font-semibold text-slate-950 hover:bg-slate-950 hover:text-white"
+          >
+            <Icon d={MAIL_ICON} class="h-5 w-5" /> {EMAIL}
+          </a>
+        </div>
       </div>
     </section>
   </main>
@@ -272,7 +282,10 @@ const order = (cat: string, name: string) =>
         © 2026 <a href={PORTFOLIO} class="text-slate-300 hover:underline">Purbo Panambang</a>. Harga dapat berubah
         sewaktu-waktu.
       </p>
-      <a href={url('/')} class="text-slate-300 hover:underline">Lihat contoh website →</a>
+      <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
+        <a href={mailto('Konsultasi pembuatan website')} class="text-slate-300 hover:underline">{EMAIL}</a>
+        <a href={url('/')} class="text-slate-300 hover:underline">Lihat contoh website →</a>
+      </div>
     </div>
   </footer>
 </Base>

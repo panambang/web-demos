@@ -5,6 +5,9 @@
  */
 export const WA_NUMBER = '';
 
+export const EMAIL = 'ppanambang@gmail.com';
+export const mailto = (subject: string) => `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;
+
 export const waTo = (text: string) =>
   `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
 
