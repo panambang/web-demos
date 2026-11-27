@@ -3,7 +3,7 @@
  * Set WA_NUMBER (e.g. '6281234567890', no + or spaces) to send chats to your
  * own WhatsApp; while it's empty the buttons open WhatsApp without a number.
  */
-export const WA_NUMBER = '';
+export const WA_NUMBER = '6285117303062';
 
 export const EMAIL = 'ppanambang@gmail.com';
 export const mailto = (subject: string) => `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;
