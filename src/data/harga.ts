@@ -5,11 +5,16 @@
  */
 export const WA_NUMBER = '6285117303062';
 
-export const EMAIL = 'ppanambang@gmail.com';
+export const EMAIL = 'mogacuan.id@gmail.com';
 export const mailto = (subject: string) => `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}`;
 
 export const waTo = (text: string) =>
   `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`;
+
+/** "Free sample site for your business" request, used on the demo index and the pricelist. */
+export const freeSample = waTo(
+  'Halo Mocu Digital, saya mau minta contoh website gratis untuk usaha saya.\nNama usaha: \nLink TikTok / Instagram / Google Maps: ',
+);
 
 export type Paket = {
   name: string;
