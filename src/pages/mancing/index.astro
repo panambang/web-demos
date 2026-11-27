@@ -4,7 +4,7 @@ import '@fontsource/permanent-marker';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
-import { url, rupiah, wa } from '../../lib/util';
+import { url, rupiah, wa, BRAND } from '../../lib/util';
 import { img, stats, ticker, kegiatan, videos, kru, jadwal, rutin, spot, peralatan, pesta, galeri, testimoni } from '../../data/mancing';
 
 const HOOK = 'M15 3v9a5 5 0 0 1-10 0V9l3 3';
@@ -476,7 +476,7 @@ const tilts = ['-rotate-3', 'rotate-2', '-rotate-1', 'rotate-3', 'rotate-1', '-r
         <span class="font-display text-xl uppercase">Joran Senja</span>
         <span class="text-slate-500">· Basecamp: Muara Angke, Jakarta Utara</span>
       </div>
-      <p>Foto: Unsplash · Video: Pexels · Demo oleh Purbo Panambang</p>
+      <p>Foto: Unsplash · Video: Pexels · Demo oleh {BRAND}</p>
     </div>
   </footer>
 </Base>

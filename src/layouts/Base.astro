@@ -3,7 +3,7 @@ import '@fontsource-variable/inter';
 import '@fontsource-variable/plus-jakarta-sans';
 import '@fontsource-variable/fraunces';
 import '../styles/global.css';
-import { url, PORTFOLIO } from '../lib/util';
+import { url, BRAND } from '../lib/util';
 
 interface Props {
   title: string;
@@ -38,8 +38,8 @@ const { title, description, bodyClass = '', themeColor = '#0f172a', bare = false
         <div class="relative z-50 bg-slate-950 px-4 py-2 text-center font-sans text-xs text-slate-300">
           <span class="mr-1 rounded bg-amber-400 px-1.5 py-0.5 font-semibold text-slate-950">DEMO</span>
           Bisnis fiktif untuk contoh portofolio, dibuat oleh{' '}
-          <a href={PORTFOLIO} class="font-medium text-white underline-offset-2 hover:underline">
-            Purbo Panambang
+          <a href={url('harga')} class="font-medium text-white underline-offset-2 hover:underline">
+            {BRAND}
           </a>
           .{' '}
           <a href={url('/')} class="font-medium text-amber-300 underline-offset-2 hover:underline">

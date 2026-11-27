@@ -1,7 +1,7 @@
 ---
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
-import { url, rupiah, PORTFOLIO } from '../../lib/util';
+import { url, rupiah, PORTFOLIO, BRAND, OWNER } from '../../lib/util';
 import { kategori, included, addons, maintenance, steps, faqs, waTo, EMAIL, mailto } from '../../data/harga';
 
 const CHECK = 'M5 12.5l4.5 4.5L19 7.5';
@@ -17,7 +17,7 @@ const order = (cat: string, name: string) =>
 ---
 
 <Base
-  title="Harga Jasa Pembuatan Website — Purbo Panambang"
+  title={`Harga Jasa Pembuatan Website — ${BRAND}`}
   description="Daftar harga jasa pembuatan landing page, company profile, dan toko online untuk UMKM dan bisnis di Indonesia. Mulai Rp1,5 juta, sudah termasuk domain dan hosting."
   bodyClass="min-h-screen bg-slate-950 font-sans text-slate-300"
   bare
@@ -26,7 +26,7 @@ const order = (cat: string, name: string) =>
   <header class="sticky top-0 z-40 border-b border-slate-800/80 bg-slate-950/85 backdrop-blur">
     <div class="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-3">
       <a href={url('harga')} class="leading-tight">
-        <span class="block font-semibold text-white">Purbo Panambang</span>
+        <span class="block font-semibold text-white">{BRAND}</span>
         <span class="block text-xs text-slate-400">Jasa Pembuatan Website</span>
       </a>
       <nav class="hidden items-center gap-6 text-sm md:flex">
@@ -279,7 +279,7 @@ const order = (cat: string, name: string) =>
   <footer class="border-t border-slate-800">
     <div class="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-3 px-5 py-8 text-sm text-slate-500">
       <p>
-        © 2026 <a href={PORTFOLIO} class="text-slate-300 hover:underline">Purbo Panambang</a>. Harga dapat berubah
+        © 2026 {BRAND}, dikelola oleh <a href={PORTFOLIO} class="text-slate-300 hover:underline">{OWNER}</a>. Harga dapat berubah
         sewaktu-waktu.
       </p>
       <div class="flex flex-wrap items-center gap-x-6 gap-y-2">

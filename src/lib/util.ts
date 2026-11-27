@@ -13,3 +13,7 @@ export const rupiah = (n: number) => 'Rp' + n.toLocaleString('id-ID');
 export const wa = (text: string) => `https://wa.me/?text=${encodeURIComponent(text)}`;
 
 export const PORTFOLIO = 'https://panambang.github.io';
+
+/** Business name for the website service. The owner's name stays as the person behind it. */
+export const BRAND = 'Mocu Digital';
+export const OWNER = 'Purbo Panambang';

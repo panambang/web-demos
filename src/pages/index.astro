@@ -1,6 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
-import { url, PORTFOLIO } from '../lib/util';
+import { url, BRAND, OWNER } from '../lib/util';
 
 const demos = [
   {
@@ -39,7 +39,7 @@ const demos = [
 ---
 
 <Base
-  title="Demo Website — Purbo Panambang"
+  title={`Demo Website — ${BRAND}`}
   description="Contoh website company profile, landing page, dan toko online untuk bisnis Indonesia."
   bodyClass="min-h-screen bg-slate-950 font-sans text-slate-300"
   bare
@@ -88,7 +88,7 @@ const demos = [
 
     <p class="mt-16 text-sm text-slate-500">
       Semua nama bisnis, orang, harga, dan ulasan di keempat demo ini fiktif. Foto dan video komunitas mancing dari Unsplash dan Pexels. Dibuat oleh
-      <a href={PORTFOLIO} class="text-slate-300 underline-offset-2 hover:underline">Purbo Panambang</a>.
+      <a href={url('harga')} class="text-slate-300 underline-offset-2 hover:underline">{BRAND}</a> ({OWNER}).
     </p>
   </main>
 </Base>
