@@ -1,6 +1,6 @@
 # Web demos
 
-Five demo sites for fictional Indonesian businesses and communities, used as portfolio samples for the website service (see `../website-service-indonesia.md`).
+Six demo sites for fictional Indonesian businesses and communities, used as portfolio samples for the website service (see `../website-service-indonesia.md`).
 
 | Path | Demo | Package it shows |
 |---|---|---|
@@ -8,11 +8,16 @@ Five demo sites for fictional Indonesian businesses and communities, used as por
 | `/catering` | Dapur Sehari: healthy catering | Landing Page |
 | `/toko` | Kopi Lereng: coffee roastery | Toko Online |
 | `/wedding` | Laras Rasa Catering: wedding & event catering | Catering Wedding (piring terbang course order, date-check form → WA) |
+| `/restoran` | Pawon Simbah: Javanese restaurant | Landing Page Restoran (photo menu, order slip → WA, table booking → WA, live open/closed status, branches) |
 | `/mancing` | Joran Senja: fishing community | Community site (video, members, schedule, gallery) |
 
 Also `/harga`: the real pricelist for the website service (prices in `src/data/harga.ts`). It's the only indexable page. Set `WA_NUMBER` in that file to route its WhatsApp buttons to your number.
 
 Stack: Astro 7 + Tailwind 4, static output. The klinik, catering, toko and wedding demos use inline SVG art only. The fishing demo uses real photos (optimized to WebP by `astro:assets`) and short MP4 clips that load only when scrolled into view and are skipped on data-saver.
+
+### Media credits (restaurant demo)
+
+- Photos are hotlinked from the [Unsplash](https://unsplash.com) CDN (free under the [Unsplash License](https://unsplash.com/license)) and sized per breakpoint with its URL params. The photo ids live in `src/data/restoran.ts`; for a client build, swap them for the client's own photos.
 
 ### Media credits (fishing demo)
 
@@ -39,4 +44,4 @@ To serve under a sub-path (e.g. `/demos` on the portfolio), build with `BASE_PAT
 - **Store payment:** the QRIS code and VA numbers are fake, and "Simulasikan pembayaran berhasil" stands in for the payment gateway webhook. In production, use Midtrans/Xendit Snap with the client's own merchant account.
 - **Maps:** an SVG illustration. In production, embed Google Maps.
 
-All names, people, prices and reviews in the five demos are fictional. Each page shows a DEMO bar saying so.
+All names, people, prices and reviews in the six demos are fictional. Each page shows a DEMO bar saying so.

@@ -31,6 +31,7 @@ const { title, description, bodyClass = '', themeColor = '#0f172a', bare = false
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <link rel="icon" href={url('favicon.svg')} type="image/svg+xml" />
+    <slot name="head" />
   </head>
   <body class={bodyClass}>
     {

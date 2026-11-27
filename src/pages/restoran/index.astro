@@ -1,0 +1,1362 @@
+---
+import '@fontsource-variable/bricolage-grotesque/standard.css';
+import '@fontsource-variable/caveat';
+import '@fontsource/courier-prime/400.css';
+import '@fontsource/courier-prime/700.css';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { rupiah, wa, url, BRAND } from '../../lib/util';
+import { biz, img, photo, srcset, hours, facts, menu, day, notes, areas, branches, delivery, marquee } from '../../data/restoran';
+
+const general = wa(`Halo ${biz.name}, saya lihat dari website. Mau tanya menu dan pesan.`);
+const first = menu[0].dishes[0];
+
+const I = {
+  plus: 'M12 5v14M5 12h14',
+  minus: 'M5 12h14',
+  x: 'M6 6l12 12M18 6L6 18',
+  arrow: 'M5 12h14M13 6l6 6-6 6',
+  left: 'M15 6l-6 6 6 6',
+  right: 'M9 6l6 6-6 6',
+  pin: 'M12 21s-7-6.5-7-12a7 7 0 1 1 14 0c0 5.5-7 12-7 12zM12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
+  phone: 'M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2',
+  clock: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z',
+  nota: 'M6 3h12v18l-3-2-3 2-3-2-3 2V3zM9 8h6M9 12h6M9 16h3',
+  wa: 'M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.6l-4.5.9zM9 8.5c0 3.5 3 6.5 6.5 6.5l1.2-1.4-1.9-1-1 .8c-1.2-.5-2.2-1.5-2.7-2.7l.8-1-1-1.9z',
+  menu: 'M4 6h16M4 12h16M4 18h10',
+  cal: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',
+};
+
+const CHILI = 'M15.2 4.6c-.4-1.4.6-2.6 2.2-2.6M15.4 5.2c3 .9 4.8 4.4 2.9 8.3C15.8 18.6 9.4 21.6 4 20.6c4.1-2 7-6 7.9-10 .5-2.3 1.6-4.4 3.5-5.4z';
+const times = Array.from({ length: 22 }, (_, i) => {
+  const m = 10 * 60 + i * 30;
+  return `${String(Math.floor(m / 60)).padStart(2, '0')}:${m % 60 ? '30' : '00'}`;
+});
+---
+
+<Base
+  title={`${biz.name} — Warung Makan Jawa di Colomadu, Solo Raya`}
+  description="Masakan rumahan Jawa: sego liwet, sate kambing muda, soto seger, wedangan. Reservasi meja dan pesan lewat WhatsApp."
+  bodyClass="ps"
+  themeColor="#24160f"
+>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://images.unsplash.com" />
+  </Fragment>
+  <script is:inline>document.documentElement.classList.add('js');</script>
+
+  <!-- Header -->
+  <header class="ps-header sticky top-0 z-40">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-2.5 sm:px-6">
+      <a href="#" class="flex items-center gap-2.5" aria-label={`${biz.name}, kembali ke atas`}>
+        <svg viewBox="0 0 44 44" class="h-11 w-11 shrink-0" aria-hidden="true">
+          <circle cx="22" cy="22" r="20" fill="var(--kunyit)" stroke="var(--ink)" stroke-width="2.5" />
+          <path d="M11 22h22c0 6.5-4.9 11-11 11s-11-4.5-11-11z" fill="var(--ink)" />
+          <path d="M13.5 22c.6-3.2 4-5.5 8.5-5.5s7.9 2.3 8.5 5.5" fill="none" stroke="var(--ink)" stroke-width="2.5" />
+          <path class="ps-logo-steam" d="M17 13c-1.2-2 1.2-3 0-5.5M22 13c-1.2-2 1.2-3 0-5.5M27 13c-1.2-2 1.2-3 0-5.5" fill="none" stroke="var(--ink)" stroke-width="2" stroke-linecap="round" />
+        </svg>
+        <span class="leading-none">
+          <span class="f-display block text-[1.35rem] font-extrabold">{biz.name}</span>
+          <span class="f-hand block text-lg leading-none text-[var(--cabai)]">sejak {biz.since}</span>
+        </span>
+      </a>
+      <nav class="hidden items-center gap-6 text-[13px] font-extrabold tracking-wider uppercase lg:flex" aria-label="Utama">
+        <a href="#menu" class="ps-link">Menu</a>
+        <a href="#dapur" class="ps-link">Dapur</a>
+        <a href="#ulasan" class="ps-link">Ulasan</a>
+        <a href="#reservasi" class="ps-link">Reservasi</a>
+        <a href="#lokasi" class="ps-link">Lokasi</a>
+      </nav>
+      <div class="flex items-center gap-2">
+        <span class="ps-status" data-open-status data-open="true"><span class="ps-dot"></span><span data-status-text>Buka · tutup 21.00</span></span>
+        <button type="button" class="btn btn-sm hidden md:inline-flex" data-cart-open>
+          <Icon d={I.nota} class="h-4 w-4" /> Nota <span class="ps-count" data-cart-count hidden>0</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="ps-hero relative">
+      <div class="ps-hero-photo relative overflow-hidden bg-[var(--ink)]">
+        <picture>
+          <source media="(min-width: 1024px)" srcset={srcset(img.hero, 0.5, [1280, 1600, 2000])} sizes="100vw" />
+          <source media="(min-width: 640px)" srcset={srcset(img.hero, 0.625, [800, 1100])} sizes="100vw" />
+          <img
+            src={photo(img.hero, 720, 540)}
+            srcset={srcset(img.hero, 0.75, [480, 720, 960])}
+            sizes="100vw"
+            width="720"
+            height="540"
+            fetchpriority="high"
+            decoding="async"
+            draggable="false"
+            alt="Meja makan penuh: sate ayam bumbu kacang, nasi goreng kampung dengan kerupuk, soto, dan nasi putih"
+            class="ps-settle absolute inset-0 h-full w-full object-cover"
+          />
+        </picture>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/45 via-transparent to-black/10"></div>
+
+        <!-- Hand-drawn notes on the photo -->
+        <div class="ps-annot hidden md:block" aria-hidden="true">
+          <div class="ps-note-tag" style="left: 15%; top: 5%; --d: 1.1s">
+            <svg viewBox="0 0 120 70" class="ps-draw ps-flip w-24"><path pathLength="1" d="M8 8c34 2 62 16 80 48" /><path pathLength="1" d="M76 50l12 8 2-14" /></svg>
+            <span>sate ayam,<br />bumbu kacang sangrai</span>
+          </div>
+          <div class="ps-note-tag" style="left: 55%; top: 7%; --d: 1.5s">
+            <svg viewBox="0 0 120 70" class="ps-draw ps-flip w-24"><path pathLength="1" d="M8 8c34 2 62 16 80 48" /><path pathLength="1" d="M76 50l12 8 2-14" /></svg>
+            <span>sego goreng kampung,<br />digoreng di wajan besi</span>
+          </div>
+          <div class="ps-note-tag" style="right: 22%; top: 50%; --d: 1.9s">
+            <span>sate kambing muda,<br />kecap & rawit</span>
+            <svg viewBox="0 0 120 70" class="ps-draw w-24"><path pathLength="1" d="M8 8c34 2 62 16 80 48" /><path pathLength="1" d="M76 50l12 8 2-14" /></svg>
+          </div>
+          <svg class="ps-steam" viewBox="0 0 80 90" style="left: 50%; bottom: 3%">
+            <path d="M18 86c-10-14 10-22 0-38s10-24 0-40" /><path d="M40 86c-10-14 10-22 0-38s10-24 0-40" /><path d="M62 86c-10-14 10-22 0-38s10-24 0-40" />
+          </svg>
+        </div>
+      </div>
+
+      <!-- Sign board -->
+      <div class="ps-board-wrap">
+        <div class="ps-sign">
+          <svg class="ps-stamp" viewBox="0 0 120 120" aria-hidden="true">
+            <defs><path id="ps-ring" d="M60 60m-44 0a44 44 0 1 1 88 0a44 44 0 1 1-88 0" /></defs>
+            <circle cx="60" cy="60" r="57" fill="var(--kunyit)" stroke="var(--ink)" stroke-width="3" />
+            <text class="f-nota" font-size="11.5" font-weight="700" letter-spacing="2.2" fill="var(--ink)"><textPath href="#ps-ring">SEJAK {biz.since} · MASAK PAKAI ARANG · </textPath></text>
+            <path d="M44 62h32c0 9-7 15-16 15s-16-6-16-15z" fill="var(--ink)" />
+            <path d="M52 55c-1.5-2.5 1.5-3.5 0-6.5M60 55c-1.5-2.5 1.5-3.5 0-6.5M68 55c-1.5-2.5 1.5-3.5 0-6.5" stroke="var(--ink)" stroke-width="2.4" fill="none" stroke-linecap="round" />
+          </svg>
+          <p class="pr-16 text-xs font-extrabold tracking-[.18em] text-[var(--cabai)] uppercase sm:pr-20">Warung makan Jawa · {biz.area}</p>
+          <h1 class="f-display mt-3 text-[2.6rem] leading-[.95] font-extrabold sm:text-6xl">
+            Masakan rumahan, <span class="ps-underline">rasa Simbah.</span>
+          </h1>
+          <p class="mt-4 max-w-md text-[15px] leading-relaxed text-[var(--ink-2)] sm:text-base">{biz.intro}</p>
+          <div class="mt-6 flex flex-wrap gap-3">
+            <a href="#menu" class="btn">Lihat menu <Icon d={I.arrow} class="h-4 w-4" /></a>
+            <a href="#reservasi" class="btn btn-paper">Reservasi meja</a>
+          </div>
+          <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold">
+            <li class="flex items-center gap-1.5"><span class="text-[var(--kunyit-d)]">★★★★★</span> {biz.rating} · {biz.reviews} ulasan</li>
+            <li class="flex items-center gap-1.5"><Icon d={I.clock} class="h-4 w-4" /> <span data-today-hours>Hari ini 07.00–21.00</span></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Marquee -->
+    <div class="ps-marquee" aria-hidden="true">
+      <div class="ps-marquee-track">
+        {
+          [0, 1].map(() => (
+            <div class="flex shrink-0 items-center">
+              {marquee.map((m) => (
+                <span class="flex items-center">
+                  <span class="f-display px-6 text-2xl font-extrabold whitespace-nowrap uppercase sm:text-3xl">{m}</span>
+                  <svg viewBox="0 0 24 24" class="h-6 w-6 shrink-0"><path d="M12 2c1.5 4 1.5 6 0 10 1.5-4 3.5-5.5 8-6-4 1.5-5.5 3.5-8 6 4-1.5 6-1.5 10 0-4-1.5-6-1.5-10 0 2.5 2.5 4 4.5 8 6-4.5-.5-6.5-2-8-6 1.5 4 1.5 6 0 10-1.5-4-1.5-6 0-10-1.5 4-3.5 5.5-8 6 4-1.5 5.5-3.5 8-6-4 1.5-6 1.5-10 0 4 1.5 6 1.5 10 0-2.5-2.5-4-4.5-8-6 4.5.5 6.5 2 8 6-1.5-4-1.5-6 0-10z" fill="var(--cabai)" /></svg>
+                </span>
+              ))}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <!-- Facts -->
+    <section class="ps-facts" aria-label="Sekilas">
+      <div class="mx-auto grid max-w-7xl grid-cols-2 lg:grid-cols-4">
+        {
+          facts.map((f, i) => (
+            <div class="ps-fact" data-reveal style={`--rd:${i * 0.08}s`}>
+              <p class="f-display text-3xl font-extrabold sm:text-4xl">{f.big}</p>
+              <p class="mt-1 text-sm font-semibold text-[var(--ink-2)]">{f.label}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Menu -->
+    <section id="menu" class="ps-menu grid grid-cols-1 lg:grid-cols-2">
+      <div class="ps-stage relative overflow-hidden bg-[var(--ink)]" data-stage>
+        {
+          [0, 1].map((n) => (
+            <img
+              data-stage-img
+              src={photo(first.photo, 800, 800)}
+              srcset={srcset(first.photo, 1, [480, 800, 1100])}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              width="800"
+              height="800"
+              loading="lazy"
+              decoding="async"
+              draggable="false"
+              alt={n === 0 ? first.name : ''}
+              class:list={['absolute inset-0 h-full w-full object-cover', n === 0 && 'is-front']}
+            />
+          ))
+        }
+        <div class="absolute inset-0 bg-gradient-to-b from-black/55 via-transparent to-black/60"></div>
+        <h2 class="f-hand absolute top-5 left-5 text-5xl leading-[.85] font-bold text-white sm:top-8 sm:left-8 sm:text-7xl">
+          Menu<br />Pawon Simbah
+        </h2>
+        <div class="ps-stage-cap" data-stage-cap>
+          <p class="f-display text-xl font-extrabold sm:text-2xl" data-cap-name>{first.name}</p>
+          <p class="f-nota text-base font-bold" data-cap-price>{rupiah(first.price)}</p>
+        </div>
+      </div>
+
+      <div class="ps-menu-panel px-4 py-8 sm:px-8 sm:py-10 lg:px-10">
+        <div class="ps-tabs" role="tablist" aria-label="Kategori menu">
+          <span class="ps-tab-ind" data-tab-ind aria-hidden="true"></span>
+          {
+            menu.map((c, i) => (
+              <button type="button" role="tab" id={`tab-${c.id}`} aria-controls={`panel-${c.id}`} aria-selected={i === 0 ? 'true' : 'false'} tabindex={i === 0 ? 0 : -1} class="ps-tab">
+                {c.label}
+              </button>
+            ))
+          }
+        </div>
+
+        {
+          menu.map((c, i) => (
+            <div role="tabpanel" id={`panel-${c.id}`} aria-labelledby={`tab-${c.id}`} hidden={i !== 0} class="ps-panel is-anim">
+              <p class="f-hand mt-5 text-2xl text-[var(--cabai)]">{c.note}</p>
+              <ul class="mt-3 divide-y-2 divide-dashed divide-[var(--ink)]/20">
+                {c.dishes.map((d, j) => (
+                  <li class="ps-dish" data-dish={d.id} style={`--i:${j}`}>
+                    <img src={photo(d.photo, 160, 160, 60)} width="160" height="160" loading="lazy" decoding="async" alt="" class="ps-thumb lg:hidden" />
+                    <div class="min-w-0 flex-1">
+                      <div class="flex items-baseline gap-2">
+                        <h3 class="text-[17px] leading-snug font-extrabold" tabindex="0">{d.name}</h3>
+                        <span class="ps-leader" aria-hidden="true" />
+                        <span class="f-nota shrink-0 text-[15px] font-bold">{rupiah(d.price)}</span>
+                      </div>
+                      <p class="mt-1 text-sm leading-relaxed text-[var(--ink-2)]">{d.desc}</p>
+                      <div class="mt-2 flex flex-wrap items-center gap-2">
+                        {d.tag && <span class="ps-tag">{d.tag}</span>}
+                        {d.spicy ? (
+                          <span class="flex items-center gap-0.5" title={`Level pedas ${d.spicy} dari 3`}>
+                            {Array.from({ length: 3 }, (_, k) => (
+                              <svg viewBox="0 0 24 24" class="h-4 w-4" aria-hidden="true"><path d={CHILI} fill={k < d.spicy! ? 'var(--cabai)' : 'none'} stroke="var(--cabai)" stroke-width="1.6" /></svg>
+                            ))}
+                            <span class="sr-only">Level pedas {d.spicy} dari 3</span>
+                          </span>
+                        ) : null}
+                        <span class="ps-inqty f-nota text-xs font-bold" data-inqty={d.id} hidden />
+                      </div>
+                    </div>
+                    <button type="button" class="ps-add" data-add={d.id} aria-label={`Tambah ${d.name} ke nota`}>
+                      <Icon d={I.plus} class="h-5 w-5" />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+
+        <div class="mt-8 flex flex-wrap items-center gap-2 border-t-[3px] border-[var(--ink)] pt-5">
+          <p class="mr-1 text-sm font-bold">Mager keluar? Pesan antar:</p>
+          {delivery.map((d) => <a href={d.href} target="_blank" rel="noopener" class="ps-chip">{d.name}</a>)}
+        </div>
+      </div>
+    </section>
+
+    <!-- Kitchen day -->
+    <section id="dapur" class="ps-day py-16 sm:py-24">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-end justify-between gap-6 px-4 sm:px-6">
+        <div class="max-w-xl" data-reveal>
+          <p class="f-hand text-3xl text-[var(--cabai)]">Sebelum pintu dibuka…</p>
+          <h2 class="f-display mt-1 text-4xl leading-none font-extrabold sm:text-6xl">Pagi di dapur Simbah</h2>
+          <p class="mt-4 text-[var(--ink-2)]">Masakan enak itu urusan subuh. Begini tiap hari, kecuali Senin.</p>
+        </div>
+        <div class="flex items-center gap-3">
+          <span class="f-hand hidden text-2xl sm:inline">geser</span>
+          <button type="button" class="ps-round" data-prev aria-label="Sebelumnya"><Icon d={I.left} class="h-5 w-5" /></button>
+          <button type="button" class="ps-round" data-next aria-label="Berikutnya"><Icon d={I.right} class="h-5 w-5" /></button>
+        </div>
+      </div>
+      <ol class="ps-track mt-10" data-track>
+        {
+          day.map((s, i) => (
+            <li class:list={['ps-card', s.bg]} style={`--r:${i % 2 ? 1.6 : -1.4}deg`}>
+              <div class="ps-sticker">
+                <img src={photo(s.photo, 700, 525)} srcset={srcset(s.photo, 0.75, [400, 700])} sizes="340px" width="700" height="525" loading="lazy" decoding="async" draggable="false" alt={s.title} class="aspect-[4/3] w-full object-cover" />
+              </div>
+              <p class="f-nota mt-5 text-4xl font-bold">{s.time}</p>
+              <h3 class="f-display mt-1 text-2xl font-extrabold">{s.title}</h3>
+              <p class="mt-2 text-[15px] leading-relaxed">{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+      <div class="mx-auto mt-6 max-w-7xl px-4 sm:px-6">
+        <div class="h-[5px] overflow-hidden rounded-full bg-[var(--ink)]/15"><div class="ps-bar" data-track-bar></div></div>
+      </div>
+    </section>
+
+    <!-- Board -->
+    <section id="ulasan" class="ps-board-sec px-4 py-16 sm:px-6 sm:py-24">
+      <div class="mx-auto max-w-7xl">
+        <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
+          <div>
+            <p class="f-hand text-3xl text-[var(--cabai)]">Kata pelanggan & kabar warung</p>
+            <h2 class="f-display mt-1 text-4xl leading-none font-extrabold sm:text-6xl">Papan pengumuman</h2>
+          </div>
+          <div class="flex items-center gap-4">
+            <p class="f-display text-6xl leading-none font-extrabold">{biz.rating}</p>
+            <div>
+              <p class="text-lg text-[var(--kunyit-d)]">★★★★★</p>
+              <p class="text-sm font-semibold text-[var(--ink-2)]">dari {biz.reviews} ulasan Google</p>
+            </div>
+          </div>
+        </div>
+        <div class="ps-cork mt-10">
+          <ul class="ps-notes">
+            {
+              notes.map((n, i) => (
+                <li class:list={['ps-pnote', n.kind === 'info' ? 'is-info' : 'is-review']} style={`--r:${[-2.5, 1.8, -1.2, 2.4, -1.8, 1.4][i % 6]}deg; --rd:${(i % 3) * 0.08}s`} data-reveal>
+                  {n.kind === 'info' ? (
+                    <>
+                      <p class="f-display text-xl font-extrabold uppercase">{n.title}</p>
+                      <p class="mt-2 text-[15px] leading-relaxed">{n.text}</p>
+                    </>
+                  ) : (
+                    <>
+                      <p class="text-[var(--kunyit-d)]">{'★'.repeat(n.stars ?? 5)}</p>
+                      <p class="f-hand mt-1 text-[1.6rem] leading-[1.1]">“{n.text}”</p>
+                      <p class="mt-3 text-xs font-bold tracking-wide text-[var(--ink-2)] uppercase">{n.who}</p>
+                    </>
+                  )}
+                </li>
+              ))
+            }
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reservation -->
+    <section id="reservasi" class="ps-resv grid grid-cols-1 lg:grid-cols-2">
+      <div class="relative min-h-[320px] overflow-hidden bg-[var(--ink)] lg:min-h-full">
+        <img src={photo(img.pendopo, 1000, 1000)} srcset={srcset(img.pendopo, 1, [640, 1000, 1400])} sizes="(min-width: 1024px) 50vw, 100vw" width="1000" height="1000" loading="lazy" decoding="async" alt="Pendopo kayu dengan lampu gantung dan jendela kaca patri" class="absolute inset-0 h-full w-full object-cover" />
+        <div class="ps-sticky-note" data-reveal>
+          <p class="f-hand text-[1.7rem] leading-none">Pendopo kayu jati,<br />muat 40 orang.</p>
+          <p class="mt-1 text-xs font-bold">Cocok buat arisan, ulang tahun, makan kantor.</p>
+        </div>
+      </div>
+
+      <div class="bg-[var(--tan)] px-4 py-12 sm:px-8 sm:py-16 lg:px-12">
+        <p class="f-hand text-3xl text-[var(--cabai)]">Rombongan? Aman.</p>
+        <h2 class="f-display mt-1 text-4xl leading-none font-extrabold sm:text-5xl">Pesan meja dulu, datang tinggal makan.</h2>
+        <p class="mt-4 max-w-lg text-[var(--ink-2)]">Isi form ini, nanti terkirim ke WhatsApp kami. Admin membalas dalam 15 menit selama jam buka.</p>
+
+        <form class="ps-form mt-8" data-resv novalidate>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="ps-field sm:col-span-2">
+              <span>Nama</span>
+              <input id="r-name" name="name" type="text" autocomplete="name" placeholder="Nama pemesan" required />
+            </label>
+            <label class="ps-field">
+              <span>Tanggal</span>
+              <input id="r-date" name="date" type="date" required />
+            </label>
+            <label class="ps-field">
+              <span>Jam datang</span>
+              <select id="r-time" name="time" required>
+                {times.map((t) => <option value={t} selected={t === '12:00'}>{t.replace(':', '.')}</option>)}
+              </select>
+            </label>
+            <div class="ps-field">
+              <span id="r-people-l">Jumlah orang</span>
+              <div class="ps-stepper" role="group" aria-labelledby="r-people-l">
+                <button type="button" data-step="-1" aria-label="Kurangi"><Icon d={I.minus} class="h-4 w-4" /></button>
+                <input id="r-people" name="people" type="number" inputmode="numeric" min="1" max="60" value="4" aria-labelledby="r-people-l" />
+                <button type="button" data-step="1" aria-label="Tambah"><Icon d={I.plus} class="h-4 w-4" /></button>
+              </div>
+            </div>
+            <label class="ps-field">
+              <span>Acara</span>
+              <select id="r-event" name="event">
+                <option>Makan biasa</option>
+                <option>Ulang tahun</option>
+                <option>Arisan / kumpul keluarga</option>
+                <option>Makan kantor</option>
+                <option>Rombongan wisata</option>
+              </select>
+            </label>
+            <fieldset class="ps-field sm:col-span-2">
+              <legend>Area</legend>
+              <div class="mt-1 grid gap-2 sm:grid-cols-3">
+                {
+                  areas.map((a, i) => (
+                    <label class="ps-area">
+                      <input type="radio" name="area" value={a.label} checked={i === 0} class="sr-only" />
+                      <span class="block font-extrabold">{a.label}</span>
+                      <span class="block text-xs font-semibold text-[var(--ink-2)]">{a.note}</span>
+                    </label>
+                  ))
+                }
+              </div>
+            </fieldset>
+            <label class="ps-field sm:col-span-2">
+              <span>Catatan <em class="font-normal not-italic opacity-70">(opsional)</em></span>
+              <textarea id="r-note" name="note" rows="2" placeholder="Contoh: butuh kursi bayi, pesan tumpeng"></textarea>
+            </label>
+          </div>
+          <p class="ps-error mt-4" data-resv-error role="alert" hidden></p>
+          <button type="submit" class="btn btn-dark mt-6 w-full justify-center py-3.5 text-base sm:w-auto">
+            <Icon d={I.wa} class="h-5 w-5" /> Kirim reservasi lewat WhatsApp
+          </button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <!-- Location & footer -->
+  <footer id="lokasi" class="ps-footer px-4 pt-16 pb-10 sm:px-6 sm:pt-20">
+    <div class="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[1.15fr_1fr_1fr]">
+      <div>
+        <p class="f-hand text-3xl text-[var(--cabai)]">Mampir ke Pawon</p>
+        <svg viewBox="0 0 360 214" class="ps-drawing mt-3 w-full max-w-sm" data-reveal role="img" aria-label="Gambar garis rumah joglo Pawon Simbah">
+          <g fill="none" stroke="var(--ink)" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+            <path pathLength="1" d="M10 204H350" />
+            <path pathLength="1" d="M122 40h116l32 38H90z" />
+            <path pathLength="1" d="M90 78l-50 34h280l-50-34" />
+            <path pathLength="1" d="M122 40l-10-12M238 40l10-12M105 60h150M62 98h236" />
+            <path pathLength="1" d="M70 112v92M130 112v92M230 112v92M290 112v92M60 122h240" />
+            <path pathLength="1" d="M140 128h80v20h-80z" />
+            <path pathLength="1" d="M152 162h56v42M152 162v42" />
+            <path pathLength="1" d="M80 172h44M85 172v32M119 172v32M92 166h24l-2-8h-20z" />
+            <path pathLength="1" d="M98 152c-3-4 3-6 0-10M108 152c-3-4 3-6 0-10" />
+            <path pathLength="1" d="M180 112v8M174 120h12l-2 10h-8z" />
+            <path pathLength="1" d="M240 180h44M245 180v24M279 180v24" />
+            <path pathLength="1" d="M30 204c-2-20-8-28-16-32M30 204c2-22 10-32 20-36M30 204c0-18 0-30 0-44M22 204l2-12h12l2 12" />
+            <path pathLength="1" d="M330 204c0-20 8-30 16-34M330 204c-2-18-10-28-18-30M330 204c0-16 0-26 0-38" />
+          </g>
+          <text x="180" y="142" text-anchor="middle" class="f-display" font-size="11" font-weight="800" letter-spacing="1.5" fill="var(--ink)">PAWON SIMBAH</text>
+        </svg>
+
+        <div class="ps-branch mt-6">
+          <div class="flex items-center justify-between gap-2">
+            <button type="button" class="ps-round ps-round-sm" data-branch-prev aria-label="Cabang sebelumnya"><Icon d={I.left} class="h-4 w-4" /></button>
+            <p class="f-nota text-xs font-bold" data-branch-count>1 / {branches.length}</p>
+            <button type="button" class="ps-round ps-round-sm" data-branch-next aria-label="Cabang berikutnya"><Icon d={I.right} class="h-4 w-4" /></button>
+          </div>
+          <div class="mt-3" aria-live="polite">
+            <p class="f-display text-xl font-extrabold"><span data-branch-name>{branches[0].name}</span> <span class="ps-tag ml-1 align-middle" data-branch-note>{branches[0].note}</span></p>
+            <p class="mt-1 text-sm text-[var(--ink-2)]" data-branch-address>{branches[0].address}</p>
+          </div>
+          <a href={branches[0].maps} target="_blank" rel="noopener" class="btn btn-sm btn-dark mt-4" data-branch-maps><Icon d={I.pin} class="h-4 w-4" /> Petunjuk arah</a>
+        </div>
+      </div>
+
+      <div>
+        <h2 class="f-display text-2xl font-extrabold">Jam buka</h2>
+        <p class="mt-1 text-sm text-[var(--ink-2)]">Waktu Indonesia Barat</p>
+        <ul class="mt-4 space-y-1">
+          {
+            hours.map((h, i) => (
+              <li class="ps-hour" data-hours-row={i}>
+                <span>{h.day}</span>
+                <span class="f-nota font-bold">{h.open ? `${h.open.replace(':', '.')}–${h.close!.replace(':', '.')}` : 'Libur'}</span>
+              </li>
+            ))
+          }
+        </ul>
+        <p class="mt-4 text-sm"><span class="ps-status ps-status-inline" data-open-status data-open="true"><span class="ps-dot"></span><span data-status-text>Buka</span></span></p>
+      </div>
+
+      <div>
+        <h2 class="f-display text-2xl font-extrabold">Hubungi kami</h2>
+        <div class="mt-4 grid gap-3">
+          <a href={general} target="_blank" rel="noopener" class="ps-contact">
+            <span class="f-nota text-lg font-bold">{biz.phone}</span>
+            <span class="ps-contact-cta"><Icon d={I.wa} class="h-4 w-4" /> Pesan & reservasi</span>
+          </a>
+          <a href={wa(`Halo ${biz.name}, saya mau tanya pesanan nasi kotak / acara.`)} target="_blank" rel="noopener" class="ps-contact">
+            <span class="f-nota text-lg font-bold">{biz.phoneEvents}</span>
+            <span class="ps-contact-cta"><Icon d={I.cal} class="h-4 w-4" /> Nasi kotak & acara</span>
+          </a>
+        </div>
+        <p class="mt-6 text-sm font-bold">Instagram & TikTok <span class="f-nota font-bold">{biz.instagram}</span></p>
+        <ul class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm font-bold">
+          <li><a href="#menu" class="ps-link">Menu</a></li>
+          <li><a href="#dapur" class="ps-link">Dapur</a></li>
+          <li><a href="#ulasan" class="ps-link">Ulasan</a></li>
+          <li><a href="#reservasi" class="ps-link">Reservasi</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mx-auto mt-14 flex max-w-7xl flex-wrap items-center justify-between gap-3 border-t-[3px] border-[var(--ink)] pt-5 text-xs font-semibold text-[var(--ink-2)]">
+      <p>© 2026 {biz.name}. Bisnis fiktif untuk contoh. Foto dari <a href="https://unsplash.com" target="_blank" rel="noopener" class="underline">Unsplash</a>.</p>
+      <p>Website contoh oleh <a href={url('harga')} class="font-extrabold text-[var(--ink)] underline">{BRAND}</a></p>
+    </div>
+  </footer>
+
+  <!-- Mobile dock -->
+  <nav class="ps-dock md:hidden" aria-label="Aksi cepat">
+    <a href="#menu"><Icon d={I.menu} class="h-5 w-5" />Menu</a>
+    <button type="button" data-cart-open class="is-main"><Icon d={I.nota} class="h-5 w-5" />Nota <span class="ps-count" data-cart-count hidden>0</span></button>
+    <a href="#reservasi"><Icon d={I.cal} class="h-5 w-5" />Reservasi</a>
+  </nav>
+
+  <!-- Toast -->
+  <div class="ps-toast" data-toast role="status" aria-live="polite" hidden>
+    <span data-toast-text></span>
+    <button type="button" data-cart-open class="font-extrabold underline">Lihat nota</button>
+  </div>
+
+  <!-- Order drawer -->
+  <dialog id="nota" class="ps-cart" aria-labelledby="nota-title">
+    <div class="flex h-full flex-col">
+      <div class="flex items-center justify-between border-b-[3px] border-[var(--ink)] px-5 py-4">
+        <h2 id="nota-title" class="f-display text-2xl font-extrabold">Nota pesanan</h2>
+        <button type="button" class="ps-round ps-round-sm" data-cart-close aria-label="Tutup nota"><Icon d={I.x} class="h-4 w-4" /></button>
+      </div>
+      <div class="flex-1 overflow-y-auto px-5 py-5">
+        <div class="ps-receipt">
+          <p class="f-nota text-center text-sm font-bold tracking-widest uppercase">{biz.name}</p>
+          <p class="f-nota text-center text-xs">{branches[0].name.replace(`${biz.name} `, '')} · {biz.phone}</p>
+          <p class="f-nota my-3 overflow-hidden text-xs whitespace-nowrap opacity-60">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
+          <ul class="space-y-3" data-cart-list></ul>
+          <div class="text-center" data-cart-empty>
+            <p class="f-hand text-2xl">Notanya masih kosong.</p>
+            <p class="mt-1 text-sm text-[var(--ink-2)]">Tekan tombol + di menu untuk menambah.</p>
+          </div>
+          <p class="f-nota my-3 overflow-hidden text-xs whitespace-nowrap opacity-60">- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -</p>
+          <div class="f-nota flex justify-between text-base font-bold"><span>TOTAL</span><span data-cart-total>Rp0</span></div>
+        </div>
+
+        <div class="mt-6 grid gap-4" data-cart-form>
+          <fieldset class="ps-field">
+            <legend>Cara ambil</legend>
+            <div class="mt-1 grid grid-cols-3 gap-2">
+              {['Makan di tempat', 'Ambil sendiri', 'Diantar'].map((m, i) => (
+                <label class="ps-area ps-area-sm">
+                  <input type="radio" name="mode" value={m} checked={i === 1} class="sr-only" />
+                  <span class="block text-sm font-extrabold">{m}</span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+          <label class="ps-field" data-address hidden>
+            <span>Alamat antar</span>
+            <textarea id="o-address" rows="2" placeholder="Jalan, nomor rumah, patokan"></textarea>
+          </label>
+          <div class="grid grid-cols-2 gap-3">
+            <label class="ps-field">
+              <span>Nama</span>
+              <input id="o-name" type="text" autocomplete="name" placeholder="Nama kamu" />
+            </label>
+            <label class="ps-field">
+              <span>Jam</span>
+              <select id="o-time">
+                <option>Secepatnya</option>
+                {times.map((t) => <option>{t.replace(':', '.')}</option>)}
+              </select>
+            </label>
+          </div>
+          <label class="ps-field">
+            <span>Catatan <em class="font-normal not-italic opacity-70">(opsional)</em></span>
+            <input id="o-note" type="text" placeholder="Contoh: sambel dipisah" />
+          </label>
+        </div>
+      </div>
+      <div class="border-t-[3px] border-[var(--ink)] px-5 py-4" style="padding-bottom: max(1rem, env(safe-area-inset-bottom))">
+        <p class="ps-error mb-3" data-cart-error role="alert" hidden></p>
+        <a href={general} target="_blank" rel="noopener" class="btn btn-dark w-full justify-center py-3.5 text-base" data-cart-send>
+          <Icon d={I.wa} class="h-5 w-5" /> Kirim pesanan lewat WhatsApp
+        </a>
+      </div>
+    </div>
+  </dialog>
+</Base>
+
+<style is:global>
+  /* Page styles live in the components layer so Tailwind utilities (hidden, md:hidden…) still win. */
+  @layer theme, base, components, utilities;
+  @layer components {
+  .ps {
+    --ink: #24160f;
+    --ink-2: #5b4636;
+    --paper: #fbf4e6;
+    --tan: #ead7b0;
+    --kunyit: #f2b705;
+    --kunyit-d: #c98a00;
+    --cabai: #c8401b;
+    --daun: #2f6b3a;
+    --line: 3px;
+    --f-display: 'Bricolage Grotesque Variable', 'Arial Narrow', ui-sans-serif, system-ui, sans-serif;
+    --f-hand: 'Caveat Variable', 'Segoe Print', 'Comic Sans MS', cursive;
+    --f-nota: 'Courier Prime', 'Courier New', ui-monospace, monospace;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Plus Jakarta Sans Variable', ui-sans-serif, system-ui, sans-serif;
+    overflow-x: clip;
+  }
+  @media (max-width: 767px) {
+    .ps { padding-bottom: calc(68px + env(safe-area-inset-bottom)); }
+  }
+  html:has(.ps) { scroll-padding-top: 4.75rem; }
+  .ps ::selection { background: var(--kunyit); color: var(--ink); }
+  .ps :focus-visible { outline: 3px solid var(--cabai); outline-offset: 3px; border-radius: 6px; }
+  .ps h1, .ps h2, .ps h3 { text-wrap: balance; }
+  .f-display { font-family: var(--f-display); font-stretch: 78%; letter-spacing: -0.015em; }
+  .f-hand { font-family: var(--f-hand); font-weight: 600; }
+  .f-nota { font-family: var(--f-nota); font-variant-numeric: tabular-nums; }
+
+  /* Buttons */
+  .ps .btn {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: var(--line) solid var(--ink); border-radius: 999px;
+    padding: 0.7rem 1.3rem; font-weight: 800; line-height: 1.1;
+    background: var(--kunyit); color: var(--ink);
+    box-shadow: 4px 4px 0 var(--ink);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s;
+  }
+  .ps .btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .ps .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--ink); }
+  .ps .btn-paper { background: var(--paper); }
+  .ps .btn-dark { background: var(--ink); color: var(--paper); box-shadow: 4px 4px 0 var(--kunyit); }
+  .ps .btn-dark:hover { box-shadow: 6px 6px 0 var(--kunyit); }
+  .ps .btn-sm { padding: 0.45rem 0.95rem; font-size: 0.875rem; box-shadow: 3px 3px 0 var(--ink); }
+  .ps .btn-dark.btn-sm { box-shadow: 3px 3px 0 var(--kunyit); }
+  .ps-link { background: linear-gradient(var(--cabai), var(--cabai)) 0 100% / 0 2px no-repeat; transition: background-size 0.25s; padding-bottom: 2px; }
+  .ps-link:hover { background-size: 100% 2px; }
+  .ps-round {
+    display: grid; place-items: center; width: 2.9rem; height: 2.9rem; border-radius: 999px;
+    border: var(--line) solid var(--ink); background: var(--paper); transition: background-color 0.15s, transform 0.15s;
+  }
+  .ps-round:hover { background: var(--kunyit); transform: scale(1.06); }
+  .ps-round-sm { width: 2.25rem; height: 2.25rem; border-width: 2px; }
+  .ps-count {
+    display: inline-grid; place-items: center; min-width: 1.35rem; height: 1.35rem; padding: 0 0.3rem;
+    border-radius: 999px; background: var(--cabai); color: #fff; font-size: 0.75rem; font-weight: 800;
+  }
+  .ps-count.bump { animation: ps-bump 0.4s ease; }
+  .ps-chip {
+    border: 2px solid var(--ink); border-radius: 999px; padding: 0.35rem 0.9rem; font-size: 0.875rem; font-weight: 800;
+    background: var(--paper); transition: background-color 0.15s, transform 0.15s;
+  }
+  .ps-chip:hover { background: var(--kunyit); transform: translateY(-2px); }
+  .ps-tag {
+    display: inline-block; border: 2px solid var(--ink); border-radius: 4px; padding: 0 0.4rem;
+    font-size: 0.7rem; font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; background: var(--kunyit);
+    transform: rotate(-2deg);
+  }
+
+  /* Header */
+  .ps-header { top: 0; background: var(--paper); border-bottom: var(--line) solid var(--ink); }
+  .ps-status {
+    display: inline-flex; align-items: center; gap: 0.45rem; border: 2px solid var(--ink); border-radius: 999px;
+    padding: 0.3rem 0.7rem; font-size: 0.75rem; font-weight: 800; background: #fff; white-space: nowrap;
+  }
+  .ps-status-inline { font-size: 0.8rem; }
+  .ps-dot { width: 0.55rem; height: 0.55rem; border-radius: 999px; background: #1f9d4c; box-shadow: 0 0 0 0 rgb(31 157 76 / 0.6); animation: ps-pulse 2s infinite; }
+  .ps-status[data-open='false'] .ps-dot { background: var(--cabai); animation: none; }
+  .ps-logo-steam { animation: ps-float 2.6s ease-in-out infinite; }
+
+  /* Hero */
+  .ps-hero { border-bottom: var(--line) solid var(--ink); background: var(--ink); overflow-x: clip; }
+  .ps-hero-photo { aspect-ratio: 4 / 3; }
+  @media (min-width: 640px) { .ps-hero-photo { aspect-ratio: 16 / 10; } }
+  @media (min-width: 1024px) { .ps-hero-photo { aspect-ratio: auto; height: clamp(560px, calc(100svh - 6.5rem), 820px); } }
+  .ps-settle { animation: ps-settle 1.8s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .ps-annot { position: absolute; inset: 0; pointer-events: none; }
+  .ps-note-tag {
+    position: absolute; display: flex; align-items: flex-start; gap: 0.25rem;
+    font-family: var(--f-hand); font-weight: 700; font-size: clamp(1.35rem, 1.9vw, 1.9rem); line-height: 1; color: #fff;
+    text-shadow: 0 2px 12px rgb(0 0 0 / 0.55);
+    opacity: 0; animation: ps-fade 0.6s ease forwards; animation-delay: var(--d);
+  }
+  .ps-note-tag span { transform: rotate(-3deg); }
+  .ps-note-right span { transform: rotate(2deg); text-align: right; }
+  .ps-draw { overflow: visible; flex-shrink: 0; margin-top: 0.8rem; }
+  .ps-flip { transform: scaleX(-1); }
+  .ps-draw path {
+    fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round;
+    stroke-dasharray: 1; stroke-dashoffset: 1; animation: ps-draw 0.9s ease forwards; animation-delay: calc(var(--d) + 0.15s);
+    filter: drop-shadow(0 1px 4px rgb(0 0 0 / 0.5));
+  }
+  .ps-steam { position: absolute; width: 5rem; overflow: visible; }
+  .ps-steam path { fill: none; stroke: rgb(255 255 255 / 0.75); stroke-width: 3; stroke-linecap: round; animation: ps-steam 3.2s ease-in-out infinite; opacity: 0; }
+  .ps-steam path:nth-child(2) { animation-delay: 1s; }
+  .ps-steam path:nth-child(3) { animation-delay: 2s; }
+
+  .ps-board-wrap { position: relative; z-index: 2; padding: 0 1rem; margin-top: -3.25rem; padding-bottom: 2rem; }
+  @media (min-width: 1024px) {
+    .ps-board-wrap { position: absolute; left: max(1.5rem, calc((100vw - 80rem) / 2 + 1.5rem)); bottom: 2.25rem; margin: 0; padding: 0; width: min(36rem, 46vw); }
+  }
+  .ps-sign {
+    position: relative; background: var(--paper); border: var(--line) solid var(--ink); border-radius: 1.25rem;
+    padding: 1.6rem 1.4rem 1.5rem; box-shadow: 8px 8px 0 var(--ink);
+    animation: ps-swing 1s cubic-bezier(0.2, 0.8, 0.25, 1.2) 0.25s both; transform-origin: 50% -40px;
+  }
+  @media (min-width: 640px) { .ps-sign { padding: 2.2rem 2.2rem 2rem; } }
+  .ps-stamp { position: absolute; top: -2.6rem; right: -0.6rem; width: 5.6rem; animation: ps-spin 26s linear infinite; }
+  @media (min-width: 640px) { .ps-stamp { width: 7rem; top: -3.2rem; right: -2rem; } }
+  .ps-underline { background: linear-gradient(transparent 62%, var(--kunyit) 62%, var(--kunyit) 92%, transparent 92%); padding: 0 0.1em; }
+
+  /* Marquee */
+  .ps-marquee { overflow: hidden; background: var(--kunyit); border-bottom: var(--line) solid var(--ink); padding: 0.85rem 0; }
+  .ps-marquee-track { display: flex; width: max-content; animation: ps-marquee 38s linear infinite; }
+  .ps-marquee:hover .ps-marquee-track { animation-play-state: paused; }
+
+  /* Facts */
+  .ps-facts { border-bottom: var(--line) solid var(--ink); }
+  .ps-fact { padding: 1.6rem 1.25rem; border-right: var(--line) solid var(--ink); border-bottom: var(--line) solid var(--ink); }
+  .ps-fact:nth-child(2n) { border-right: 0; }
+  .ps-fact:nth-child(n + 3) { border-bottom: 0; }
+  @media (min-width: 1024px) {
+    .ps-fact { padding: 2rem 2rem; border-bottom: 0; }
+    .ps-fact:nth-child(2n) { border-right: var(--line) solid var(--ink); }
+    .ps-fact:last-child { border-right: 0; }
+  }
+
+  /* Menu */
+  .ps-menu { border-bottom: var(--line) solid var(--ink); }
+  .ps-stage { aspect-ratio: 4 / 3; border-bottom: var(--line) solid var(--ink); }
+  @media (min-width: 1024px) {
+    .ps-stage { aspect-ratio: auto; position: sticky; top: 4.1rem; height: calc(100svh - 4.1rem); border-bottom: 0; border-right: var(--line) solid var(--ink); }
+  }
+  [data-stage-img] { opacity: 0; transform: scale(1.06); transition: opacity 0.5s ease, transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  [data-stage-img].is-front { opacity: 1; transform: scale(1); }
+  .ps-stage-cap {
+    position: absolute; left: 1.25rem; bottom: 1.25rem; max-width: calc(100% - 2.5rem);
+    background: var(--paper); border: var(--line) solid var(--ink); border-radius: 0.9rem; padding: 0.7rem 1rem;
+    box-shadow: 5px 5px 0 var(--ink); transform: rotate(-1.5deg); transition: transform 0.3s;
+  }
+  @media (min-width: 640px) { .ps-stage-cap { left: 2rem; bottom: 2rem; } }
+  .ps-stage-cap.flip { animation: ps-pop 0.45s ease; }
+  .ps-menu-panel { background: var(--tan); }
+  .ps-tabs {
+    position: relative; display: flex; gap: 0.25rem; padding: 4px; border: var(--line) solid var(--ink); border-radius: 999px;
+    background: var(--paper); overflow-x: auto; scrollbar-width: none; width: fit-content; max-width: 100%;
+  }
+  .ps-tabs::-webkit-scrollbar { display: none; }
+  .ps-tab-ind {
+    position: absolute; top: 4px; bottom: 4px; left: 0; width: 0; border-radius: 999px; background: var(--kunyit);
+    border: 2px solid var(--ink); transition: transform 0.35s cubic-bezier(0.3, 0.9, 0.3, 1.1), width 0.35s cubic-bezier(0.3, 0.9, 0.3, 1.1);
+  }
+  .ps-tab { position: relative; z-index: 1; padding: 0.55rem 1.1rem; border-radius: 999px; font-weight: 800; font-size: 0.95rem; white-space: nowrap; }
+  .ps-tab[aria-selected='false']:hover { color: var(--cabai); }
+  .ps-panel.is-anim .ps-dish { animation: ps-rise 0.45s ease both; animation-delay: calc(var(--i) * 0.06s); }
+  .ps-dish { position: relative; display: flex; align-items: flex-start; gap: 0.9rem; padding: 1rem 0.25rem; transition: background-color 0.2s; border-radius: 0.6rem; }
+  @media (min-width: 1024px) { .ps-dish { padding: 1.1rem 0.75rem; } .ps-dish:hover { background: rgb(255 255 255 / 0.45); } }
+  .ps-dish h3 { outline-offset: 2px; }
+  .ps-thumb { width: 4.5rem; height: 4.5rem; flex-shrink: 0; border-radius: 0.75rem; border: 2px solid var(--ink); object-fit: cover; }
+  .ps-leader { flex: 1; min-width: 1rem; border-bottom: 2px dotted rgb(36 22 15 / 0.45); transform: translateY(-0.3rem); }
+  .ps-inqty { background: var(--ink); color: var(--paper); border-radius: 999px; padding: 0.1rem 0.5rem; }
+  .ps-add {
+    position: relative; display: grid; place-items: center; flex-shrink: 0; width: 2.6rem; height: 2.6rem; margin-top: 0.1rem;
+    border-radius: 999px; border: var(--line) solid var(--ink); background: var(--kunyit); box-shadow: 3px 3px 0 var(--ink);
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .ps-add:hover { transform: translate(-1px, -1px) rotate(90deg); box-shadow: 4px 4px 0 var(--ink); }
+  .ps-add:active { transform: translate(2px, 2px); box-shadow: 0 0 0 var(--ink); }
+  .ps-plus1 {
+    position: absolute; left: 50%; top: -0.4rem; translate: -50% 0; pointer-events: none;
+    font-family: var(--f-hand); font-weight: 700; font-size: 1.6rem; color: var(--cabai); animation: ps-plus1 0.8s ease forwards;
+  }
+
+  /* Kitchen day carousel */
+  .ps-day { border-bottom: var(--line) solid var(--ink); }
+  .ps-track {
+    display: flex; gap: 1.5rem; overflow-x: auto; scroll-snap-type: x mandatory; scrollbar-width: none;
+    padding: 1.5rem max(1rem, calc((100vw - 80rem) / 2 + 1.5rem)) 1.75rem; scroll-padding-inline: max(1rem, calc((100vw - 80rem) / 2 + 1.5rem));
+    cursor: grab; overscroll-behavior-x: contain;
+  }
+  .ps-track::-webkit-scrollbar { display: none; }
+  .ps-track.is-drag { cursor: grabbing; scroll-snap-type: none; user-select: none; }
+  .ps-card {
+    flex: 0 0 min(82vw, 21.5rem); scroll-snap-align: start; border: var(--line) solid var(--ink); border-radius: 1.25rem;
+    padding: 1rem 1rem 1.4rem; box-shadow: 6px 6px 0 var(--ink); transform: rotate(var(--r)); transition: transform 0.35s ease;
+  }
+  .ps-card:hover { transform: rotate(0) translateY(-6px); }
+  .ps-card.bg-\[\#d9481e\], .ps-card.bg-\[\#2f6b3a\] { color: #fff8ec; }
+  .ps-sticker { background: #fff; padding: 0.5rem; border-radius: 0.4rem; transform: rotate(calc(var(--r) * -1.6)); box-shadow: 0 10px 20px -10px rgb(0 0 0 / 0.6); }
+  .ps-sticker img { border-radius: 0.2rem; }
+  .ps-bar { height: 100%; width: 100%; background: var(--ink); border-radius: 999px; transform-origin: left; transform: scaleX(0.25); transition: transform 0.15s linear; }
+
+  /* Board */
+  .ps-board-sec { border-bottom: var(--line) solid var(--ink); }
+  .ps-cork {
+    position: relative; border: var(--line) solid var(--ink); border-radius: 1rem; padding: 2.25rem 1.25rem;
+    background-color: #c9a273;
+    background-image: radial-gradient(rgb(90 55 25 / 0.28) 1px, transparent 1.6px), radial-gradient(rgb(255 240 210 / 0.25) 1px, transparent 1.6px);
+    background-size: 9px 9px, 13px 13px; background-position: 0 0, 4px 6px;
+    box-shadow: inset 0 0 0 12px #7a4a26, inset 0 0 0 15px var(--ink), 8px 8px 0 var(--ink);
+  }
+  @media (min-width: 640px) { .ps-cork { padding: 3rem 2.75rem; } }
+  .ps-notes { display: grid; gap: 1.75rem 1.75rem; grid-template-columns: 1fr; align-items: start; }
+  @media (min-width: 640px) { .ps-notes { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ps-notes { grid-template-columns: repeat(3, 1fr); gap: 2.25rem 2.5rem; } }
+  .ps-pnote {
+    position: relative; padding: 1.4rem 1.25rem 1.2rem; border-radius: 3px; background: #fffdf7;
+    box-shadow: 0 14px 22px -12px rgb(0 0 0 / 0.55); transform: rotate(var(--r)); transition: transform 0.3s ease, box-shadow 0.3s;
+  }
+  .js .ps-pnote[data-reveal] { transform: rotate(var(--r)) translateY(18px); }
+  .js .ps-pnote[data-reveal].is-in, .ps-pnote:hover { transform: rotate(var(--r)); }
+  .ps-pnote:hover { transform: rotate(0) translateY(-4px) scale(1.02) !important; box-shadow: 0 22px 28px -14px rgb(0 0 0 / 0.6); z-index: 2; }
+  .ps-pnote.is-info { background: #ffe58a; }
+  .ps-pnote.is-review::before {
+    content: ''; position: absolute; top: -0.7rem; left: 50%; width: 5.5rem; height: 1.5rem; translate: -50% 0; rotate: -4deg;
+    background: rgb(255 255 255 / 0.55); border: 1px solid rgb(0 0 0 / 0.08);
+  }
+  .ps-pnote.is-info::before {
+    content: ''; position: absolute; top: 0.55rem; left: 50%; width: 1rem; height: 1rem; translate: -50% 0; border-radius: 999px;
+    background: radial-gradient(circle at 35% 35%, #ff8a6a, var(--cabai) 60%, #7a1c06); box-shadow: 0 3px 4px rgb(0 0 0 / 0.4);
+  }
+  .ps-pnote.is-info { padding-top: 2rem; }
+
+  /* Reservation */
+  .ps-resv { border-bottom: var(--line) solid var(--ink); }
+  .ps-resv > div:first-child { border-bottom: var(--line) solid var(--ink); }
+  @media (min-width: 1024px) { .ps-resv > div:first-child { border-bottom: 0; border-right: var(--line) solid var(--ink); } }
+  .ps-sticky-note {
+    position: absolute; left: 1.25rem; bottom: 1.25rem; max-width: 17rem; padding: 1rem 1.1rem;
+    background: #ffe58a; box-shadow: 0 14px 24px -10px rgb(0 0 0 / 0.6); transform: rotate(-2.5deg);
+  }
+  @media (min-width: 640px) { .ps-sticky-note { left: 2rem; bottom: 2rem; } }
+  .ps-field { display: grid; gap: 0.35rem; min-width: 0; border: 0; padding: 0; margin: 0; }
+  .ps-field > span, .ps-field > legend { font-size: 0.8rem; font-weight: 800; letter-spacing: 0.05em; text-transform: uppercase; }
+  .ps-field input, .ps-field select, .ps-field textarea {
+    width: 100%; border: 2px solid var(--ink); border-radius: 0.7rem; background: #fffdf7; padding: 0.7rem 0.85rem;
+    font: inherit; font-size: 1rem; color: var(--ink); transition: box-shadow 0.15s;
+  }
+  .ps-field input:focus, .ps-field select:focus, .ps-field textarea:focus { outline: none; box-shadow: 4px 4px 0 var(--kunyit), 0 0 0 1px var(--ink); }
+  .ps-field [aria-invalid='true'] { border-color: var(--cabai); background: #fff1ec; }
+  .ps-stepper { display: flex; align-items: stretch; border: 2px solid var(--ink); border-radius: 0.7rem; background: #fffdf7; overflow: hidden; }
+  .ps-stepper button { width: 3rem; display: grid; place-items: center; transition: background-color 0.15s; }
+  .ps-stepper button:hover { background: var(--kunyit); }
+  .ps-stepper input { border: 0 !important; border-radius: 0 !important; text-align: center; font-weight: 800; box-shadow: none !important; -moz-appearance: textfield; appearance: textfield; }
+  .ps-stepper input::-webkit-inner-spin-button { display: none; }
+  .ps-area {
+    display: block; cursor: pointer; border: 2px solid var(--ink); border-radius: 0.8rem; padding: 0.65rem 0.85rem;
+    background: #fffdf7; transition: background-color 0.15s, box-shadow 0.15s, transform 0.15s;
+  }
+  .ps-area:hover { transform: translateY(-1px); }
+  .ps-area:has(input:checked) { background: var(--kunyit); box-shadow: 3px 3px 0 var(--ink); }
+  .ps-area:has(input:focus-visible) { outline: 3px solid var(--cabai); outline-offset: 2px; }
+  .ps-area-sm { padding: 0.55rem 0.4rem; text-align: center; }
+  .ps-error { color: var(--cabai); font-weight: 800; font-size: 0.9rem; }
+
+  /* Footer */
+  .ps-footer { background: var(--paper); }
+  .ps-branch { border: var(--line) solid var(--ink); border-radius: 1rem; padding: 1rem 1.1rem 1.2rem; background: #fff; box-shadow: 5px 5px 0 var(--ink); max-width: 24rem; }
+  .ps-hour { display: flex; justify-content: space-between; gap: 1rem; padding: 0.4rem 0.6rem; border-radius: 0.5rem; font-weight: 600; }
+  .ps-hour.is-today { background: var(--kunyit); font-weight: 800; box-shadow: inset 0 0 0 2px var(--ink); }
+  .ps-contact {
+    display: flex; flex-direction: column; gap: 0.5rem; border: var(--line) solid var(--ink); border-radius: 1rem; padding: 0.9rem 1rem 0;
+    overflow: hidden; background: #fff; transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .ps-contact:hover { transform: translate(-2px, -2px); box-shadow: 5px 5px 0 var(--ink); }
+  .ps-contact-cta { display: flex; align-items: center; gap: 0.5rem; margin: 0 -1rem; padding: 0.55rem 1rem; background: var(--ink); color: var(--paper); font-size: 0.85rem; font-weight: 800; }
+  .js .ps-drawing path { stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 2.2s ease; }
+  .js .ps-drawing text { opacity: 0; transition: opacity 0.6s ease 1.6s; }
+  .js .ps-drawing.is-in path { stroke-dashoffset: 0; }
+  .js .ps-drawing.is-in text { opacity: 1; }
+
+  /* Dock, toast, drawer */
+  .ps-dock {
+    position: fixed; inset: auto 0 0; z-index: 45; display: grid; grid-template-columns: 1fr 1.2fr 1fr; gap: 0.5rem;
+    padding: 0.5rem max(0.75rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
+    background: var(--paper); border-top: var(--line) solid var(--ink);
+  }
+  .ps-dock > * { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.1rem; padding: 0.35rem; border-radius: 0.8rem; font-size: 0.72rem; font-weight: 800; position: relative; }
+  .ps-dock .is-main { background: var(--kunyit); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--ink); }
+  .ps-dock .ps-count { position: absolute; top: -0.4rem; right: 0.6rem; }
+  .ps-toast {
+    position: fixed; z-index: 60; left: 50%; bottom: calc(5.25rem + env(safe-area-inset-bottom)); translate: -50% 0;
+    display: flex; align-items: center; gap: 1rem; max-width: calc(100vw - 2rem); padding: 0.75rem 1.1rem;
+    background: var(--ink); color: var(--paper); border-radius: 999px; font-size: 0.9rem; font-weight: 600; white-space: nowrap;
+    box-shadow: 4px 4px 0 var(--kunyit); animation: ps-toast 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+  }
+  .ps-toast [data-toast-text] { overflow: hidden; text-overflow: ellipsis; }
+  @media (min-width: 768px) { .ps-toast { bottom: 2rem; } }
+  dialog.ps-cart {
+    margin: 0 0 0 auto; width: min(28rem, 100vw); max-width: 100vw; height: 100dvh; max-height: 100dvh; padding: 0;
+    border: 0; border-left: var(--line) solid var(--ink); background: var(--paper); color: var(--ink);
+  }
+  dialog.ps-cart[open] { animation: ps-slide-in 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  dialog.ps-cart::backdrop { background: rgb(36 22 15 / 0.55); backdrop-filter: blur(2px); }
+  @media (max-width: 639px) {
+    dialog.ps-cart { margin: auto 0 0; width: 100vw; height: auto; max-height: 90dvh; border-left: 0; border-top: var(--line) solid var(--ink); border-radius: 1.25rem 1.25rem 0 0; }
+    dialog.ps-cart[open] { animation-name: ps-sheet-in; }
+  }
+  .ps-receipt {
+    position: relative; background: #fff; padding: 1.25rem 1.1rem 1.4rem; border-radius: 4px 4px 0 0;
+    box-shadow: 0 10px 20px -14px rgb(0 0 0 / 0.5);
+  }
+  .ps-receipt::after {
+    content: ''; position: absolute; left: 0; right: 0; bottom: -10px; height: 10px;
+    background: radial-gradient(circle at 8px 10px, transparent 6px, #fff 6.5px) 0 0 / 16px 10px repeat-x;
+  }
+  .ps-line { display: grid; grid-template-columns: 1fr auto; gap: 0.25rem 0.75rem; align-items: center; }
+  .ps-qty { display: inline-flex; justify-self: start; align-items: center; border: 2px solid var(--ink); border-radius: 999px; overflow: hidden; }
+  .ps-qty button { width: 1.9rem; height: 1.75rem; display: grid; place-items: center; }
+  .ps-qty button:hover { background: var(--kunyit); }
+  .ps-qty span { min-width: 1.6rem; text-align: center; font-weight: 800; font-family: var(--f-nota); }
+
+  /* Reveal */
+  .js [data-reveal] { opacity: 0; transform: translateY(18px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); transition-delay: var(--rd, 0s); }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
+
+  @keyframes ps-settle { from { transform: scale(1.1); filter: saturate(0.6) brightness(0.8); } to { transform: scale(1); filter: none; } }
+  @keyframes ps-swing { 0% { opacity: 0; transform: translateY(-28px) rotate(-5deg); } 55% { opacity: 1; transform: translateY(0) rotate(1.2deg); } 100% { transform: rotate(-0.6deg); } }
+  @keyframes ps-fade { to { opacity: 1; } }
+  @keyframes ps-draw { to { stroke-dashoffset: 0; } }
+  @keyframes ps-steam { 0% { opacity: 0; transform: translateY(14px) scaleX(0.9); } 35% { opacity: 0.85; } 100% { opacity: 0; transform: translateY(-34px) scaleX(1.25); } }
+  @keyframes ps-spin { to { transform: rotate(360deg); } }
+  @keyframes ps-marquee { to { transform: translateX(-50%); } }
+  @keyframes ps-pulse { 70% { box-shadow: 0 0 0 7px rgb(31 157 76 / 0); } 100% { box-shadow: 0 0 0 0 rgb(31 157 76 / 0); } }
+  @keyframes ps-float { 50% { transform: translateY(-1.5px); } }
+  @keyframes ps-rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+  @keyframes ps-pop { 0% { transform: rotate(-1.5deg) scale(1); } 40% { transform: rotate(1deg) scale(1.05); } 100% { transform: rotate(-1.5deg) scale(1); } }
+  @keyframes ps-bump { 40% { transform: scale(1.45); } }
+  @keyframes ps-plus1 { from { opacity: 1; transform: translateY(0); } to { opacity: 0; transform: translateY(-2.2rem); } }
+  @keyframes ps-toast { from { opacity: 0; transform: translateY(16px) scale(0.96); } }
+  @keyframes ps-slide-in { from { transform: translateX(100%); } }
+  @keyframes ps-sheet-in { from { transform: translateY(100%); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ps *, .ps *::before, .ps *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .ps-marquee-track, .ps-stamp, .ps-steam { animation: none !important; }
+    .js [data-reveal] { opacity: 1; transform: none; }
+    html:has(.ps) { scroll-behavior: auto; }
+  }
+  }
+</style>
+
+<script>
+  import { rupiah, wa } from '../../lib/util';
+  import { biz, menu, hours, branches, photo, srcset, type Dish } from '../../data/restoran';
+
+  const $ = <T extends Element = HTMLElement>(s: string, el: ParentNode = document) => el.querySelector<T>(s)!;
+  const $$ = <T extends Element = HTMLElement>(s: string, el: ParentNode = document) => [...el.querySelectorAll<T>(s)];
+  const dishes: Record<string, Dish> = Object.fromEntries(menu.flatMap((c) => c.dishes).map((d) => [d.id, d]));
+
+  /* ---------- Open now (WIB) ---------- */
+  const toMin = (t: string) => {
+    const [h, m] = t.split(':').map(Number);
+    return h * 60 + m;
+  };
+  const dot = (t: string) => t.replace(':', '.');
+  function wibNow() {
+    const p = Object.fromEntries(
+      new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Jakarta', weekday: 'short', hour: '2-digit', minute: '2-digit', hourCycle: 'h23' })
+        .formatToParts(new Date())
+        .map((x) => [x.type, x.value]),
+    );
+    return { day: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].indexOf(p.weekday), min: Number(p.hour) * 60 + Number(p.minute) };
+  }
+  function openStatus() {
+    const { day, min } = wibNow();
+    const h = hours[day];
+    if (h.open && h.close && min >= toMin(h.open) && min < toMin(h.close)) {
+      const soon = toMin(h.close) - min <= 45;
+      return { open: true, text: soon ? `Segera tutup · ${dot(h.close)}` : `Buka · tutup ${dot(h.close)}` };
+    }
+    if (h.open && min < toMin(h.open)) return { open: false, text: `Tutup · buka ${dot(h.open)}` };
+    for (let i = 1; i <= 7; i++) {
+      const n = hours[(day + i) % 7];
+      if (n.open) return { open: false, text: `Tutup · buka ${i === 1 ? 'besok' : n.day} ${dot(n.open)}` };
+    }
+    return { open: false, text: 'Tutup' };
+  }
+  function paintStatus() {
+    const s = openStatus();
+    $$('[data-open-status]').forEach((el) => {
+      el.dataset.open = String(s.open);
+      $('[data-status-text]', el).textContent = s.text;
+    });
+    const { day } = wibNow();
+    $$('[data-hours-row]').forEach((row) => row.classList.toggle('is-today', Number(row.dataset.hoursRow) === day));
+    const h = hours[day];
+    $('[data-today-hours]').textContent = h.open ? `Hari ini ${dot(h.open)}–${dot(h.close!)}` : 'Hari ini libur';
+  }
+  paintStatus();
+  setInterval(paintStatus, 60_000);
+
+  /* ---------- Menu tabs + photo stage ---------- */
+  const tabs = $$<HTMLButtonElement>('[role="tab"]');
+  const panels = $$('[role="tabpanel"]');
+  const ind = $('[data-tab-ind]');
+  let current = 0;
+  const moveInd = () => {
+    const t = tabs[current];
+    ind.style.width = `${t.offsetWidth}px`;
+    ind.style.transform = `translateX(${t.offsetLeft}px)`;
+  };
+  function selectTab(i: number, focus = false) {
+    current = i;
+    tabs.forEach((t, j) => {
+      t.setAttribute('aria-selected', String(j === i));
+      t.tabIndex = j === i ? 0 : -1;
+    });
+    panels.forEach((p, j) => {
+      p.hidden = j !== i;
+      if (j === i) {
+        p.classList.remove('is-anim');
+        void p.offsetWidth;
+        p.classList.add('is-anim');
+      }
+    });
+    moveInd();
+    if (focus) tabs[i].focus();
+    const bar = tabs[i].parentElement!;
+    bar.scrollTo({ left: tabs[i].offsetLeft - (bar.clientWidth - tabs[i].offsetWidth) / 2, behavior: 'smooth' });
+    const firstDish = $('[data-dish]', panels[i]);
+    if (firstDish) showDish(firstDish.dataset.dish!);
+  }
+  tabs.forEach((t, i) => {
+    t.addEventListener('click', () => selectTab(i));
+    t.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+        e.preventDefault();
+        selectTab((i + (e.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length, true);
+      }
+    });
+  });
+  document.fonts?.ready.then(moveInd);
+  moveInd();
+  new ResizeObserver(moveInd).observe($('.ps-tabs'));
+
+  const layers = $$<HTMLImageElement>('[data-stage-img]');
+  const cap = $('[data-stage-cap]');
+  let front = 0;
+  let shown = menu[0].dishes[0].id;
+  function showDish(id: string) {
+    if (id === shown) return;
+    shown = id;
+    const d = dishes[id];
+    const back = layers[1 - front];
+    back.srcset = srcset(d.photo, 1, [480, 800, 1100]);
+    back.src = photo(d.photo, 800, 800);
+    back.alt = d.name;
+    $('[data-cap-name]').textContent = d.name;
+    $('[data-cap-price]').textContent = rupiah(d.price);
+    cap.classList.remove('flip');
+    void cap.offsetWidth;
+    cap.classList.add('flip');
+    const swap = () => {
+      if (shown !== id) return;
+      back.classList.add('is-front');
+      layers[front].classList.remove('is-front');
+      layers[front].alt = '';
+      front = 1 - front;
+    };
+    back.decode().then(swap, swap);
+  }
+  const fine = matchMedia('(hover: hover) and (min-width: 1024px)');
+  $$('[data-dish]').forEach((el) => {
+    el.addEventListener('pointerenter', () => fine.matches && showDish(el.dataset.dish!));
+    el.addEventListener('focusin', () => showDish(el.dataset.dish!));
+  });
+  // Warm the cache for the stage photos once the menu is near.
+  new IntersectionObserver((entries, obs) => {
+    if (!entries[0].isIntersecting) return;
+    obs.disconnect();
+    if (!fine.matches) return;
+    Object.values(dishes).forEach((d) => {
+      const im = new Image();
+      im.sizes = '50vw';
+      im.srcset = srcset(d.photo, 1, [480, 800, 1100]);
+    });
+  }, { rootMargin: '400px' }).observe($('#menu'));
+
+  /* ---------- Order (nota) ---------- */
+  const KEY = 'pawon-simbah-nota';
+  let cart = new Map<string, number>();
+  try {
+    cart = new Map((JSON.parse(localStorage.getItem(KEY) || '[]') as [string, number][]).filter(([id]) => dishes[id]));
+  } catch {}
+  const save = () => {
+    try {
+      localStorage.setItem(KEY, JSON.stringify([...cart]));
+    } catch {}
+  };
+  const dlg = $<HTMLDialogElement>('#nota');
+  const list = $('[data-cart-list]');
+  const send = $<HTMLAnchorElement>('[data-cart-send]');
+  const cartErr = $('[data-cart-error]');
+  const oName = $<HTMLInputElement>('#o-name');
+  const oTime = $<HTMLSelectElement>('#o-time');
+  const oNote = $<HTMLInputElement>('#o-note');
+  const oAddr = $<HTMLTextAreaElement>('#o-address');
+  const mode = () => $<HTMLInputElement>('input[name="mode"]:checked').value;
+
+  function totals() {
+    let sum = 0;
+    let count = 0;
+    cart.forEach((q, id) => {
+      sum += dishes[id].price * q;
+      count += q;
+    });
+    return { sum, count };
+  }
+  function setQty(id: string, q: number) {
+    if (q <= 0) cart.delete(id);
+    else cart.set(id, Math.min(q, 50));
+    save();
+    render();
+  }
+  function render() {
+    const { sum, count } = totals();
+    $$('[data-cart-count]').forEach((el) => {
+      el.textContent = String(count);
+      el.hidden = count === 0;
+    });
+    $$('[data-inqty]').forEach((el) => {
+      const q = cart.get(el.dataset.inqty!) || 0;
+      el.hidden = q === 0;
+      el.textContent = `${q} di nota`;
+    });
+    $('[data-cart-total]').textContent = rupiah(sum);
+    $('[data-cart-empty]').hidden = count > 0;
+    list.innerHTML = '';
+    cart.forEach((q, id) => {
+      const d = dishes[id];
+      const li = document.createElement('li');
+      li.className = 'ps-line';
+      li.innerHTML = `
+        <p class="f-nota text-sm font-bold leading-snug"></p>
+        <p class="f-nota text-sm font-bold text-right">${rupiah(d.price * q)}</p>
+        <div class="ps-qty">
+          <button type="button" aria-label="Kurangi ${d.name}" data-q="-1">−</button><span>${q}</span><button type="button" aria-label="Tambah ${d.name}" data-q="1">+</button>
+        </div>
+        <p class="f-nota text-xs text-right opacity-70">@ ${rupiah(d.price)}</p>`;
+      li.querySelector('p')!.textContent = d.name;
+      li.querySelectorAll<HTMLButtonElement>('[data-q]').forEach((b) => b.addEventListener('click', () => setQty(id, q + Number(b.dataset.q))));
+      list.append(li);
+    });
+    $('[data-cart-form]').hidden = count === 0;
+    updateSend();
+  }
+  function orderText() {
+    const { sum } = totals();
+    const lines = [...cart].map(([id, q]) => `${q}x ${dishes[id].name} — ${rupiah(dishes[id].price * q)}`);
+    const m = mode();
+    return [
+      `Halo ${biz.name}, saya mau pesan (dari website):`,
+      '',
+      ...lines,
+      `Total: ${rupiah(sum)}`,
+      '',
+      `Nama: ${oName.value.trim()}`,
+      `Cara: ${m}, ${oTime.value === 'Secepatnya' ? 'secepatnya' : `jam ${oTime.value}`}`,
+      m === 'Diantar' ? `Alamat: ${oAddr.value.trim()}` : '',
+      oNote.value.trim() ? `Catatan: ${oNote.value.trim()}` : '',
+    ]
+      .filter((l, i, a) => l !== '' || a[i - 1] !== '')
+      .join('\n')
+      .trim();
+  }
+  function updateSend() {
+    send.href = wa(orderText());
+  }
+  send.addEventListener('click', (e) => {
+    const problems = [];
+    if (cart.size === 0) problems.push('Tambah minimal satu menu.');
+    if (!oName.value.trim()) problems.push('Isi nama dulu ya.');
+    if (mode() === 'Diantar' && !oAddr.value.trim()) problems.push('Alamat antar belum diisi.');
+    oName.setAttribute('aria-invalid', String(!oName.value.trim() && cart.size > 0));
+    oAddr.setAttribute('aria-invalid', String(mode() === 'Diantar' && !oAddr.value.trim()));
+    cartErr.hidden = problems.length === 0;
+    cartErr.textContent = problems.join(' ');
+    if (problems.length) {
+      e.preventDefault();
+      (cart.size === 0 ? null : !oName.value.trim() ? oName : oAddr)?.focus();
+    }
+  });
+  [oName, oTime, oNote, oAddr].forEach((el) => el.addEventListener('input', updateSend));
+  $$<HTMLInputElement>('input[name="mode"]').forEach((r) =>
+    r.addEventListener('change', () => {
+      $('[data-address]').hidden = mode() !== 'Diantar';
+      updateSend();
+    }),
+  );
+
+  const toast = $('[data-toast]');
+  let toastTimer = 0;
+  function showToast(text: string) {
+    $('[data-toast-text]').textContent = text;
+    toast.hidden = false;
+    toast.style.animation = 'none';
+    void toast.offsetWidth;
+    toast.style.animation = '';
+    clearTimeout(toastTimer);
+    toastTimer = window.setTimeout(() => (toast.hidden = true), 2600);
+  }
+  $$<HTMLButtonElement>('[data-add]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const id = b.dataset.add!;
+      setQty(id, (cart.get(id) || 0) + 1);
+      showToast(`${dishes[id].name} masuk nota`);
+      const plus = document.createElement('span');
+      plus.className = 'ps-plus1';
+      plus.textContent = '+1';
+      plus.setAttribute('aria-hidden', 'true');
+      b.append(plus);
+      plus.addEventListener('animationend', () => plus.remove());
+      $$('[data-cart-count]').forEach((c) => {
+        c.classList.remove('bump');
+        void c.offsetWidth;
+        c.classList.add('bump');
+      });
+    }),
+  );
+  document.addEventListener('click', (e) => {
+    const t = (e.target as Element).closest('[data-cart-open]');
+    if (!t) return;
+    toast.hidden = true;
+    dlg.showModal();
+  });
+  $('[data-cart-close]').addEventListener('click', () => dlg.close());
+  dlg.addEventListener('click', (e) => {
+    if (e.target === dlg) dlg.close();
+  });
+  render();
+
+  /* ---------- Reservation ---------- */
+  const form = $<HTMLFormElement>('[data-resv]');
+  const rDate = $<HTMLInputElement>('#r-date');
+  const rPeople = $<HTMLInputElement>('#r-people');
+  const rErr = $('[data-resv-error]');
+  const wibDate = (offsetDays = 0) =>
+    new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(new Date(Date.now() + offsetDays * 864e5));
+  rDate.min = wibDate();
+  rDate.value = (() => {
+    for (let i = 1; i < 8; i++) {
+      const v = wibDate(i);
+      const dow = (new Date(`${v}T12:00:00`).getDay() + 6) % 7;
+      if (hours[dow].open) return v;
+    }
+    return wibDate(1);
+  })();
+  $$<HTMLButtonElement>('[data-step]').forEach((b) =>
+    b.addEventListener('click', () => {
+      const v = Math.min(60, Math.max(1, (Number(rPeople.value) || 1) + Number(b.dataset.step)));
+      rPeople.value = String(v);
+    }),
+  );
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const name = String(data.get('name') || '').trim();
+    const date = String(data.get('date') || '');
+    const people = Math.round(Number(data.get('people')));
+    const problems: string[] = [];
+    const fields: [string, boolean][] = [];
+    if (!name) problems.push('Isi nama pemesan.');
+    fields.push(['#r-name', !name]);
+    let dateBad = !date || date < rDate.min;
+    if (!date) problems.push('Pilih tanggal.');
+    else if (date < rDate.min) problems.push('Tanggalnya sudah lewat.');
+    else {
+      const dow = (new Date(`${date}T12:00:00`).getDay() + 6) % 7;
+      if (!hours[dow].open) {
+        problems.push(`${hours[dow].day} kami libur. Pilih hari lain ya.`);
+        dateBad = true;
+      }
+    }
+    fields.push(['#r-date', dateBad]);
+    const peopleBad = !(people >= 1 && people <= 60);
+    if (peopleBad) problems.push('Jumlah orang 1–60. Lebih dari itu, chat kami langsung.');
+    fields.push(['#r-people', peopleBad]);
+    fields.forEach(([sel, bad]) => $(sel).setAttribute('aria-invalid', String(bad)));
+    rErr.hidden = problems.length === 0;
+    rErr.textContent = problems.join(' ');
+    if (problems.length) {
+      const firstBad = fields.find(([, bad]) => bad);
+      if (firstBad) $(firstBad[0]).focus();
+      return;
+    }
+    const nice = new Intl.DateTimeFormat('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' }).format(new Date(`${date}T12:00:00`));
+    const note = String(data.get('note') || '').trim();
+    const text = [
+      `Halo ${biz.name}, saya mau reservasi meja (dari website):`,
+      '',
+      `Nama: ${name}`,
+      `Tanggal: ${nice}, jam ${String(data.get('time')).replace(':', '.')}`,
+      `Jumlah: ${people} orang`,
+      `Area: ${data.get('area')}`,
+      `Acara: ${data.get('event')}`,
+      note ? `Catatan: ${note}` : '',
+    ]
+      .filter(Boolean)
+      .join('\n');
+    window.open(wa(text), '_blank', 'noopener');
+  });
+
+  /* ---------- Kitchen carousel ---------- */
+  const track = $('[data-track]');
+  const bar = $('[data-track-bar]');
+  const step = () => (track.querySelector<HTMLElement>('.ps-card')?.offsetWidth ?? 300) + 24;
+  $('[data-prev]').addEventListener('click', () => track.scrollBy({ left: -step(), behavior: 'smooth' }));
+  $('[data-next]').addEventListener('click', () => track.scrollBy({ left: step(), behavior: 'smooth' }));
+  const paintBar = () => {
+    const max = track.scrollWidth - track.clientWidth;
+    const view = track.clientWidth / track.scrollWidth;
+    bar.style.transform = `scaleX(${max > 0 ? view + (1 - view) * (track.scrollLeft / max) : 1})`;
+  };
+  track.addEventListener('scroll', paintBar, { passive: true });
+  addEventListener('resize', paintBar);
+  paintBar();
+  let drag = { on: false, x: 0, left: 0, moved: false };
+  track.addEventListener('pointerdown', (e) => {
+    if (e.pointerType !== 'mouse') return;
+    drag = { on: true, x: e.clientX, left: track.scrollLeft, moved: false };
+  });
+  addEventListener('pointermove', (e) => {
+    if (!drag.on) return;
+    const dx = e.clientX - drag.x;
+    if (!drag.moved && Math.abs(dx) > 5) {
+      drag.moved = true;
+      track.classList.add('is-drag');
+    }
+    if (drag.moved) track.scrollLeft = drag.left - dx;
+  });
+  addEventListener('pointerup', () => {
+    if (!drag.on) return;
+    drag.on = false;
+    if (drag.moved) {
+      const left = track.scrollLeft;
+      track.classList.remove('is-drag');
+      track.scrollLeft = left;
+      const s = step();
+      track.scrollTo({ left: Math.round(left / s) * s, behavior: 'smooth' });
+    }
+  });
+
+  /* ---------- Branch switcher ---------- */
+  let bi = 0;
+  const showBranch = (d: number) => {
+    bi = (bi + d + branches.length) % branches.length;
+    const b = branches[bi];
+    $('[data-branch-name]').textContent = b.name;
+    $('[data-branch-note]').textContent = b.note;
+    $('[data-branch-address]').textContent = b.address;
+    $<HTMLAnchorElement>('[data-branch-maps]').href = b.maps;
+    $('[data-branch-count]').textContent = `${bi + 1} / ${branches.length}`;
+  };
+  $('[data-branch-prev]').addEventListener('click', () => showBranch(-1));
+  $('[data-branch-next]').addEventListener('click', () => showBranch(1));
+
+  /* ---------- Reveal on scroll ---------- */
+  const io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (e.isIntersecting) {
+          e.target.classList.add('is-in');
+          io.unobserve(e.target);
+        }
+      }),
+    { rootMargin: '0px 0px -8% 0px' },
+  );
+  $$('[data-reveal]').forEach((el) => io.observe(el));
+</script>
