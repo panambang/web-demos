@@ -1,0 +1,1450 @@
+---
+import '@fontsource-variable/big-shoulders/standard.css';
+import '@fontsource/saira-stencil-one/400.css';
+import '@fontsource/barlow/400.css';
+import '@fontsource/barlow/600.css';
+import '@fontsource/barlow/700.css';
+import '@fontsource/permanent-marker';
+import Base from '../../layouts/Base.astro';
+import Icon from '../../components/Icon.astro';
+import { rupiah, wa, url, BRAND } from '../../lib/util';
+import {
+  club, img, photo, srcset, cropSet, stats, rules, events, filters, roles, signals, chapters, board, gallery, merch, sponsors, joinSteps, faqs, bloodTypes,
+} from '../../data/touring';
+
+const I = {
+  arrow: 'M5 12h14M13 6l6 6-6 6',
+  left: 'M15 6l-6 6 6 6',
+  right: 'M9 6l6 6-6 6',
+  x: 'M6 6l12 12M18 6L6 18',
+  pin: 'M12 21s-7-6.5-7-12a7 7 0 1 1 14 0c0 5.5-7 12-7 12zM12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5z',
+  clock: 'M12 7v5l3 2M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z',
+  wa: 'M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.6l-4.5.9zM9 8.5c0 3.5 3 6.5 6.5 6.5l1.2-1.4-1.9-1-1 .8c-1.2-.5-2.2-1.5-2.7-2.7l.8-1-1-1.9z',
+  cal: 'M4 6h16v14H4zM4 10h16M8 3v4M16 3v4',
+  users: 'M9 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1M17 3.5a4 4 0 0 1 0 7.5M22 21v-1a6 6 0 0 0-4-5.6',
+  route: 'M6 19a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM18 9a2 2 0 1 0 0-4 2 2 0 0 0 0 4zM6 15V9a4 4 0 0 1 4-4h2M18 9v6a4 4 0 0 1-4 4h-2',
+  plus: 'M12 5v14M5 12h14',
+  bag: 'M5 8h14l-1 13H6L5 8zM9 8V6a3 3 0 0 1 6 0v2',
+};
+
+const ruleIcons = [
+  'M4 15c0-6 4-10 9-10s7 3 7 8v3h-8l-2 3H5c-.7-1.3-1-2.6-1-4zM13 9h7',
+  'M4 17h4M10 17h4M16 17h4M6 12l3-5h6l3 5M7 17v-3h10v3',
+  'M12 3l9 16H3l9-16zM12 10v4M12 17h.01M4 4l16 16',
+  'M12 20s-7-4.5-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.5-7 10-7 10z',
+];
+const signalIcons: Record<string, string> = {
+  slow: 'M6 8l6 5 6-5M6 13l6 5 6-5',
+  stop: 'M8 3h8l5 5v8l-5 5H8l-5-5V8l5-5zM8 12h8',
+  hazard: 'M12 4l9 16H3l9-16zM12 10v4M12 17h.01',
+  single: 'M12 3v18M8 7l4-4 4 4',
+  stagger: 'M8 4v16M16 4v16M5 8l3-4 3 4M13 8l3-4 3 4',
+  fuel: 'M4 21V5a2 2 0 0 1 2-2h7a2 2 0 0 1 2 2v16M4 11h11M15 8l3 2v8a2 2 0 0 0 4 0V9l-3-3',
+};
+const levelBars: Record<string, number> = { Santai: 1, Menengah: 2, Berat: 3 };
+const initials = (n: string) =>
+  n
+    .replace(/^dr\.\s*/, '')
+    .split(' ')
+    .map((w) => w[0])
+    .slice(0, 2)
+    .join('');
+const nextEvent = events[0];
+const kmDigits = String(club.km).padStart(6, '0').split('');
+const general = wa(`Halo ${club.short}, saya lihat dari website. Mau tanya-tanya soal klub.`);
+const totalMembers = chapters.reduce((s, c) => s + c.members, 0);
+/** Gentle random-looking route lines for the event cards, one per event. */
+const routePath = (i: number) =>
+  [
+    'M6 30 C40 4, 70 44, 104 22 S 160 10, 194 26',
+    'M6 22 C34 40, 64 2, 100 24 S 150 40, 194 14',
+    'M6 26 C30 8, 60 8, 90 28 S 150 44, 194 20',
+    'M6 18 C46 36, 70 4, 110 20 S 170 36, 194 24',
+    'M6 28 C36 20, 56 4, 96 16 S 156 42, 194 18',
+  ][i % 5];
+---
+
+<Base
+  title={`${club.name} — Klub Touring Motor Solo Raya`}
+  description="Klub touring motor Solo Raya sejak 2012. Agenda touring, kopdar, chapter, pengurus, merchandise, dan pendaftaran anggota."
+  bodyClass="jt"
+  themeColor="#141517"
+>
+  <Fragment slot="head">
+    <link rel="preconnect" href="https://images.unsplash.com" />
+  </Fragment>
+  <script is:inline>document.documentElement.classList.add('js');</script>
+
+  <!-- Header -->
+  <header class="jt-header sticky top-0 z-40">
+    <div class="mx-auto flex max-w-7xl items-center justify-between gap-4 px-4 py-2.5 sm:px-6">
+      <a href="#" class="flex items-center gap-3" aria-label={`${club.name}, kembali ke atas`}>
+        <svg viewBox="0 0 48 48" class="jt-logo h-11 w-11 shrink-0" aria-hidden="true">
+          <circle cx="24" cy="24" r="22" fill="#141517" stroke="var(--kuning)" stroke-width="3" />
+          <circle cx="24" cy="24" r="16.5" fill="none" stroke="var(--kuning)" stroke-width="3" stroke-dasharray="3.2 2.4" />
+          <text x="24" y="29.5" text-anchor="middle" font-family="Saira Stencil One, Impact, sans-serif" font-size="15" fill="var(--kuning)">JA</text>
+        </svg>
+        <span class="leading-none">
+          <span class="jt-display block text-[1.45rem] font-black tracking-wide uppercase">{club.short}</span>
+          <span class="jt-stencil block text-[11px] tracking-[.2em] text-[var(--muted)] uppercase">Touring club<span class="hidden sm:inline"> · est. {club.since}</span></span>
+        </span>
+      </a>
+      <nav class="hidden items-center gap-5 xl:flex" aria-label="Utama">
+        {[['tentang', 'Tentang'], ['agenda', 'Agenda'], ['cara-jalan', 'Cara jalan'], ['chapter', 'Chapter'], ['pengurus', 'Pengurus'], ['galeri', 'Galeri'], ['merch', 'Merch']].map(([id, label]) => (
+          <a href={`#${id}`} class="jt-nav" data-nav={id}>{label}</a>
+        ))}
+      </nav>
+      <a href="#gabung" class="jt-btn jt-btn-sm">Gabung <Icon d={I.arrow} class="h-4 w-4" /></a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="jt-hero relative">
+      <div class="jt-hero-media absolute inset-0 overflow-hidden">
+        <picture>
+          <source media="(min-width: 1024px)" srcset={srcset(img.hero, 0.6, [1280, 1700, 2200])} sizes="100vw" />
+          <source media="(min-width: 640px)" srcset={srcset(img.hero, 0.8, [900, 1200])} sizes="100vw" />
+          <img
+            src={photo(img.hero, 720, 1000)}
+            srcset={srcset(img.hero, 1.4, [480, 720, 960])}
+            sizes="100vw"
+            width="720"
+            height="1000"
+            fetchpriority="high"
+            decoding="async"
+            draggable="false"
+            alt="Rombongan motor touring berjalan beriringan di jalan berkelok di perbukitan hijau"
+            class="jt-settle h-full w-full object-cover"
+          />
+        </picture>
+        <div class="jt-hero-shade absolute inset-0"></div>
+        <div class="jt-tapes hidden lg:block" aria-hidden="true">
+          <div class="jt-tape jt-tape-down" style="left: 77%; top: 41%; --r: -3deg; --d: 1.3s">
+            <span>road captain di depan</span>
+            <svg viewBox="0 0 40 60" class="jt-arrow w-7"><path pathLength="1" d="M14 4c8 14 8 30 4 48" /><path pathLength="1" d="M9 42l9 11 8-11" /></svg>
+          </div>
+          <div class="jt-tape" style="left: 54%; top: 36%; --r: 3deg; --d: 1.7s">
+            <svg viewBox="0 0 90 60" class="jt-arrow jt-flip w-16"><path pathLength="1" d="M8 6c20 4 36 20 44 44" /><path pathLength="1" d="M42 40l10 11 6-13" /></svg>
+            <span>sweeper jaga<br />paling belakang</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="jt-hero-body relative mx-auto max-w-7xl px-4 sm:px-6">
+        <div class="max-w-4xl">
+          <div class="jt-rise flex flex-wrap items-center gap-3" style="--d: .15s">
+            <span class="jt-plate">{club.plate}</span>
+            <span class="jt-stencil text-sm tracking-[.18em] text-[var(--kuning)] uppercase">Klub touring · {club.base}</span>
+          </div>
+          <h1 class="jt-display jt-h1 mt-5 font-black uppercase">
+            <span class="jt-line"><span style="--d: .3s">Jalan jauh,</span></span>
+            <span class="jt-line"><span style="--d: .45s" class="text-[var(--kuning)]">pulang utuh.</span></span>
+          </h1>
+          <p class="jt-rise mt-5 max-w-xl text-[17px] leading-relaxed text-[var(--cat)]/90" style="--d: .65s">{club.intro}</p>
+          <div class="jt-rise mt-7 flex flex-wrap gap-3" style="--d: .8s">
+            <a href="#agenda" class="jt-btn">Lihat agenda touring <Icon d={I.arrow} class="h-4 w-4" /></a>
+            <a href="#gabung" class="jt-btn jt-btn-ghost">Gabung jadi anggota</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="jt-dash" aria-hidden="true"></div>
+      <div class="jt-hero-foot relative">
+        <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-8 gap-y-4 px-4 py-4 sm:px-6">
+          <div class="flex items-center gap-4">
+            <p class="jt-stencil text-xs leading-tight tracking-[.15em] text-[var(--muted)] uppercase">Total jarak<br />touring bareng</p>
+            <div class="jt-odo" role="img" aria-label={`${club.km.toLocaleString('id-ID')} kilometer`}>
+              {kmDigits.map((d, i) => (
+                <span class="jt-odo-digit" aria-hidden="true">
+                  <span class="jt-odo-strip" style={`--n:${d}; --i:${i}`}>{[0, 1, 2, 3, 4, 5, 6, 7, 8, 9].map((x) => <span>{x}</span>)}</span>
+                </span>
+              ))}
+              <span class="jt-odo-unit">km</span>
+            </div>
+          </div>
+          <a href={`#ev-${events[1].id}`} class="jt-next group">
+            <span class="jt-live"></span>
+            <span class="text-sm"><span class="text-[var(--muted)]">Touring berikutnya:</span> <strong class="text-[var(--cat)]">{events[1].title}</strong> · <span data-countdown={events[1].date}>{events[1].dateLabel}</span></span>
+            <Icon d={I.arrow} class="h-4 w-4 transition group-hover:translate-x-1" />
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- About -->
+    <section id="tentang" class="jt-about">
+      <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 sm:px-6 sm:py-24 lg:grid-cols-[1fr_1.1fr] lg:gap-16">
+        <div class="relative" data-reveal>
+          <div class="jt-photo-frame">
+            <img src={photo(img.garage, 900, 1000)} srcset={srcset(img.garage, 1.11, [500, 900, 1200])} sizes="(min-width: 1024px) 45vw, 100vw" width="900" height="1000" loading="lazy" decoding="async" alt="Anggota membersihkan helm di bengkel basecamp" class="aspect-[9/10] w-full object-cover" />
+          </div>
+          <p class="jt-tape jt-tape-static" style="--r: -3deg">basecamp = bengkel + warung kopi</p>
+        </div>
+        <div>
+          <p class="jt-eyebrow" data-reveal>Sejak {club.since}</p>
+          <h2 class="jt-display jt-h2 mt-3 font-black uppercase" data-reveal>Berawal dari tujuh motor di depan bengkel.</h2>
+          <div class="mt-5 space-y-4 text-[17px] leading-relaxed text-[var(--cat)]/85" data-reveal>
+            <p>Tahun 2012, tujuh orang yang sering ketemu di bengkel yang sama iseng touring ke Tawangmangu. Pulangnya kehujanan dan satu motor mogok, tapi semua sampai rumah.</p>
+            <p>Dari situ Jejak Aspal lahir: klub yang lebih peduli sampai tujuan bareng daripada siapa yang paling cepat. Sekarang ada {totalMembers} anggota di 6 kota, dengan motor dari 110 cc sampai 1.200 cc.</p>
+          </div>
+          <dl class="jt-stats mt-10">
+            {stats.map((s, i) => (
+              <div class="jt-stat" data-reveal style={`--rd:${i * 0.08}s`}>
+                <dt class="sr-only">{s.label}</dt>
+                <dd class="jt-display text-5xl font-black text-[var(--kuning)] tabular-nums sm:text-6xl" data-count={s.n}>{s.n.toLocaleString('id-ID')}</dd>
+                <dd class="mt-1 text-sm font-semibold text-[var(--muted)]">{s.label}</dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </div>
+
+      <div class="jt-hazard" aria-hidden="true"></div>
+      <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-20">
+        <div class="flex flex-wrap items-end justify-between gap-4" data-reveal>
+          <h2 class="jt-display jt-h2 font-black uppercase">Empat pegangan di jalan</h2>
+          <p class="jt-marker text-xl text-[var(--kuning)]">ditandatangani tiap anggota baru</p>
+        </div>
+        <ul class="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {rules.map((r, i) => (
+            <li class="jt-rule" data-reveal style={`--rd:${i * 0.08}s`}>
+              <span class="jt-rule-icon"><Icon d={ruleIcons[i]} class="h-7 w-7" /></span>
+              <h3 class="jt-display mt-5 text-2xl leading-none font-extrabold uppercase">{r.title}</h3>
+              <p class="mt-3 text-[15px] leading-relaxed text-[var(--cat)]/80">{r.text}</p>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Agenda -->
+    <section id="agenda" class="jt-light jt-agenda">
+      <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
+        <div class="flex flex-wrap items-end justify-between gap-6">
+          <div data-reveal>
+            <p class="jt-eyebrow jt-eyebrow-dark">Agenda klub</p>
+            <h2 class="jt-display jt-h2 mt-3 font-black uppercase">Touring & kopdar terdekat</h2>
+            <p class="mt-3 max-w-xl text-[var(--ink-2)]">Kuota terbatas supaya rombongan tetap aman. Non-anggota boleh ikut touring berlabel Santai sebagai tamu.</p>
+          </div>
+          <div class="jt-filters" role="group" aria-label="Saring agenda">
+            {filters.map((f, i) => (
+              <button type="button" class="jt-filter" data-filter={f.id} aria-pressed={i === 0 ? 'true' : 'false'}>{f.label}</button>
+            ))}
+          </div>
+        </div>
+
+        <ol class="mt-10 grid gap-5" data-events>
+          {events.map((e, i) => (
+            <li id={`ev-${e.id}`} class="jt-event" data-type={e.type} data-date={e.date}>
+              <div class="jt-event-date">
+                <span class="jt-stencil text-xs tracking-[.15em] uppercase">{e.type}</span>
+                <span class="jt-display text-6xl leading-none font-black">{e.date.slice(8, 10)}</span>
+                <span class="jt-display text-lg font-extrabold uppercase">{new Date(`${e.date}T12:00:00`).toLocaleDateString('id-ID', { month: 'short', year: 'numeric' })}</span>
+              </div>
+              <div class="jt-event-photo">
+                <img src={photo(e.photo, 600, 450)} srcset={srcset(e.photo, 0.75, [400, 600, 800])} sizes="(min-width: 1024px) 260px, (min-width: 640px) 40vw, 100vw" width="600" height="450" loading="lazy" decoding="async" alt="" class="h-full w-full object-cover" />
+              </div>
+              <div class="jt-event-body">
+                <div class="flex flex-wrap items-center gap-2">
+                  <span class="jt-level" data-level={e.level}>
+                    <span class="jt-bars" aria-hidden="true">{[1, 2, 3].map((b) => <i class:list={[b <= levelBars[e.level] && 'on']} />)}</span>
+                    {e.level}
+                  </span>
+                  <span class="text-sm font-semibold text-[var(--ink-2)]">{e.dateLabel} · {e.days}</span>
+                </div>
+                <h3 class="jt-display mt-2 text-3xl leading-none font-black uppercase">{e.title}</h3>
+                {e.km > 0 ? (
+                  <div class="jt-route mt-4" aria-label={`Rute ${e.from} ke ${e.to}, ${e.km} kilometer`}>
+                    <span class="jt-route-pt">{e.from}</span>
+                    <svg viewBox="0 0 200 48" preserveAspectRatio="none" class="jt-route-line" aria-hidden="true">
+                      <path d={routePath(i)} class="base" />
+                      <path d={routePath(i)} class="draw" pathLength="1" />
+                    </svg>
+                    <span class="jt-route-pt">{e.to}</span>
+                    <span class="jt-route-km">{e.km} km</span>
+                  </div>
+                ) : (
+                  <p class="mt-4 text-sm font-bold">Di basecamp, tanpa jalan jauh.</p>
+                )}
+                <ul class="mt-4 grid gap-1.5 text-sm text-[var(--ink-2)] sm:grid-cols-2">
+                  <li class="flex gap-2"><Icon d={I.pin} class="mt-0.5 h-4 w-4 shrink-0" /> Kumpul: {e.meet}</li>
+                  <li class="flex gap-2"><Icon d={I.plus} class="mt-0.5 h-4 w-4 shrink-0" /> {e.includes}</li>
+                </ul>
+              </div>
+              <div class="jt-event-side">
+                <div>
+                  <div class="flex items-baseline justify-between gap-3 text-sm font-bold">
+                    <span>{e.filled}/{e.quota} terisi</span>
+                    <span class="jt-stencil text-xs" data-countdown={e.date}>{e.dateLabel}</span>
+                  </div>
+                  <div class="jt-quota mt-2" role="progressbar" aria-valuemin="0" aria-valuemax={e.quota} aria-valuenow={e.filled} aria-label="Kuota terisi">
+                    <span style={`--p:${(e.filled / e.quota) * 100}%`} class:list={[e.filled / e.quota > 0.8 && 'hot']}></span>
+                  </div>
+                  <p class="jt-display mt-4 text-3xl font-black">{e.fee ? rupiah(e.fee) : 'Gratis'}</p>
+                  <p class="text-xs font-semibold text-[var(--ink-2)]">{e.fee ? 'per rider, sudah termasuk fasilitas' : 'untuk anggota & tamu'}</p>
+                </div>
+                <a
+                  href={wa(`Halo ${club.short}, saya mau ikut "${e.title}" (${e.dateLabel}).\nNama:\nMotor:\nChapter / tamu:`)}
+                  target="_blank"
+                  rel="noopener"
+                  class="jt-btn jt-btn-dark mt-5 justify-center"
+                  data-join-event
+                >
+                  <Icon d={I.wa} class="h-4 w-4" /> {e.type === 'kopdar' ? 'Saya datang' : 'Ikut touring'}
+                </a>
+              </div>
+            </li>
+          ))}
+        </ol>
+        <p class="mt-6 hidden text-center font-bold" data-events-empty>Belum ada agenda untuk kategori ini.</p>
+      </div>
+    </section>
+
+    <!-- Riding formation -->
+    <section id="cara-jalan" class="jt-formation">
+      <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
+        <div class="grid items-center gap-12 lg:grid-cols-[1fr_1fr]">
+          <div>
+            <p class="jt-eyebrow" data-reveal>Cara kami jalan</p>
+            <h2 class="jt-display jt-h2 mt-3 font-black uppercase" data-reveal>Formasi zig-zag, jarak dua detik.</h2>
+            <p class="mt-4 max-w-lg text-[var(--cat)]/80" data-reveal>Setiap touring dibuka dengan briefing 15 menit. Ini posisi dan tugas tiap orang di rombongan, dari depan sampai belakang.</p>
+            <ol class="mt-8 grid gap-2" data-roles>
+              {roles.map((r, i) => (
+                <li>
+                  <button type="button" class="jt-role" data-role={r.id} aria-pressed={i === 0 ? 'true' : 'false'}>
+                    <span class="jt-role-badge">{r.short}</span>
+                    <span class="min-w-0 text-left">
+                      <span class="jt-display block text-xl leading-none font-extrabold uppercase">{r.name}</span>
+                      <span class="mt-1 block text-sm text-[var(--cat)]/75">{r.text}</span>
+                    </span>
+                  </button>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          <div class="jt-road-wrap" data-reveal>
+            <svg viewBox="0 0 320 520" class="jt-road" role="img" aria-label="Diagram formasi zig-zag: road captain di depan, sweeper di belakang">
+              <rect x="40" y="0" width="240" height="520" fill="#202226" />
+              <path d="M44 0V520M276 0V520" stroke="var(--cat)" stroke-width="4" />
+              <path class="jt-lane" d="M160 -40V560" stroke="var(--kuning)" stroke-width="5" stroke-dasharray="28 24" />
+              {[
+                { id: 'rc', x: 110, y: 60, l: 'RC' },
+                { id: 'marshal', x: 210, y: 115, l: 'MS' },
+                { id: 'rider', x: 110, y: 170, l: 'R' },
+                { id: 'rider', x: 210, y: 225, l: 'R' },
+                { id: 'rider', x: 110, y: 280, l: 'R' },
+                { id: 'safety', x: 210, y: 335, l: 'SO' },
+                { id: 'rider', x: 110, y: 390, l: 'R' },
+                { id: 'sweeper', x: 210, y: 455, l: 'SW' },
+              ].map((m, i) => (
+                <g class="jt-bike" data-marker={m.id} style={`--i:${i}`} transform={`translate(${m.x} ${m.y})`}>
+                  <path d="M0 -10l22 0 0 30-22 0z" fill="none" />
+                  <g class="jt-bike-in">
+                    <rect x="-9" y="-24" width="18" height="48" rx="9" class="body" />
+                    <circle cx="0" cy="-30" r="5" class="lamp" />
+                    <text x="0" y="5" text-anchor="middle" font-family="Big Shoulders Variable, Impact, sans-serif" font-weight="900" font-size="13">{m.l}</text>
+                  </g>
+                </g>
+              ))}
+              <g class="jt-gap" transform="translate(268 170)">
+                <path d="M0 0v55" stroke="var(--kuning)" stroke-width="2" stroke-dasharray="3 4" />
+                <path d="M-5 0h10M-5 55h10" stroke="var(--kuning)" stroke-width="2" />
+              </g>
+              <text x="300" y="200" fill="var(--kuning)" font-family="Permanent Marker, cursive" font-size="15" transform="rotate(90 300 200)">± 2 detik</text>
+              <text x="160" y="512" text-anchor="middle" fill="var(--muted)" font-family="Saira Stencil One, sans-serif" font-size="12" letter-spacing="3">ARAH JALAN ↑</text>
+            </svg>
+          </div>
+        </div>
+
+        <div class="mt-20">
+          <div class="flex flex-wrap items-end justify-between gap-4" data-reveal>
+            <h3 class="jt-display text-3xl font-black uppercase sm:text-4xl">Isyarat tangan</h3>
+            <p class="jt-marker text-lg text-[var(--kuning)]">tekan kartunya untuk lihat artinya</p>
+          </div>
+          <ul class="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-6">
+            {signals.map((s, i) => (
+              <li data-reveal style={`--rd:${i * 0.05}s`}>
+                <button type="button" class="jt-signal" aria-pressed="false">
+                  <span class="jt-signal-face jt-signal-front">
+                    <Icon d={signalIcons[s.icon]} class="h-9 w-9" />
+                    <span class="mt-3 block text-sm leading-snug font-semibold">{s.sign}</span>
+                  </span>
+                  <span class="jt-signal-face jt-signal-back">
+                    <span class="jt-display text-2xl leading-none font-black uppercase">{s.means}</span>
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Chapters -->
+    <section id="chapter" class="jt-chapter">
+      <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
+        <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
+          <div>
+            <p class="jt-eyebrow jt-eyebrow-dark">Chapter</p>
+            <h2 class="jt-display jt-h2 mt-3 font-black uppercase">Enam kota, satu jalur.</h2>
+          </div>
+          <p class="max-w-sm font-semibold">Tiap chapter punya kopdar sendiri. Touring besar digelar bareng, dari Purwokerto sampai Malang.</p>
+        </div>
+
+        <div class="jt-line-map mt-12" data-reveal>
+          <ol class="jt-stations" role="tablist" aria-label="Pilih chapter">
+            {chapters.map((c) => (
+              <li class="jt-station-li">
+                <button type="button" role="tab" class="jt-station" data-chapter={c.id} aria-selected={c.hq ? 'true' : 'false'} aria-controls="chapter-card">
+                  <span class="jt-dot"></span>
+                  <span class="jt-station-text">
+                    <span class="jt-plate jt-plate-sm">{c.code}</span>
+                    <span class="jt-display text-xl font-black uppercase">{c.city}</span>
+                    {c.hq && <span class="jt-hq">Pusat</span>}
+                  </span>
+                </button>
+              </li>
+            ))}
+          </ol>
+        </div>
+
+        <div id="chapter-card" class="jt-chapter-card mt-10" role="tabpanel" aria-live="polite">
+          <div class="jt-chapter-code"><span class="jt-display font-black" data-c="code">AD</span></div>
+          <div class="grid flex-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+            <div><p class="jt-label">Chapter</p><p class="jt-display text-3xl font-black uppercase" data-c="city">Solo Raya</p><p class="text-sm font-semibold" data-c="since">Sejak 2012</p></div>
+            <div><p class="jt-label">Anggota</p><p class="jt-display text-3xl font-black" data-c="members">142</p></div>
+            <div><p class="jt-label">Ketua chapter</p><p class="jt-display text-2xl font-black uppercase" data-c="lead">Bagas Wicaksono</p></div>
+            <div><p class="jt-label">Kopdar rutin</p><p class="font-bold" data-c="kopdar">Jumat 20.00 · Basecamp Karanganyar</p></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Board -->
+    <section id="pengurus" class="jt-light jt-board">
+      <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
+        <div class="text-center" data-reveal>
+          <p class="jt-eyebrow jt-eyebrow-dark justify-center">Struktur organisasi</p>
+          <h2 class="jt-display jt-h2 mt-3 font-black uppercase">Pengurus pusat 2025–2027</h2>
+          <p class="mx-auto mt-3 max-w-xl text-[var(--ink-2)]">Dipilih lewat musyawarah anggota tiap dua tahun. Laporan kas dan kegiatan dibagikan tiap bulan di grup.</p>
+        </div>
+        <div class="jt-org mt-12">
+          <div class="jt-org-top">
+            {board.top.map((p) => (
+              <article class="jt-person jt-person-lg" data-reveal>
+                <svg viewBox="0 0 84 72" class="jt-helmet" aria-hidden="true">
+                  <path d="M8 46C8 23 24 8 43 8s33 14 33 33v10H42l-6 11H13C9.5 57 8 52 8 46z" fill={p.color} stroke="#141517" stroke-width="3" />
+                  <path d="M46 24h27c2 5 3 10 3 16H52c-4 0-7-3-7-7z" fill="#141517" />
+                  <path class="shine" d="M51 28h17" stroke="#ffffff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round" />
+                  <text x="26" y="43" text-anchor="middle" font-family="Big Shoulders Variable, Impact, sans-serif" font-weight="900" font-size="17" fill="#141517">{initials(p.name)}</text>
+                </svg>
+                <p class="jt-label mt-3">{p.role}</p>
+                <h3 class="jt-display text-2xl leading-none font-black uppercase">{p.name}</h3>
+                <p class="mt-1 text-sm font-semibold text-[var(--ink-2)]">{p.bike}</p>
+              </article>
+            ))}
+          </div>
+          <div class="jt-org-rest">
+            {board.rest.map((p, i) => (
+              <article class="jt-person" data-reveal style={`--rd:${(i % 3) * 0.06}s`}>
+                <svg viewBox="0 0 84 72" class="jt-helmet" aria-hidden="true">
+                  <path d="M8 46C8 23 24 8 43 8s33 14 33 33v10H42l-6 11H13C9.5 57 8 52 8 46z" fill={p.color} stroke="#141517" stroke-width="3" />
+                  <path d="M46 24h27c2 5 3 10 3 16H52c-4 0-7-3-7-7z" fill="#141517" />
+                  <path class="shine" d="M51 28h17" stroke="#ffffff" stroke-opacity=".5" stroke-width="3" stroke-linecap="round" />
+                  <text x="26" y="43" text-anchor="middle" font-family="Big Shoulders Variable, Impact, sans-serif" font-weight="900" font-size="17" fill="#141517">{initials(p.name)}</text>
+                </svg>
+                <div class="min-w-0">
+                  <p class="jt-label">{p.role}</p>
+                  <h3 class="jt-display text-xl leading-none font-black uppercase">{p.name}</h3>
+                  <p class="mt-1 text-sm font-semibold text-[var(--ink-2)]">{p.bike}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Gallery -->
+    <section id="galeri" class="jt-gallery">
+      <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
+        <div class="flex flex-wrap items-end justify-between gap-4" data-reveal>
+          <div>
+            <p class="jt-eyebrow">Galeri</p>
+            <h2 class="jt-display jt-h2 mt-3 font-black uppercase">Dari balik helm</h2>
+          </div>
+          <p class="jt-marker text-lg text-[var(--kuning)]">tekan foto untuk lihat besar</p>
+        </div>
+        <ul class="jt-masonry mt-10">
+          {gallery.map((g, i) => (
+            <li data-reveal style={`--rd:${(i % 3) * 0.06}s`}>
+              <button type="button" class="jt-shot" data-shot={i} aria-label={`Buka foto: ${g.caption}`}>
+                <img src={photo(g.id, 700, g.tall ? 900 : 520)} srcset={srcset(g.id, g.tall ? 1.29 : 0.74, [400, 700, 1000])} sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" width="700" height={g.tall ? 900 : 520} loading="lazy" decoding="async" alt={g.caption} class="w-full object-cover" />
+                <span class="jt-shot-cap">{g.caption}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Merch -->
+    <section id="merch" class="jt-light jt-merch">
+      <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
+        <div class="flex flex-wrap items-end justify-between gap-6" data-reveal>
+          <div>
+            <p class="jt-eyebrow jt-eyebrow-dark">Merchandise</p>
+            <h2 class="jt-display jt-h2 mt-3 font-black uppercase">Pakai warnanya, bawa namanya.</h2>
+          </div>
+          <p class="max-w-sm text-[var(--ink-2)]">Hasil penjualan masuk kas klub untuk P3K dan baksos. Jaket dan patch khusus anggota.</p>
+        </div>
+        <ul class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+          {merch.map((m, i) => (
+            <li class="jt-product" data-product={m.id} data-reveal style={`--rd:${i * 0.07}s`}>
+              <div class:list={['jt-product-art', `art-${m.art}`]}>
+                {m.art === 'jacket' && (
+                  <svg viewBox="0 0 200 170" aria-hidden="true">
+                    <path d="M62 22l22-10h32l22 10 30 22-14 56-18-6-2 70H66l-2-70-18 6-14-56z" fill="#141517" stroke="#000" stroke-width="2" />
+                    <path d="M66 110h68M66 124h68" stroke="var(--kuning)" stroke-width="5" />
+                    <circle cx="100" cy="64" r="26" fill="none" stroke="var(--kuning)" stroke-width="4" />
+                    <circle cx="100" cy="64" r="19" fill="none" stroke="var(--kuning)" stroke-width="3" stroke-dasharray="3 2.5" />
+                    <text x="100" y="71" text-anchor="middle" font-family="Saira Stencil One, sans-serif" font-size="18" fill="var(--kuning)">JA</text>
+                    <path d="M40 60l10 30M160 60l-10 30" stroke="#3a3d42" stroke-width="3" />
+                  </svg>
+                )}
+                {m.art === 'tee' && (
+                  <svg viewBox="0 0 200 170" aria-hidden="true">
+                    <path d="M70 16l14-6c6 10 26 10 32 0l14 6 34 24-16 22-14-8v108H66V54l-14 8-16-22z" fill="#141517" />
+                    <text x="100" y="82" text-anchor="middle" font-family="Big Shoulders Variable, Impact, sans-serif" font-weight="900" font-size="22" fill="var(--kuning)">PULANG</text>
+                    <text x="100" y="106" text-anchor="middle" font-family="Big Shoulders Variable, Impact, sans-serif" font-weight="900" font-size="22" fill="var(--cat)">UTUH.</text>
+                    <path d="M76 118h48" stroke="var(--kuning)" stroke-width="4" stroke-dasharray="10 7" />
+                  </svg>
+                )}
+                {m.art === 'patch' && (
+                  <svg viewBox="0 0 200 170" aria-hidden="true">
+                    <circle cx="100" cy="85" r="66" fill="#141517" />
+                    <circle cx="100" cy="85" r="60" fill="none" stroke="var(--kuning)" stroke-width="3" stroke-dasharray="2 3" />
+                    <defs><path id="jt-arc" d="M100 85m-44 0a44 44 0 1 1 88 0" /></defs>
+                    <text font-family="Big Shoulders Variable, Impact, sans-serif" font-weight="900" font-size="17" letter-spacing="3" fill="var(--cat)"><textPath href="#jt-arc" startOffset="50%" text-anchor="middle">JEJAK ASPAL</textPath></text>
+                    <text x="100" y="98" text-anchor="middle" font-family="Saira Stencil One, sans-serif" font-size="34" fill="var(--kuning)">JA</text>
+                    <text x="100" y="124" text-anchor="middle" font-family="Saira Stencil One, sans-serif" font-size="11" letter-spacing="2" fill="var(--muted)">EST. 2012</text>
+                  </svg>
+                )}
+                {m.art === 'sticker' && (
+                  <svg viewBox="0 0 200 170" aria-hidden="true">
+                    <g transform="rotate(-8 70 50)"><rect x="22" y="30" width="96" height="36" rx="5" fill="#141517" stroke="#fff" stroke-width="3" /><text x="70" y="55" text-anchor="middle" font-family="Big Shoulders Variable, Impact, sans-serif" font-weight="900" font-size="18" fill="#fff">AD 2012 JA</text></g>
+                    <g transform="rotate(10 145 70)"><circle cx="145" cy="70" r="30" fill="var(--kuning)" stroke="#fff" stroke-width="4" /><text x="145" y="77" text-anchor="middle" font-family="Saira Stencil One, sans-serif" font-size="20" fill="#141517">JA</text></g>
+                    <g transform="rotate(-3 100 128)"><rect x="18" y="108" width="164" height="38" rx="19" fill="var(--oranye)" stroke="#fff" stroke-width="4" /><text x="100" y="132.5" text-anchor="middle" font-family="Big Shoulders Variable, Impact, sans-serif" font-weight="900" font-size="14" fill="#141517">JALAN JAUH, PULANG UTUH</text></g>
+                  </svg>
+                )}
+                {m.members && <span class="jt-badge">Khusus anggota</span>}
+              </div>
+              <div class="flex flex-1 flex-col p-5">
+                <h3 class="jt-display text-2xl leading-none font-black uppercase">{m.name}</h3>
+                <p class="mt-2 text-sm text-[var(--ink-2)]">{m.note}</p>
+                {m.sizes.length > 0 && (
+                  <div class="mt-4 flex flex-wrap gap-1.5" role="radiogroup" aria-label={`Ukuran ${m.name}`}>
+                    {m.sizes.map((s, k) => (
+                      <button type="button" role="radio" class="jt-size" data-size={s} aria-checked={k === 1 ? 'true' : 'false'}>{s}</button>
+                    ))}
+                  </div>
+                )}
+                <div class="mt-auto flex items-center justify-between gap-3 pt-5">
+                  <p class="jt-display text-2xl font-black">{rupiah(m.price)}</p>
+                  <a href={wa(`Halo ${club.short}, saya mau pesan ${m.name}${m.sizes.length ? ` ukuran ${m.sizes[1]}` : ''} (${rupiah(m.price)}).`)} target="_blank" rel="noopener" class="jt-btn jt-btn-dark jt-btn-sm" data-buy={m.name} data-price={m.price}>
+                    <Icon d={I.bag} class="h-4 w-4" /> Pesan
+                  </a>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <!-- Sponsors -->
+    <div class="jt-sponsors" aria-label="Didukung oleh">
+      <div class="jt-hazard jt-hazard-thin" aria-hidden="true"></div>
+      <div class="flex items-center gap-6 overflow-hidden py-6">
+        <p class="jt-stencil hidden shrink-0 pl-6 text-xs tracking-[.2em] text-[var(--muted)] uppercase sm:block">Didukung oleh</p>
+        <div class="jt-marquee min-w-0 flex-1">
+          <div class="jt-marquee-track">
+            {[0, 1].map((k) => (
+              <ul class="flex shrink-0 items-center" aria-hidden={k === 1 ? 'true' : undefined}>
+                {sponsors.map((s, i) => (
+                  <li class:list={['jt-sponsor', `s${i % 4}`]}>{s}</li>
+                ))}
+              </ul>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div class="jt-hazard jt-hazard-thin" aria-hidden="true"></div>
+    </div>
+
+    <!-- Join -->
+    <section id="gabung" class="jt-join">
+      <div class="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24">
+        <div class="max-w-2xl" data-reveal>
+          <p class="jt-eyebrow">Pendaftaran anggota</p>
+          <h2 class="jt-display jt-h2 mt-3 font-black uppercase">Gabung, dan lihat KTA-mu jadi.</h2>
+          <p class="mt-4 text-[var(--cat)]/80">Isi form di bawah. Kartu anggotamu terisi langsung, lalu datanya terkirim ke humas lewat WhatsApp. Biaya pendaftaran {rupiah(club.fee.join)} (KTA + patch), iuran {rupiah(club.fee.monthly)}/bulan.</p>
+        </div>
+
+        <div class="mt-12 grid items-start gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-14">
+          <form class="jt-form" data-join novalidate>
+            <div class="grid gap-4 sm:grid-cols-2">
+              <label class="jt-field sm:col-span-2">
+                <span>Nama lengkap</span>
+                <input id="j-name" name="name" type="text" autocomplete="name" placeholder="Sesuai KTP" maxlength="32" required />
+              </label>
+              <label class="jt-field">
+                <span>Nama panggilan di jalan</span>
+                <input id="j-nick" name="nick" type="text" placeholder="Contoh: Bagas" maxlength="16" />
+              </label>
+              <label class="jt-field">
+                <span>Plat nomor</span>
+                <input id="j-plate" name="plate" type="text" autocapitalize="characters" placeholder="AD 1234 XY" maxlength="11" required />
+              </label>
+              <label class="jt-field sm:col-span-2">
+                <span>Motor (merek & tipe)</span>
+                <input id="j-bike" name="bike" type="text" placeholder="Contoh: Honda ADV 160" maxlength="28" required />
+              </label>
+              <label class="jt-field">
+                <span>Chapter terdekat</span>
+                <select id="j-chapter" name="chapter">
+                  {chapters.map((c) => <option value={c.id} selected={c.hq}>{c.city}</option>)}
+                </select>
+              </label>
+              <fieldset class="jt-field">
+                <legend>Golongan darah</legend>
+                <div class="mt-1 grid grid-cols-4 gap-2">
+                  {bloodTypes.map((b, i) => (
+                    <label class="jt-chip">
+                      <input type="radio" name="blood" value={b} checked={i === 3} class="sr-only" />
+                      <span>{b}</span>
+                    </label>
+                  ))}
+                </div>
+              </fieldset>
+              <label class="jt-check sm:col-span-2">
+                <input id="j-sim" type="checkbox" name="sim" required />
+                <span>Saya punya SIM C aktif dan STNK motor hidup.</span>
+              </label>
+              <label class="jt-check sm:col-span-2">
+                <input id="j-rules" type="checkbox" name="rules" required />
+                <span>Saya setuju dengan empat pegangan klub, termasuk tanpa sirine dan strobo.</span>
+              </label>
+            </div>
+            <p class="jt-error mt-4" data-join-error role="alert" hidden></p>
+            <button type="submit" class="jt-btn mt-6 w-full justify-center py-4 text-base sm:w-auto">
+              <Icon d={I.wa} class="h-5 w-5" /> Kirim pendaftaran lewat WhatsApp
+            </button>
+          </form>
+
+          <div class="jt-kta-wrap order-first lg:order-none lg:sticky lg:top-24">
+            <div class="jt-kta" data-kta>
+              <div class="jt-kta-glare" aria-hidden="true"></div>
+              <div class="jt-kta-stripe" aria-hidden="true"></div>
+              <div class="flex items-start justify-between gap-3">
+                <div class="flex items-center gap-2.5">
+                  <svg viewBox="0 0 48 48" class="h-10 w-10 shrink-0" aria-hidden="true">
+                    <circle cx="24" cy="24" r="22" fill="#141517" stroke="var(--kuning)" stroke-width="3" />
+                    <circle cx="24" cy="24" r="16.5" fill="none" stroke="var(--kuning)" stroke-width="3" stroke-dasharray="3.2 2.4" />
+                    <text x="24" y="29.5" text-anchor="middle" font-family="Saira Stencil One, Impact, sans-serif" font-size="15" fill="var(--kuning)">JA</text>
+                  </svg>
+                  <div class="leading-none">
+                    <p class="jt-display text-lg font-black uppercase">{club.short}</p>
+                    <p class="jt-stencil text-[9px] tracking-[.2em] text-[var(--muted)] uppercase">Kartu tanda anggota</p>
+                  </div>
+                </div>
+                <p class="jt-stencil text-right text-xs text-[var(--kuning)]" data-k="no">JATC/AD/0413</p>
+              </div>
+              <div class="mt-4 flex items-end gap-4">
+                <svg viewBox="0 0 84 72" class="w-16 shrink-0 sm:w-20" aria-hidden="true">
+                  <path d="M8 46C8 23 24 8 43 8s33 14 33 33v10H42l-6 11H13C9.5 57 8 52 8 46z" fill="var(--kuning)" stroke="#000" stroke-width="3" />
+                  <path d="M46 24h27c2 5 3 10 3 16H52c-4 0-7-3-7-7z" fill="#141517" />
+                  <text x="26" y="43" text-anchor="middle" font-family="Big Shoulders Variable, Impact, sans-serif" font-weight="900" font-size="17" fill="#141517" data-k="ini">?</text>
+                </svg>
+                <div class="min-w-0">
+                  <p class="jt-display truncate text-[1.7rem] leading-none font-black uppercase sm:text-3xl" data-k="name">Nama kamu</p>
+                  <p class="jt-marker mt-1 truncate text-[var(--kuning)]" data-k="nick">"panggilan"</p>
+                </div>
+              </div>
+              <dl class="jt-kta-grid mt-4">
+                <div><dt>Motor</dt><dd data-k="bike">—</dd></div>
+                <div><dt>Plat</dt><dd><span class="jt-plate jt-plate-xs" data-k="plate">AD ···· ··</span></dd></div>
+                <div><dt>Chapter</dt><dd data-k="chapter">Solo Raya</dd></div>
+                <div><dt>Gol. darah</dt><dd data-k="blood">O</dd></div>
+              </dl>
+              <div class="mt-4 flex items-end justify-between gap-3">
+                <div class="jt-barcode" aria-hidden="true"></div>
+                <p class="jt-stencil text-[10px] tracking-[.15em] text-[var(--muted)] uppercase">Berlaku s/d <span data-k="valid">Des 2027</span></p>
+              </div>
+            </div>
+            <p class="jt-marker mt-4 text-center text-[var(--muted)]"><span class="hidden lg:inline">← </span>kartunya ikut terisi waktu kamu mengetik<span class="lg:hidden"> ↓</span></p>
+          </div>
+        </div>
+
+        <div class="mt-20 grid gap-12 lg:grid-cols-2">
+          <div>
+            <h3 class="jt-display text-3xl font-black uppercase">Alur jadi anggota</h3>
+            <ol class="jt-steps mt-6">
+              {joinSteps.map((s, i) => (
+                <li data-reveal style={`--rd:${i * 0.07}s`}>
+                  <span class="jt-step-n">{i + 1}</span>
+                  <div>
+                    <p class="jt-display text-xl font-extrabold uppercase">{s.title}</p>
+                    <p class="mt-1 text-[15px] text-[var(--cat)]/75">{s.text}</p>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          </div>
+          <div>
+            <h3 class="jt-display text-3xl font-black uppercase">Sering ditanya</h3>
+            <div class="mt-6 grid gap-3">
+              {faqs.map((f) => (
+                <details class="jt-faq">
+                  <summary><span>{f.q}</span><span class="jt-faq-x" aria-hidden="true"></span></summary>
+                  <p>{f.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="jt-footer">
+    <div class="jt-dash jt-dash-static" aria-hidden="true"></div>
+    <div class="mx-auto grid max-w-7xl gap-10 px-4 py-14 sm:px-6 lg:grid-cols-[1.3fr_1fr_1fr]">
+      <div>
+        <p class="jt-display text-5xl leading-[.9] font-black uppercase sm:text-6xl">Sampai jumpa<br /><span class="text-[var(--kuning)]">di kopdar.</span></p>
+        <p class="mt-5 flex items-start gap-2 text-[var(--cat)]/80"><Icon d={I.pin} class="mt-0.5 h-5 w-5 shrink-0 text-[var(--kuning)]" /> {club.basecamp}</p>
+        <p class="mt-2 flex items-center gap-2 text-[var(--cat)]/80"><Icon d={I.clock} class="h-5 w-5 shrink-0 text-[var(--kuning)]" /> Kopdar pusat tiap {club.kopdar}</p>
+      </div>
+      <div>
+        <p class="jt-label jt-label-light">Hubungi humas</p>
+        <a href={general} target="_blank" rel="noopener" class="jt-contact mt-3">
+          <span class="jt-display text-2xl font-black">{club.phone}</span>
+          <span class="flex items-center gap-2 text-sm font-bold text-[var(--kuning)]"><Icon d={I.wa} class="h-4 w-4" /> Chat WhatsApp</span>
+        </a>
+        <p class="mt-4 text-sm text-[var(--cat)]/80">Instagram & TikTok <span class="font-bold text-[var(--cat)]">{club.instagram}</span></p>
+      </div>
+      <div>
+        <p class="jt-label jt-label-light">Jelajahi</p>
+        <ul class="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 font-semibold">
+          {[['tentang', 'Tentang'], ['agenda', 'Agenda'], ['cara-jalan', 'Cara jalan'], ['chapter', 'Chapter'], ['pengurus', 'Pengurus'], ['galeri', 'Galeri'], ['merch', 'Merch'], ['gabung', 'Gabung']].map(([id, label]) => (
+            <li><a href={`#${id}`} class="jt-nav">{label}</a></li>
+          ))}
+        </ul>
+      </div>
+    </div>
+    <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 border-t border-[var(--line-c)] px-4 py-5 text-xs text-[var(--muted)] sm:px-6">
+      <p>© 2026 {club.name}. Komunitas fiktif untuk contoh. Foto dari <a href="https://unsplash.com" target="_blank" rel="noopener" class="underline">Unsplash</a>.</p>
+      <p>Website contoh oleh <a href={url('harga')} class="font-bold text-[var(--cat)] underline">{BRAND}</a></p>
+    </div>
+  </footer>
+
+  <!-- Mobile dock -->
+  <nav class="jt-dock md:hidden" aria-label="Aksi cepat">
+    <a href="#agenda"><Icon d={I.cal} class="h-5 w-5" />Agenda</a>
+    <a href="#gabung" class="is-main"><Icon d={I.users} class="h-5 w-5" />Gabung</a>
+    <a href={general} target="_blank" rel="noopener"><Icon d={I.wa} class="h-5 w-5" />Chat</a>
+  </nav>
+
+  <!-- Lightbox -->
+  <dialog class="jt-lightbox" data-lightbox aria-label="Foto galeri">
+    <figure class="flex h-full flex-col">
+      <div class="flex items-center justify-between gap-3 px-4 py-3">
+        <p class="jt-stencil text-sm text-[var(--muted)]" data-lb-count>1 / 9</p>
+        <button type="button" class="jt-round" data-lb-close aria-label="Tutup"><Icon d={I.x} class="h-5 w-5" /></button>
+      </div>
+      <div class="relative flex min-h-0 flex-1 items-center justify-center px-4">
+        <img data-lb-img alt="" class="max-h-full max-w-full object-contain" />
+        <button type="button" class="jt-round jt-lb-nav left-3" data-lb-prev aria-label="Foto sebelumnya"><Icon d={I.left} class="h-5 w-5" /></button>
+        <button type="button" class="jt-round jt-lb-nav right-3" data-lb-next aria-label="Foto berikutnya"><Icon d={I.right} class="h-5 w-5" /></button>
+      </div>
+      <figcaption class="px-4 py-4 text-center text-[var(--cat)]" data-lb-cap></figcaption>
+    </figure>
+  </dialog>
+</Base>
+
+<style is:global>
+  @layer theme, base, components, utilities;
+  @layer components {
+  .jt {
+    --aspal: #141517;
+    --aspal-2: #1c1e21;
+    --aspal-3: #26292d;
+    --line-c: #33363b;
+    --cat: #f1ede4;
+    --muted: #a19f97;
+    --kuning: #ffc21a;
+    --oranye: #ff6a1a;
+    --semen: #e7e3d9;
+    --ink: #141517;
+    --ink-2: #4a4a46;
+    --f-display: 'Big Shoulders Variable', Impact, 'Arial Narrow', sans-serif;
+    --f-stencil: 'Saira Stencil One', Impact, sans-serif;
+    --f-marker: 'Permanent Marker', 'Comic Sans MS', cursive;
+    background: var(--aspal);
+    color: var(--cat);
+    font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+    overflow-x: clip;
+  }
+  @media (max-width: 767px) { .jt { padding-bottom: calc(68px + env(safe-area-inset-bottom)); } }
+  html:has(.jt) { scroll-padding-top: 4.5rem; }
+  .jt ::selection { background: var(--kuning); color: var(--ink); }
+  .jt :focus-visible { outline: 3px solid var(--kuning); outline-offset: 3px; border-radius: 4px; }
+  .jt-light :focus-visible, .jt-chapter :focus-visible { outline-color: var(--oranye); }
+  .jt h1, .jt h2, .jt h3 { text-wrap: balance; }
+  .jt-display { font-family: var(--f-display); letter-spacing: 0.005em; }
+  .jt-stencil { font-family: var(--f-stencil); font-weight: 400; }
+  .jt-marker { font-family: var(--f-marker); }
+  .jt-h1 { font-size: clamp(3.4rem, 9vw, 7.75rem); line-height: 0.86; }
+  .jt-h2 { font-size: clamp(2.5rem, 5.6vw, 4.6rem); line-height: 0.9; }
+  .jt-eyebrow { display: flex; align-items: center; gap: 0.6rem; font-family: var(--f-stencil); font-size: 0.85rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--kuning); }
+  .jt-eyebrow::before { content: ''; width: 2.2rem; height: 4px; background: repeating-linear-gradient(90deg, currentColor 0 10px, transparent 10px 15px); }
+  .jt-eyebrow-dark { color: var(--ink); }
+  .jt-label { font-family: var(--f-stencil); font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--ink-2); }
+  .jt-label-light { color: var(--muted); }
+
+  /* Buttons */
+  .jt .jt-btn {
+    display: inline-flex; align-items: center; gap: 0.55rem; padding: 0.8rem 1.35rem; border: 3px solid var(--kuning);
+    background: var(--kuning); color: var(--ink); font-family: var(--f-display); font-weight: 900; font-size: 1.1rem; letter-spacing: 0.04em;
+    text-transform: uppercase; line-height: 1; border-radius: 6px; box-shadow: 4px 4px 0 #000;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background-color 0.15s, color 0.15s;
+  }
+  .jt .jt-btn:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 #000; }
+  .jt .jt-btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 #000; }
+  .jt .jt-btn-ghost { background: transparent; color: var(--cat); border-color: var(--cat); }
+  .jt .jt-btn-ghost:hover { background: var(--cat); color: var(--ink); }
+  .jt .jt-btn-dark { background: var(--ink); color: var(--kuning); border-color: var(--ink); box-shadow: 4px 4px 0 var(--kuning); }
+  .jt .jt-btn-dark:hover { box-shadow: 6px 6px 0 var(--kuning); }
+  .jt .jt-btn-sm { padding: 0.55rem 0.95rem; font-size: 0.95rem; box-shadow: 3px 3px 0 #000; }
+  .jt .jt-btn-dark.jt-btn-sm { box-shadow: 3px 3px 0 var(--kuning); }
+  .jt-round { display: grid; place-items: center; width: 2.75rem; height: 2.75rem; border-radius: 999px; border: 2px solid var(--cat); color: var(--cat); background: rgb(20 21 23 / 0.7); transition: background-color 0.15s, color 0.15s; }
+  .jt-round:hover { background: var(--kuning); color: var(--ink); border-color: var(--kuning); }
+
+  /* Header */
+  .jt-header { background: rgb(20 21 23 / 0.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line-c); }
+  .jt-logo { transition: transform 0.6s cubic-bezier(0.3, 1.4, 0.4, 1); }
+  .jt-header a:hover .jt-logo { transform: rotate(-90deg); }
+  .jt-nav { position: relative; font-family: var(--f-display); font-weight: 800; font-size: 1.05rem; letter-spacing: 0.05em; text-transform: uppercase; color: var(--cat); opacity: 0.8; transition: opacity 0.15s, color 0.15s; }
+  .jt-nav:hover, .jt-nav.is-active { opacity: 1; color: var(--kuning); }
+  .jt-nav.is-active::after { content: ''; position: absolute; left: 0; right: 0; bottom: -6px; height: 3px; background: var(--kuning); }
+
+  /* Plates */
+  .jt-plate {
+    display: inline-flex; align-items: center; justify-content: center; padding: 0.3rem 0.7rem 0.25rem; background: #0b0b0c; color: #fff;
+    border: 2px solid #fff; outline: 2px solid #0b0b0c; border-radius: 5px; font-family: var(--f-display); font-weight: 800; font-size: 1.15rem;
+    letter-spacing: 0.12em; line-height: 1; white-space: nowrap;
+  }
+  .jt-plate-sm { font-size: 0.85rem; padding: 0.2rem 0.45rem; min-width: 2.4rem; }
+  .jt-plate-xs { font-size: 0.8rem; padding: 0.15rem 0.4rem; letter-spacing: 0.08em; outline-width: 1px; border-width: 1.5px; }
+
+  /* Hero */
+  .jt-hero { display: flex; flex-direction: column; justify-content: flex-end; min-height: clamp(640px, calc(100svh - 6rem), 900px); }
+  .jt-hero-shade { background: linear-gradient(180deg, rgb(20 21 23 / 0.45) 0%, rgb(20 21 23 / 0.35) 25%, rgb(20 21 23 / 0.78) 60%, var(--aspal) 100%); }
+  @media (min-width: 1024px) { .jt-hero-shade { background: linear-gradient(90deg, rgb(20 21 23 / 0.9) 0%, rgb(20 21 23 / 0.55) 38%, rgb(20 21 23 / 0) 62%), linear-gradient(180deg, transparent 60%, var(--aspal) 100%); } }
+  .jt-settle { animation: jt-settle 2s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+  .jt-hero-body { padding-top: 6rem; padding-bottom: 2.25rem; width: 100%; }
+  .jt-hero-media img { object-position: 50% 50%; }
+  .jt-line { display: block; overflow: hidden; padding-bottom: 0.04em; }
+  .jt-line > span { display: inline-block; animation: jt-up 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: var(--d); }
+  .jt-rise { animation: jt-rise 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) both; animation-delay: var(--d); }
+  .jt-tapes { position: absolute; inset: 0; pointer-events: none; }
+  .jt-tape {
+    position: absolute; display: flex; align-items: flex-start; gap: 0.2rem; font-family: var(--f-marker); font-size: 1.15rem; line-height: 1.1;
+    color: var(--ink); transform: rotate(var(--r)); animation: jt-stick 0.5s cubic-bezier(0.3, 1.5, 0.5, 1) both; animation-delay: var(--d);
+  }
+  .jt-tape > span { background: #efe3c2; padding: 0.35rem 0.75rem; box-shadow: 0 6px 14px -6px rgb(0 0 0 / 0.6); clip-path: polygon(2% 0, 98% 4%, 100% 96%, 0 100%); }
+  .jt-tape-static { position: absolute; left: -0.5rem; bottom: 1.5rem; display: inline-block; background: #efe3c2; padding: 0.4rem 0.85rem; font-size: 1.05rem; box-shadow: 0 6px 14px -6px rgb(0 0 0 / 0.6); animation: none; }
+  @media (min-width: 640px) { .jt-tape-static { left: -1.5rem; } }
+  .jt-arrow { overflow: visible; flex-shrink: 0; margin-top: 0.9rem; }
+  .jt-arrow path { fill: none; stroke: #fff; stroke-width: 3.5; stroke-linecap: round; stroke-linejoin: round; stroke-dasharray: 1; stroke-dashoffset: 1; animation: jt-draw 0.7s ease forwards; animation-delay: calc(var(--d) + 0.3s); filter: drop-shadow(0 1px 3px rgb(0 0 0 / 0.6)); }
+  .jt-flip { transform: scaleX(-1); }
+  .jt-tape-down { flex-direction: column; align-items: center; gap: 0; }
+  .jt-tape-down .jt-arrow { margin-top: 0.15rem; }
+  .jt-dash { height: 6px; background: repeating-linear-gradient(90deg, var(--kuning) 0 46px, transparent 46px 84px); background-size: 84px 6px; animation: jt-dash 0.9s linear infinite; position: relative; }
+  .jt-dash-static { animation-duration: 3s; }
+  .jt-hero-foot { background: rgb(20 21 23 / 0.94); border-bottom: 1px solid var(--line-c); }
+  .jt-odo { display: inline-flex; align-items: center; gap: 3px; padding: 4px; border-radius: 6px; background: #000; box-shadow: inset 0 0 0 1px #3a3d42; }
+  .jt-odo-digit { display: block; width: 1.65rem; height: 2.3rem; overflow: hidden; border-radius: 3px; background: linear-gradient(#24272b, #101113 48%, #1a1c1f 52%, #24272b); font-family: var(--f-display); font-weight: 800; font-size: 1.8rem; color: var(--cat); text-align: center; }
+  .jt-odo-digit:last-of-type { color: var(--kuning); }
+  .jt-odo-strip { display: flex; flex-direction: column; transform: translateY(calc(var(--n) * -2.3rem)); animation: jt-odo 2.4s cubic-bezier(0.2, 0.75, 0.2, 1) both; animation-delay: calc(0.7s + var(--i) * 0.12s); }
+  .jt-odo-strip > span { height: 2.3rem; line-height: 2.3rem; }
+  .jt-odo-unit { padding: 0 0.4rem 0 0.3rem; font-family: var(--f-stencil); font-size: 0.8rem; color: var(--muted); }
+  .jt-next { display: inline-flex; align-items: center; gap: 0.7rem; padding: 0.55rem 0.9rem; border: 1px solid var(--line-c); border-radius: 999px; transition: border-color 0.2s, background-color 0.2s; }
+  .jt-next:hover { border-color: var(--kuning); background: rgb(255 194 26 / 0.06); }
+  .jt-live { width: 0.6rem; height: 0.6rem; border-radius: 999px; background: var(--oranye); box-shadow: 0 0 0 0 rgb(255 106 26 / 0.7); animation: jt-pulse 1.8s infinite; flex-shrink: 0; }
+
+  /* About + rules */
+  .jt-photo-frame { position: relative; border: 3px solid var(--cat); border-radius: 8px; overflow: hidden; box-shadow: 10px 10px 0 var(--kuning); }
+  .jt-photo-frame img { transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .jt-photo-frame:hover img { transform: scale(1.04); }
+  .jt-stats { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.75rem 1.5rem; padding-top: 2rem; border-top: 1px dashed var(--line-c); }
+  .jt-hazard { height: 18px; background: repeating-linear-gradient(-45deg, var(--kuning) 0 16px, var(--ink) 16px 32px); border-block: 2px solid #000; }
+  .jt-hazard-thin { height: 10px; background-size: auto; }
+  .jt-rule { position: relative; padding: 1.5rem 1.4rem 1.6rem; border: 1px solid var(--line-c); border-radius: 8px; background: var(--aspal-2); transition: border-color 0.25s, transform 0.25s; overflow: hidden; }
+  .jt-rule::after { content: ''; position: absolute; left: 0; right: 0; bottom: 0; height: 4px; background: var(--kuning); transform: scaleX(0); transform-origin: left; transition: transform 0.35s ease; }
+  .jt-rule:hover { border-color: var(--kuning); transform: translateY(-4px); }
+  .jt-rule:hover::after { transform: scaleX(1); }
+  .jt-rule-icon { display: grid; place-items: center; width: 3.4rem; height: 3.4rem; border-radius: 8px; background: var(--kuning); color: var(--ink); }
+
+  /* Light sections */
+  .jt-light { background: var(--semen); color: var(--ink); background-image: radial-gradient(rgb(0 0 0 / 0.05) 1px, transparent 1.4px); background-size: 7px 7px; }
+  .jt-filters { display: flex; flex-wrap: wrap; gap: 0.4rem; padding: 4px; border: 2px solid var(--ink); border-radius: 8px; background: #fff; }
+  .jt-filter { padding: 0.45rem 0.9rem; border-radius: 5px; font-family: var(--f-display); font-weight: 900; font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.04em; transition: background-color 0.15s, color 0.15s; }
+  .jt-filter:hover { background: var(--semen); }
+  .jt-filter[aria-pressed='true'] { background: var(--ink); color: var(--kuning); }
+
+  .jt-event {
+    display: grid; grid-template-columns: 1fr; border: 3px solid var(--ink); border-radius: 10px; background: #fff; overflow: hidden;
+    box-shadow: 6px 6px 0 var(--ink); transition: transform 0.25s ease, box-shadow 0.25s ease;
+  }
+  .jt-event:hover { transform: translate(-2px, -2px); box-shadow: 9px 9px 0 var(--ink); }
+  .jt-event[hidden] { display: none; }
+  .jt-event.is-past { opacity: 0.55; }
+  @media (min-width: 640px) { .jt-event { grid-template-columns: 7.5rem minmax(0, 1fr); } }
+  @media (min-width: 1024px) { .jt-event { grid-template-columns: 7.5rem 15rem minmax(0, 1fr) 15.5rem; } }
+  .jt-event-date { display: flex; flex-direction: row; align-items: baseline; gap: 0.6rem; padding: 0.9rem 1.1rem; background: var(--ink); color: var(--cat); }
+  .jt-event-date > :first-child { color: var(--kuning); order: 3; margin-left: auto; }
+  @media (min-width: 640px) {
+    .jt-event-date { flex-direction: column; align-items: flex-start; justify-content: center; gap: 0.2rem; grid-row: span 2; }
+    .jt-event-date > :first-child { order: 0; margin: 0; }
+  }
+  @media (min-width: 1024px) { .jt-event-date { grid-row: auto; } }
+  .jt-event-photo { position: relative; overflow: hidden; aspect-ratio: 16 / 9; }
+  @media (min-width: 640px) { .jt-event-photo { display: none; } }
+  @media (min-width: 1024px) { .jt-event-photo { display: block; aspect-ratio: auto; border-right: 3px solid var(--ink); } }
+  .jt-event-photo img { transition: transform 1s cubic-bezier(0.2, 0.7, 0.2, 1); }
+  .jt-event:hover .jt-event-photo img { transform: scale(1.07); }
+  .jt-event-body { padding: 1.25rem 1.25rem 0.5rem; min-width: 0; }
+  @media (min-width: 1024px) { .jt-event-body { padding: 1.4rem 1.5rem; } }
+  .jt-event-side { display: flex; flex-direction: column; justify-content: space-between; padding: 0.75rem 1.25rem 1.25rem; }
+  @media (min-width: 1024px) { .jt-event-side { padding: 1.4rem 1.4rem; border-left: 2px dashed rgb(20 21 23 / 0.25); } }
+  .jt-level { display: inline-flex; align-items: center; gap: 0.45rem; padding: 0.2rem 0.6rem 0.2rem 0.45rem; border-radius: 4px; background: var(--ink); color: var(--cat); font-family: var(--f-display); font-weight: 900; text-transform: uppercase; font-size: 0.9rem; letter-spacing: 0.05em; }
+  .jt-bars { display: inline-flex; align-items: flex-end; gap: 2px; height: 0.85rem; }
+  .jt-bars i { width: 4px; background: #555; border-radius: 1px; }
+  .jt-bars i:nth-child(1) { height: 40%; } .jt-bars i:nth-child(2) { height: 70%; } .jt-bars i:nth-child(3) { height: 100%; }
+  .jt-level[data-level='Santai'] .on { background: #7bd88f; }
+  .jt-level[data-level='Menengah'] .on { background: var(--kuning); }
+  .jt-level[data-level='Berat'] .on { background: var(--oranye); }
+  .jt-route { display: grid; grid-template-columns: auto minmax(0, 1fr) auto auto; align-items: center; gap: 0.6rem; }
+  .jt-route-pt { font-family: var(--f-display); font-weight: 900; text-transform: uppercase; font-size: 1.05rem; }
+  .jt-route-pt::before { content: ''; display: inline-block; width: 0.6rem; height: 0.6rem; border: 2.5px solid var(--ink); border-radius: 999px; margin-right: 0.35rem; vertical-align: 0.05em; }
+  .jt-route-line { width: 100%; height: 2.4rem; overflow: visible; }
+  .jt-route-line path { fill: none; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+  .jt-route-line .base { stroke: rgb(20 21 23 / 0.25); stroke-width: 3; stroke-dasharray: 2 6; }
+  .jt-route-line .draw { stroke: var(--oranye); stroke-width: 3.5; stroke-dasharray: 1; stroke-dashoffset: 1; transition: stroke-dashoffset 1.1s cubic-bezier(0.3, 0.7, 0.2, 1); }
+  .jt-event:hover .jt-route-line .draw, .jt-event.is-in .jt-route-line .draw { stroke-dashoffset: 0; }
+  .jt-route-km { font-family: var(--f-stencil); font-size: 0.85rem; padding: 0.15rem 0.45rem; background: var(--kuning); border-radius: 3px; }
+  .jt-quota { height: 10px; border-radius: 999px; background: rgb(20 21 23 / 0.12); overflow: hidden; }
+  .jt-quota span { display: block; height: 100%; width: var(--p); background: var(--ink); border-radius: 999px; transform-origin: left; transform: scaleX(0); transition: transform 1.2s cubic-bezier(0.2, 0.7, 0.2, 1) 0.2s; }
+  .jt-quota span.hot { background: var(--oranye); }
+  .jt-event.is-in .jt-quota span, html:not(.js) .jt-quota span { transform: scaleX(1); }
+
+  /* Formation */
+  .jt-formation { background: var(--aspal); border-top: 1px solid var(--line-c); }
+  .jt-role {
+    display: flex; align-items: flex-start; gap: 1rem; width: 100%; padding: 0.85rem 1rem; border: 1px solid var(--line-c); border-radius: 8px;
+    background: var(--aspal-2); text-align: left; transition: border-color 0.2s, background-color 0.2s, transform 0.2s;
+  }
+  .jt-role:hover { border-color: #555; transform: translateX(4px); }
+  .jt-role[aria-pressed='true'] { border-color: var(--kuning); background: rgb(255 194 26 / 0.08); }
+  .jt-role-badge { display: grid; place-items: center; flex-shrink: 0; width: 2.6rem; height: 2.6rem; border-radius: 999px; background: var(--aspal-3); border: 2px solid var(--cat); font-family: var(--f-display); font-weight: 900; font-size: 1rem; }
+  .jt-role[aria-pressed='true'] .jt-role-badge { background: var(--kuning); border-color: var(--kuning); color: var(--ink); }
+  .jt-road-wrap { position: relative; margin-inline: auto; width: min(100%, 22rem); border-radius: 14px; overflow: hidden; border: 3px solid var(--cat); box-shadow: 10px 10px 0 var(--kuning); background: #2c3a2a; }
+  .jt-road { display: block; width: 100%; height: auto; }
+  .jt-lane { animation: jt-lane 0.9s linear infinite; }
+  .jt-bike-in { animation: jt-wobble 2.4s ease-in-out infinite; animation-delay: calc(var(--i) * -0.3s); }
+  .jt-bike .body { fill: var(--aspal-3); stroke: var(--cat); stroke-width: 2.5; transition: fill 0.25s, stroke 0.25s; }
+  .jt-bike .lamp { fill: #fff6c9; opacity: 0.85; }
+  .jt-bike text { fill: var(--cat); transition: fill 0.25s; }
+  .jt-bike.is-on .body { fill: var(--kuning); stroke: #000; }
+  .jt-bike.is-on text { fill: var(--ink); }
+  .jt-bike.is-on .jt-bike-in { animation-name: jt-wobble-on; }
+  .jt-signal { position: relative; display: block; width: 100%; height: 11rem; perspective: 900px; text-align: left; }
+  .jt-signal-face {
+    position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: flex-end; padding: 1rem; border-radius: 10px;
+    backface-visibility: hidden; transition: transform 0.6s cubic-bezier(0.3, 0.9, 0.3, 1);
+  }
+  .jt-signal-front { background: var(--aspal-2); border: 1px solid var(--line-c); color: var(--cat); }
+  .jt-signal-front svg { color: var(--kuning); margin-bottom: auto; }
+  .jt-signal-back { background: var(--kuning); color: var(--ink); transform: rotateY(180deg); justify-content: center; }
+  .jt-signal[aria-pressed='true'] .jt-signal-front { transform: rotateY(-180deg); }
+  .jt-signal[aria-pressed='true'] .jt-signal-back { transform: rotateY(0); }
+  @media (hover: hover) {
+    .jt-signal:hover .jt-signal-front { transform: rotateY(-180deg); }
+    .jt-signal:hover .jt-signal-back { transform: rotateY(0); }
+  }
+
+  /* Chapters */
+  .jt-chapter { background: var(--kuning); color: var(--ink); border-block: 3px solid #000; }
+  .jt-stations { position: relative; display: grid; gap: 0.25rem; }
+  .jt-stations::before { content: ''; position: absolute; left: 0.95rem; top: 0.8rem; bottom: 0.8rem; width: 8px; border-radius: 8px; background: var(--ink); transform-origin: top; transform: scaleY(var(--grow, 1)); transition: transform 1.4s cubic-bezier(0.3, 0.7, 0.2, 1); }
+  .js .jt-line-map:not(.is-in) .jt-stations::before { --grow: 0; }
+  @media (min-width: 768px) {
+    .jt-stations { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 0; }
+    .jt-stations::before { left: 1rem; right: 1rem; top: 0.95rem; bottom: auto; width: auto; height: 8px; transform-origin: left; transform: scaleX(var(--grow, 1)); }
+  }
+  .jt-station { position: relative; display: flex; align-items: center; gap: 0.9rem; width: 100%; padding: 0.35rem 0; text-align: left; }
+  @media (min-width: 768px) { .jt-station { flex-direction: column; align-items: flex-start; gap: 0.75rem; padding: 0; } }
+  .jt-dot { position: relative; z-index: 1; flex-shrink: 0; width: 2.15rem; height: 2.15rem; border-radius: 999px; background: #fff; border: 5px solid var(--ink); transition: transform 0.25s cubic-bezier(0.3, 1.6, 0.5, 1), background-color 0.2s; }
+  .jt-station:hover .jt-dot { transform: scale(1.15); }
+  .jt-station[aria-selected='true'] .jt-dot { background: var(--oranye); transform: scale(1.25); box-shadow: 0 0 0 5px rgb(20 21 23 / 0.15); }
+  .jt-station-text { display: flex; flex-wrap: wrap; align-items: center; gap: 0.45rem; }
+  .jt-station[aria-selected='true'] .jt-station-text .jt-display { text-decoration: underline; text-decoration-thickness: 3px; text-underline-offset: 4px; }
+  .jt-hq { font-family: var(--f-stencil); font-size: 0.65rem; letter-spacing: 0.15em; text-transform: uppercase; padding: 0.1rem 0.35rem; border: 1.5px solid var(--ink); border-radius: 3px; }
+  .jt-chapter-card { display: flex; flex-wrap: wrap; align-items: center; gap: 1.5rem 2rem; padding: 1.5rem; background: #fff; border: 3px solid var(--ink); border-radius: 10px; box-shadow: 8px 8px 0 var(--ink); }
+  .jt-chapter-card.flip { animation: jt-card 0.45s ease; }
+  .jt-chapter-code { display: grid; place-items: center; min-width: 7rem; height: 5.5rem; padding: 0 1rem; background: #0b0b0c; color: #fff; border: 3px solid #fff; outline: 3px solid #0b0b0c; border-radius: 8px; font-size: 3.6rem; letter-spacing: 0.08em; }
+
+  /* Board */
+  .jt-org { position: relative; }
+  .jt-org-top { position: relative; display: grid; gap: 1.25rem; grid-template-columns: repeat(2, minmax(0, 1fr)); max-width: 40rem; margin-inline: auto; }
+  .jt-org-top::after { content: ''; position: absolute; left: 50%; top: 100%; width: 3px; height: 2.5rem; background: var(--ink); }
+  .jt-org-rest { position: relative; display: grid; gap: 1.25rem; grid-template-columns: repeat(1, minmax(0, 1fr)); margin-top: 2.5rem; padding-top: 2.5rem; border-top: 3px solid var(--ink); }
+  @media (min-width: 640px) { .jt-org-rest { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (min-width: 1024px) { .jt-org-rest { grid-template-columns: repeat(3, minmax(0, 1fr)); } }
+  .jt-person { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.1rem; background: #fff; border: 3px solid var(--ink); border-radius: 10px; transition: transform 0.25s, box-shadow 0.25s; }
+  .jt-person:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--ink); }
+  .jt-person-lg { flex-direction: column; align-items: center; text-align: center; padding: 1.5rem 1rem; box-shadow: 6px 6px 0 var(--ink); }
+  .jt-helmet { width: 4.5rem; flex-shrink: 0; overflow: visible; transition: transform 0.4s cubic-bezier(0.3, 1.5, 0.5, 1); }
+  .jt-person-lg .jt-helmet { width: 6rem; }
+  .jt-person:hover .jt-helmet { transform: rotate(-8deg) scale(1.05); }
+  .jt-helmet .shine { transition: transform 0.4s; }
+  .jt-person:hover .jt-helmet .shine { transform: translateX(3px); }
+
+  /* Gallery */
+  .jt-gallery { background: var(--aspal); }
+  .jt-masonry { columns: 1; column-gap: 1rem; }
+  @media (min-width: 640px) { .jt-masonry { columns: 2; } }
+  @media (min-width: 1024px) { .jt-masonry { columns: 3; column-gap: 1.25rem; } }
+  .jt-masonry > li { break-inside: avoid; margin-bottom: 1rem; }
+  @media (min-width: 1024px) { .jt-masonry > li { margin-bottom: 1.25rem; } }
+  .jt-shot { position: relative; display: block; width: 100%; overflow: hidden; border-radius: 8px; border: 1px solid var(--line-c); cursor: zoom-in; }
+  .jt-shot img { transition: transform 0.9s cubic-bezier(0.2, 0.7, 0.2, 1), filter 0.4s; filter: saturate(0.85); }
+  .jt-shot:hover img { transform: scale(1.05); filter: saturate(1.05); }
+  .jt-shot-cap { position: absolute; left: 0; right: 0; bottom: 0; padding: 2rem 1rem 0.9rem; background: linear-gradient(transparent, rgb(0 0 0 / 0.8)); font-weight: 600; font-size: 0.95rem; text-align: left; transform: translateY(100%); transition: transform 0.35s ease; }
+  .jt-shot:hover .jt-shot-cap, .jt-shot:focus-visible .jt-shot-cap { transform: none; }
+  @media (hover: none) { .jt-shot-cap { transform: none; } }
+  .jt-lightbox { width: 100vw; height: 100dvh; max-width: 100vw; max-height: 100dvh; margin: 0; padding: 0; border: 0; background: rgb(10 10 11 / 0.96); color: var(--cat); }
+  .jt-lightbox[open] { animation: jt-fade 0.25s ease; }
+  .jt-lightbox::backdrop { background: rgb(0 0 0 / 0.6); }
+  .jt-lightbox img { border-radius: 6px; animation: jt-zoom 0.35s cubic-bezier(0.2, 0.8, 0.2, 1); }
+  .jt-lb-nav { position: absolute; top: 50%; translate: 0 -50%; }
+
+  /* Merch */
+  .jt-product { display: flex; flex-direction: column; background: #fff; border: 3px solid var(--ink); border-radius: 10px; overflow: hidden; transition: transform 0.25s, box-shadow 0.25s; }
+  .jt-product:hover { transform: translate(-2px, -2px); box-shadow: 7px 7px 0 var(--ink); }
+  .jt-product-art { position: relative; display: grid; place-items: center; aspect-ratio: 5 / 4; padding: 1rem; border-bottom: 3px solid var(--ink); overflow: hidden; }
+  .jt-product-art svg { width: 82%; transition: transform 0.5s cubic-bezier(0.3, 1.4, 0.5, 1); }
+  .jt-product:hover .jt-product-art svg { transform: scale(1.06) rotate(-2deg); }
+  .art-jacket { background: #d9d4c7; } .art-tee { background: var(--kuning); } .art-patch { background: #c9d7cf; } .art-sticker { background: #2a2d31; }
+  .jt-badge { position: absolute; top: 0.75rem; left: 0.75rem; padding: 0.2rem 0.5rem; background: var(--ink); color: var(--kuning); font-family: var(--f-stencil); font-size: 0.68rem; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 3px; }
+  .jt-size { min-width: 2.4rem; padding: 0.3rem 0.5rem; border: 2px solid var(--ink); border-radius: 5px; font-family: var(--f-display); font-weight: 900; transition: background-color 0.15s, color 0.15s; }
+  .jt-size:hover { background: var(--semen); }
+  .jt-size[aria-checked='true'] { background: var(--ink); color: var(--kuning); }
+
+  /* Sponsors */
+  .jt-sponsors { background: var(--aspal); }
+  .jt-marquee { overflow: hidden; mask-image: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+  .jt-marquee-track { display: flex; width: max-content; animation: jt-marquee 34s linear infinite; }
+  .jt-marquee:hover .jt-marquee-track { animation-play-state: paused; }
+  .jt-sponsor { padding: 0 2.25rem; white-space: nowrap; color: var(--cat); opacity: 0.75; transition: opacity 0.2s, color 0.2s; }
+  .jt-sponsor:hover { opacity: 1; color: var(--kuning); }
+  .jt-sponsor.s0 { font-family: var(--f-display); font-weight: 900; font-size: 1.7rem; text-transform: uppercase; }
+  .jt-sponsor.s1 { font-family: var(--f-marker); font-size: 1.45rem; }
+  .jt-sponsor.s2 { font-family: var(--f-stencil); font-size: 1.4rem; letter-spacing: 0.08em; }
+  .jt-sponsor.s3 { font-weight: 700; font-size: 1.35rem; font-style: italic; letter-spacing: -0.01em; }
+
+  /* Join */
+  .jt-join { background: var(--aspal); background-image: radial-gradient(rgb(255 255 255 / 0.035) 1px, transparent 1.4px); background-size: 6px 6px; }
+  .jt-form { padding: 1.5rem; border: 1px solid var(--line-c); border-radius: 12px; background: var(--aspal-2); }
+  @media (min-width: 640px) { .jt-form { padding: 2rem; } }
+  .jt-field { display: grid; gap: 0.4rem; min-width: 0; border: 0; padding: 0; margin: 0; }
+  .jt-field > span, .jt-field > legend { font-family: var(--f-stencil); font-size: 0.75rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .jt-field input, .jt-field select {
+    width: 100%; padding: 0.8rem 0.9rem; border: 2px solid var(--line-c); border-radius: 6px; background: var(--aspal); color: var(--cat);
+    font: inherit; font-size: 1rem; transition: border-color 0.15s, box-shadow 0.15s;
+  }
+  .jt-field input::placeholder { color: #6d6c67; }
+  .jt-field input:focus, .jt-field select:focus { outline: none; border-color: var(--kuning); box-shadow: 0 0 0 3px rgb(255 194 26 / 0.2); }
+  .jt-field [aria-invalid='true'] { border-color: var(--oranye); }
+  #j-plate { font-family: var(--f-display); font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; }
+  .jt-chip { cursor: pointer; }
+  .jt-chip span { display: grid; place-items: center; height: 2.9rem; border: 2px solid var(--line-c); border-radius: 6px; font-family: var(--f-display); font-weight: 900; font-size: 1.2rem; transition: background-color 0.15s, border-color 0.15s, color 0.15s; }
+  .jt-chip:hover span { border-color: #666; }
+  .jt-chip input:checked + span { background: var(--kuning); border-color: var(--kuning); color: var(--ink); }
+  .jt-chip input:focus-visible + span { outline: 3px solid var(--kuning); outline-offset: 2px; }
+  .jt-check { display: flex; align-items: flex-start; gap: 0.7rem; cursor: pointer; font-size: 0.95rem; color: var(--cat); }
+  .jt-check input { flex-shrink: 0; width: 1.3rem; height: 1.3rem; margin-top: 0.1rem; accent-color: var(--kuning); }
+  .jt-check input[aria-invalid='true'] { outline: 2px solid var(--oranye); outline-offset: 2px; }
+  .jt-error { color: var(--oranye); font-weight: 700; }
+  .jt-kta-wrap { perspective: 1200px; }
+  .jt-kta {
+    position: relative; overflow: hidden; aspect-ratio: 1.586; max-width: 30rem; margin-inline: auto; padding: 1.25rem 1.4rem; border-radius: 16px;
+    background: linear-gradient(135deg, #24272b 0%, #141517 55%, #1d1f22 100%); border: 1px solid #3a3d42;
+    box-shadow: 0 30px 60px -25px rgb(0 0 0 / 0.9), inset 0 1px 0 rgb(255 255 255 / 0.08);
+    transform: rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform 0.4s ease; transform-style: preserve-3d;
+    display: flex; flex-direction: column; justify-content: space-between;
+  }
+  .jt-kta.is-tilting { transition: transform 0.08s linear; }
+  @media (max-width: 420px) { .jt-kta { aspect-ratio: auto; } }
+  .jt-kta-stripe { position: absolute; left: 0; right: 0; top: 0; height: 9px; background: repeating-linear-gradient(-45deg, var(--kuning) 0 10px, var(--ink) 10px 20px); }
+  .jt-kta-glare { position: absolute; inset: 0; pointer-events: none; background: radial-gradient(circle at var(--gx, 30%) var(--gy, 20%), rgb(255 255 255 / 0.16), transparent 45%); }
+  .jt-kta-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.5rem 1rem; }
+  .jt-kta-grid dt { font-family: var(--f-stencil); font-size: 0.6rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .jt-kta-grid dd { margin: 0.1rem 0 0; font-weight: 700; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .jt-kta.bump { animation: jt-bump 0.3s ease; }
+  .jt-barcode { width: 9rem; height: 1.7rem; background: repeating-linear-gradient(90deg, var(--cat) 0 2px, transparent 2px 4px, var(--cat) 4px 5px, transparent 5px 8px, var(--cat) 8px 11px, transparent 11px 12px); opacity: 0.8; }
+  .jt-steps { display: grid; gap: 1.25rem; counter-reset: s; }
+  .jt-steps li { display: flex; gap: 1rem; }
+  .jt-step-n { display: grid; place-items: center; flex-shrink: 0; width: 2.75rem; height: 2.75rem; border-radius: 6px; background: var(--kuning); color: var(--ink); font-family: var(--f-display); font-weight: 900; font-size: 1.5rem; }
+  .jt-faq { border: 1px solid var(--line-c); border-radius: 8px; background: var(--aspal-2); transition: border-color 0.2s; }
+  .jt-faq[open] { border-color: var(--kuning); }
+  .jt-faq summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1rem 1.1rem; font-weight: 700; font-size: 1.05rem; }
+  .jt-faq p { padding: 0 1.1rem 1.1rem; color: rgb(241 237 228 / 0.8); }
+  .jt-faq-x { position: relative; flex-shrink: 0; width: 1rem; height: 1rem; }
+  .jt-faq-x::before, .jt-faq-x::after { content: ''; position: absolute; left: 0; right: 0; top: 50%; height: 2.5px; margin-top: -1.25px; background: var(--kuning); transition: transform 0.25s; }
+  .jt-faq-x::after { transform: rotate(90deg); }
+  .jt-faq[open] .jt-faq-x::after { transform: rotate(0); }
+
+  /* Footer & dock */
+  .jt-footer { background: #0e0f10; }
+  .jt-contact { display: flex; flex-direction: column; gap: 0.3rem; padding: 0.9rem 1.1rem; border: 1px solid var(--line-c); border-radius: 8px; transition: border-color 0.2s, transform 0.2s; }
+  .jt-contact:hover { border-color: var(--kuning); transform: translateY(-2px); }
+  .jt-dock {
+    position: fixed; inset: auto 0 0; z-index: 45; display: grid; grid-template-columns: 1fr 1.25fr 1fr; gap: 0.5rem;
+    padding: 0.5rem max(0.75rem, env(safe-area-inset-right)) max(0.5rem, env(safe-area-inset-bottom)) max(0.75rem, env(safe-area-inset-left));
+    background: rgb(14 15 16 / 0.96); backdrop-filter: blur(8px); border-top: 1px solid var(--line-c);
+  }
+  .jt-dock > a { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.15rem; padding: 0.4rem; border-radius: 8px; font-family: var(--f-display); font-weight: 800; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--cat); }
+  .jt-dock .is-main { background: var(--kuning); color: var(--ink); }
+
+  /* Reveal */
+  .js [data-reveal] { opacity: 0; transform: translateY(22px); transition: opacity 0.7s ease, transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1); transition-delay: var(--rd, 0s); }
+  .js [data-reveal].is-in { opacity: 1; transform: none; }
+
+  @keyframes jt-settle { from { transform: scale(1.12); filter: brightness(0.6) saturate(0.5); } to { transform: scale(1); filter: none; } }
+  @keyframes jt-up { from { transform: translateY(105%); } to { transform: none; } }
+  @keyframes jt-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
+  @keyframes jt-stick { from { opacity: 0; transform: rotate(calc(var(--r) - 8deg)) scale(1.4); } to { opacity: 1; transform: rotate(var(--r)) scale(1); } }
+  @keyframes jt-draw { to { stroke-dashoffset: 0; } }
+  @keyframes jt-dash { to { background-position: -84px 0; } }
+  @keyframes jt-odo { from { transform: translateY(0); } }
+  @keyframes jt-pulse { 70% { box-shadow: 0 0 0 8px rgb(255 106 26 / 0); } 100% { box-shadow: 0 0 0 0 rgb(255 106 26 / 0); } }
+  @keyframes jt-lane { to { transform: translateY(52px); } }
+  @keyframes jt-wobble { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(1.5px, -3px); } }
+  @keyframes jt-wobble-on { 0%, 100% { transform: translate(0, 0) scale(1.18); } 50% { transform: translate(1.5px, -3px) scale(1.18); } }
+  @keyframes jt-card { 0% { transform: translateY(0); } 35% { transform: translateY(-6px) rotate(-0.6deg); } 100% { transform: none; } }
+  @keyframes jt-marquee { to { transform: translateX(-50%); } }
+  @keyframes jt-fade { from { opacity: 0; } }
+  @keyframes jt-zoom { from { opacity: 0; transform: scale(0.94); } }
+  @keyframes jt-bump { 50% { scale: 1.015; } }
+
+  @media (prefers-reduced-motion: reduce) {
+    .jt *, .jt *::before, .jt *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+    .jt-dash, .jt-lane, .jt-bike-in, .jt-marquee-track, .jt-live { animation: none !important; }
+    .js [data-reveal] { opacity: 1; transform: none; }
+  }
+  }
+</style>
+
+<script>
+  import { wa, rupiah } from '../../lib/util';
+  import { club, chapters, gallery, photo, srcset } from '../../data/touring';
+
+  const $ = <T extends Element = HTMLElement>(s: string, el: ParentNode = document) => el.querySelector<T>(s)!;
+  const $$ = <T extends Element = HTMLElement>(s: string, el: ParentNode = document) => [...el.querySelectorAll<T>(s)];
+
+  /* ---------- Countdown to each event (WIB) ---------- */
+  const todayWIB = new Intl.DateTimeFormat('en-CA', { timeZone: 'Asia/Jakarta' }).format(new Date());
+  const daysUntil = (iso: string) => Math.round((Date.parse(`${iso}T00:00:00Z`) - Date.parse(`${todayWIB}T00:00:00Z`)) / 864e5);
+  $$('[data-countdown]').forEach((el) => {
+    const d = daysUntil(el.dataset.countdown!);
+    el.textContent = d > 1 ? `${d} hari lagi` : d === 1 ? 'besok' : d === 0 ? 'hari ini' : 'selesai';
+    if (d < 0) el.closest('.jt-event')?.classList.add('is-past');
+  });
+
+  /* ---------- Agenda filter ---------- */
+  const filterBtns = $$<HTMLButtonElement>('[data-filter]');
+  const eventCards = $$('.jt-event');
+  filterBtns.forEach((b) =>
+    b.addEventListener('click', () => {
+      const f = b.dataset.filter;
+      filterBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      let shown = 0;
+      eventCards.forEach((c) => {
+        const on = f === 'semua' || c.dataset.type === f;
+        c.hidden = !on;
+        if (on) {
+          shown++;
+          c.animate([{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 350, delay: shown * 50, easing: 'ease-out', fill: 'backwards' });
+        }
+      });
+      $('[data-events-empty]').classList.toggle('hidden', shown > 0);
+    }),
+  );
+
+  /* ---------- Stat counters ---------- */
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const countUp = (el: HTMLElement) => {
+    const target = Number(el.dataset.count);
+    if (reduce || target === 0) return;
+    const t0 = performance.now();
+    const dur = 1400;
+    const tick = (t: number) => {
+      const p = Math.min(1, (t - t0) / dur);
+      el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))).toLocaleString('id-ID');
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    el.textContent = '0';
+    requestAnimationFrame(tick);
+  };
+
+  /* ---------- Formation roles ---------- */
+  const roleBtns = $$<HTMLButtonElement>('[data-role]');
+  const markers = $$('[data-marker]');
+  const setRole = (id: string) => {
+    roleBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.role === id)));
+    markers.forEach((m) => m.classList.toggle('is-on', m.dataset.marker === id));
+  };
+  roleBtns.forEach((b) => {
+    b.addEventListener('click', () => setRole(b.dataset.role!));
+    b.addEventListener('mouseenter', () => setRole(b.dataset.role!));
+  });
+  setRole('rc');
+
+  /* ---------- Hand signal cards ---------- */
+  $$<HTMLButtonElement>('.jt-signal').forEach((b) =>
+    b.addEventListener('click', () => b.setAttribute('aria-pressed', String(b.getAttribute('aria-pressed') !== 'true'))),
+  );
+
+  /* ---------- Chapters ---------- */
+  const card = $('#chapter-card');
+  const stations = $$<HTMLButtonElement>('[data-chapter]');
+  const showChapter = (id: string, focus = false) => {
+    const c = chapters.find((x) => x.id === id)!;
+    stations.forEach((s) => {
+      const on = s.dataset.chapter === id;
+      s.setAttribute('aria-selected', String(on));
+      s.tabIndex = on ? 0 : -1;
+      if (on && focus) s.focus();
+    });
+    $('[data-c="code"]', card).textContent = c.code;
+    $('[data-c="city"]', card).textContent = c.city;
+    $('[data-c="since"]', card).textContent = `Sejak ${c.since}${c.hq ? ' · pusat' : ''}`;
+    $('[data-c="members"]', card).textContent = String(c.members);
+    $('[data-c="lead"]', card).textContent = c.lead;
+    $('[data-c="kopdar"]', card).textContent = c.kopdar;
+    card.classList.remove('flip');
+    void card.offsetWidth;
+    card.classList.add('flip');
+  };
+  stations.forEach((s, i) => {
+    s.addEventListener('click', () => showChapter(s.dataset.chapter!));
+    s.addEventListener('keydown', (e) => {
+      const k = e.key;
+      if (!['ArrowRight', 'ArrowLeft', 'ArrowDown', 'ArrowUp'].includes(k)) return;
+      e.preventDefault();
+      const n = (i + (k === 'ArrowRight' || k === 'ArrowDown' ? 1 : -1) + stations.length) % stations.length;
+      showChapter(stations[n].dataset.chapter!, true);
+    });
+  });
+  showChapter('solo');
+
+  /* ---------- Gallery lightbox ---------- */
+  const lb = $<HTMLDialogElement>('[data-lightbox]');
+  const lbImg = $<HTMLImageElement>('[data-lb-img]');
+  let li = 0;
+  const showShot = (i: number) => {
+    li = (i + gallery.length) % gallery.length;
+    const g = gallery[li];
+    const h = g.tall ? 1.29 : 0.74;
+    lbImg.src = photo(g.id, 1400, Math.round(1400 * h));
+    lbImg.srcset = srcset(g.id, h, [800, 1400, 2000]);
+    lbImg.sizes = '100vw';
+    lbImg.alt = g.caption;
+    lbImg.style.animation = 'none';
+    void lbImg.offsetWidth;
+    lbImg.style.animation = '';
+    $('[data-lb-cap]').textContent = g.caption;
+    $('[data-lb-count]').textContent = `${li + 1} / ${gallery.length}`;
+  };
+  $$<HTMLButtonElement>('[data-shot]').forEach((b) =>
+    b.addEventListener('click', () => {
+      showShot(Number(b.dataset.shot));
+      lb.showModal();
+    }),
+  );
+  $('[data-lb-prev]').addEventListener('click', () => showShot(li - 1));
+  $('[data-lb-next]').addEventListener('click', () => showShot(li + 1));
+  $('[data-lb-close]').addEventListener('click', () => lb.close());
+  lb.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight') showShot(li + 1);
+    if (e.key === 'ArrowLeft') showShot(li - 1);
+  });
+  let touchX = 0;
+  lb.addEventListener('touchstart', (e) => (touchX = e.touches[0].clientX), { passive: true });
+  lb.addEventListener('touchend', (e) => {
+    const dx = e.changedTouches[0].clientX - touchX;
+    if (Math.abs(dx) > 50) showShot(li + (dx < 0 ? 1 : -1));
+  });
+
+  /* ---------- Merch sizes ---------- */
+  $$('[data-product]').forEach((p) => {
+    const buy = $<HTMLAnchorElement>('[data-buy]', p);
+    $$<HTMLButtonElement>('[data-size]', p).forEach((s, _, all) =>
+      s.addEventListener('click', () => {
+        all.forEach((x) => x.setAttribute('aria-checked', String(x === s)));
+        buy.href = wa(`Halo ${club.short}, saya mau pesan ${buy.dataset.buy} ukuran ${s.dataset.size} (${rupiah(Number(buy.dataset.price))}).`);
+      }),
+    );
+  });
+
+  /* ---------- Join form + live member card ---------- */
+  const form = $<HTMLFormElement>('[data-join]');
+  const kta = $('[data-kta]');
+  const f = {
+    name: $<HTMLInputElement>('#j-name'),
+    nick: $<HTMLInputElement>('#j-nick'),
+    plate: $<HTMLInputElement>('#j-plate'),
+    bike: $<HTMLInputElement>('#j-bike'),
+    chapter: $<HTMLSelectElement>('#j-chapter'),
+    sim: $<HTMLInputElement>('#j-sim'),
+    rules: $<HTMLInputElement>('#j-rules'),
+  };
+  const nextNo = chapters.reduce((s, c) => s + c.members, 0) + 1;
+  /** "ad1234xy" -> "AD 1234 XY" (region letters, numbers, suffix). */
+  const fmtPlate = (v: string) => {
+    const m = v.toUpperCase().replace(/[^A-Z0-9]/g, '').match(/^([A-Z]{0,2})(\d{0,4})([A-Z]{0,3})/);
+    return m ? [m[1], m[2], m[3]].filter(Boolean).join(' ') : '';
+  };
+  const k = (key: string) => $(`[data-k="${key}"]`, kta);
+  let bumpT = 0;
+  const paint = () => {
+    const name = f.name.value.trim();
+    const ch = chapters.find((c) => c.id === f.chapter.value)!;
+    k('name').textContent = name || 'Nama kamu';
+    k('nick').textContent = f.nick.value.trim() ? `"${f.nick.value.trim()}"` : '"panggilan"';
+    k('bike').textContent = f.bike.value.trim() || '—';
+    k('plate').textContent = f.plate.value || `${ch.code} ···· ··`;
+    k('chapter').textContent = ch.city;
+    k('blood').textContent = $<HTMLInputElement>('input[name="blood"]:checked', form).value;
+    k('no').textContent = `${club.abbr}/${ch.code}/${String(nextNo).padStart(4, '0')}`;
+    k('ini').textContent =
+      name
+        .split(/\s+/)
+        .filter(Boolean)
+        .map((w) => w[0])
+        .slice(0, 2)
+        .join('')
+        .toUpperCase() || '?';
+    clearTimeout(bumpT);
+    kta.classList.remove('bump');
+    bumpT = window.setTimeout(() => kta.classList.add('bump'), 10);
+  };
+  f.plate.addEventListener('input', () => {
+    const pos = f.plate.value.length;
+    f.plate.value = fmtPlate(f.plate.value);
+    if (pos >= f.plate.value.length) f.plate.setSelectionRange(f.plate.value.length, f.plate.value.length);
+  });
+  form.addEventListener('input', paint);
+  form.addEventListener('change', paint);
+  paint();
+
+  // Tilt + glare on the card (mouse only).
+  const wrap = $('.jt-kta-wrap');
+  if (!reduce && matchMedia('(hover: hover)').matches) {
+    wrap.addEventListener('pointermove', (e) => {
+      const r = kta.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width;
+      const y = (e.clientY - r.top) / r.height;
+      kta.classList.add('is-tilting');
+      kta.style.setProperty('--ry', `${(x - 0.5) * 16}deg`);
+      kta.style.setProperty('--rx', `${(0.5 - y) * 12}deg`);
+      kta.style.setProperty('--gx', `${x * 100}%`);
+      kta.style.setProperty('--gy', `${y * 100}%`);
+    });
+    wrap.addEventListener('pointerleave', () => {
+      kta.classList.remove('is-tilting');
+      kta.style.setProperty('--ry', '0deg');
+      kta.style.setProperty('--rx', '0deg');
+    });
+  }
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const checks: [HTMLInputElement, boolean, string][] = [
+      [f.name, f.name.value.trim().length >= 3, 'Isi nama lengkap.'],
+      [f.plate, /^[A-Z]{1,2} \d{1,4}( [A-Z]{1,3})?$/.test(f.plate.value), 'Plat nomor belum lengkap, contoh: AD 1234 XY.'],
+      [f.bike, f.bike.value.trim().length >= 3, 'Tulis merek dan tipe motor.'],
+      [f.sim, f.sim.checked, 'Centang SIM C dan STNK.'],
+      [f.rules, f.rules.checked, 'Centang persetujuan pegangan klub.'],
+    ];
+    checks.forEach(([el, ok]) => el.setAttribute('aria-invalid', String(!ok)));
+    const bad = checks.filter(([, ok]) => !ok);
+    const err = $('[data-join-error]');
+    err.hidden = bad.length === 0;
+    err.textContent = bad.map(([, , m]) => m).join(' ');
+    if (bad.length) {
+      bad[0][0].focus();
+      return;
+    }
+    const ch = chapters.find((c) => c.id === f.chapter.value)!;
+    const text = [
+      `Halo ${club.short}, saya mau daftar jadi anggota (dari website):`,
+      '',
+      `Nama: ${f.name.value.trim()}`,
+      f.nick.value.trim() ? `Panggilan: ${f.nick.value.trim()}` : '',
+      `Motor: ${f.bike.value.trim()}`,
+      `Plat: ${f.plate.value}`,
+      `Chapter: ${ch.city}`,
+      `Gol. darah: ${$<HTMLInputElement>('input[name="blood"]:checked', form).value}`,
+      'SIM C & STNK: aktif',
+      '',
+      'Saya setuju dengan empat pegangan klub.',
+    ]
+      .filter((l, i, a) => l !== '' || a[i - 1] !== '')
+      .join('\n');
+    window.open(wa(text), '_blank', 'noopener');
+  });
+
+  /* ---------- Reveal + counters + nav highlight ---------- */
+  const io = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const t = e.target as HTMLElement;
+        t.classList.add('is-in');
+        const n = t.querySelector<HTMLElement>('[data-count]');
+        if (n) countUp(n);
+        io.unobserve(t);
+      }),
+    { rootMargin: '0px 0px -10% 0px' },
+  );
+  $$('[data-reveal], .jt-event').forEach((el) => io.observe(el));
+
+  const navLinks = $$('[data-nav]');
+  const spy = new IntersectionObserver(
+    (entries) =>
+      entries.forEach((e) => {
+        if (e.isIntersecting) navLinks.forEach((a) => a.classList.toggle('is-active', a.dataset.nav === e.target.id));
+      }),
+    { rootMargin: '-45% 0px -50% 0px' },
+  );
+  navLinks.forEach((a) => {
+    const s = document.getElementById(a.dataset.nav!);
+    if (s) spy.observe(s);
+  });
+</script>
