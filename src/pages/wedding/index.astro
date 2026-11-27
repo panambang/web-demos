@@ -1,0 +1,359 @@
+---
+import Base from '../../layouts/Base.astro';
+import { rupiah, wa } from '../../lib/util';
+import { biz, perks, reasons, services, courses, packages, testimonials, steps, areas, hours, faqs } from '../../data/wedding';
+
+const ask = (what: string) => wa(`Halo ${biz.name}, saya lihat dari website. Saya mau tanya ${what}.`);
+const general = ask('paket catering');
+---
+
+<Base
+  title="Laras Rasa Catering — Catering Wedding & Piring Terbang Solo Raya"
+  description="Catering pernikahan, piring terbang, prasmanan, nasi box, dan snack box untuk Solo Raya. Gratis test food. Mulai Rp22 ribu."
+  bodyClass="bg-[#fbf7ef] font-jakarta text-stone-600"
+  themeColor="#064e3b"
+>
+  <header class="sticky top-0 z-40 border-b border-emerald-900/10 bg-[#fbf7ef]/90 backdrop-blur">
+    <div class="mx-auto flex max-w-6xl items-center justify-between gap-3 px-4 py-3 sm:px-5">
+      <a href="#" class="flex items-center gap-2.5">
+        <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-emerald-900 font-serif text-lg font-semibold text-amber-300">L</span>
+        <span class="leading-tight">
+          <span class="block font-serif text-lg font-semibold text-emerald-950">{biz.short}</span>
+          <span class="block text-[11px] tracking-wide text-stone-500">Catering · Solo Raya</span>
+        </span>
+      </a>
+      <nav class="hidden items-center gap-6 text-sm font-semibold text-stone-700 md:flex">
+        <a href="#layanan" class="hover:text-emerald-800">Layanan</a>
+        <a href="#hidangan" class="hover:text-emerald-800">Piring Terbang</a>
+        <a href="#paket" class="hover:text-emerald-800">Paket</a>
+        <a href="#ulasan" class="hover:text-emerald-800">Ulasan</a>
+      </nav>
+      <a href="#cek-tanggal" class="shrink-0 rounded-full bg-emerald-900 px-4 py-2.5 text-sm font-bold text-white hover:bg-emerald-800 sm:px-5">Cek Tanggal</a>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero -->
+    <section class="mx-auto grid max-w-6xl items-center gap-10 px-4 pt-10 pb-16 sm:px-5 md:grid-cols-2 md:pt-16 md:pb-24">
+      <div>
+        <p class="inline-flex items-center gap-2 rounded-full bg-emerald-900/5 px-3 py-1 text-xs font-bold text-emerald-900 ring-1 ring-emerald-900/10">
+          <span class="text-amber-500">★★★★★</span> {biz.rating} dari {biz.reviews} ulasan Google
+        </p>
+        <h1 class="mt-5 font-serif text-4xl leading-[1.08] font-semibold text-emerald-950 sm:text-6xl">{biz.tagline}</h1>
+        <p class="mt-5 max-w-lg text-lg leading-relaxed">
+          Catering pernikahan, piring terbang khas Solo, prasmanan, nasi box, dan snack box. Resepsi mulai{' '}
+          <strong class="text-emerald-950">{rupiah(32_000)}</strong> per tamu.
+        </p>
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#cek-tanggal" class="rounded-full bg-emerald-900 px-7 py-3.5 font-bold text-white shadow-lg shadow-emerald-900/20 hover:bg-emerald-800">Cek Tanggal & Harga</a>
+          <a href="#paket" class="rounded-full bg-white px-7 py-3.5 font-bold text-emerald-950 ring-1 ring-emerald-900/15 hover:ring-amber-400">Lihat Paket</a>
+        </div>
+        <ul class="mt-8 flex flex-wrap gap-x-5 gap-y-2 text-sm font-semibold text-emerald-900">
+          {perks.map((p) => <li class="flex items-center gap-1.5"><span class="text-amber-500">✓</span>{p}</li>)}
+        </ul>
+      </div>
+
+      <div class="relative mx-auto w-full max-w-md">
+        <div class="absolute inset-8 rounded-full bg-amber-200/60 blur-3xl"></div>
+        <svg viewBox="0 0 360 300" class="relative w-full" role="img" aria-label="Ilustrasi meja prasmanan dengan tumpeng dan wadah saji">
+          <circle cx="180" cy="150" r="128" fill="#fff" opacity=".7" />
+          <path d="M70 108c0-10 8-10 8-20M90 108c0-10 8-10 8-20M262 108c0-10 8-10 8-20M282 108c0-10 8-10 8-20" stroke="#d6b36a" stroke-width="3.5" stroke-linecap="round" fill="none" opacity=".7" />
+          <ellipse cx="180" cy="186" rx="62" ry="12" fill="#15803d" />
+          <path d="M180 64l44 118h-88z" fill="#facc15" />
+          <path d="M180 64l44 118h-24z" fill="#eab308" opacity=".55" />
+          <path d="M171 64h18l-9-14z" fill="#dc2626" />
+          <circle cx="146" cy="180" r="7" fill="#f97316" /><circle cx="164" cy="184" r="6" fill="#fff" stroke="#fde047" stroke-width="3" />
+          <circle cx="196" cy="184" r="6" fill="#16a34a" /><circle cx="214" cy="180" r="7" fill="#b45309" />
+          <g>
+            <ellipse cx="84" cy="186" rx="40" ry="8" fill="#a8a29e" />
+            <rect x="48" y="150" width="72" height="34" rx="6" fill="#d6d3d1" />
+            <path d="M46 152a38 34 0 0176 0z" fill="#e7e5e4" stroke="#a8a29e" stroke-width="2" />
+            <circle cx="84" cy="116" r="5" fill="#a8a29e" />
+          </g>
+          <g>
+            <ellipse cx="276" cy="186" rx="40" ry="8" fill="#a8a29e" />
+            <rect x="240" y="150" width="72" height="34" rx="6" fill="#d6d3d1" />
+            <path d="M238 152a38 34 0 0176 0z" fill="#e7e5e4" stroke="#a8a29e" stroke-width="2" />
+            <circle cx="276" cy="116" r="5" fill="#a8a29e" />
+          </g>
+          <rect x="18" y="192" width="324" height="14" rx="4" fill="#064e3b" />
+          <path d="M24 206h312v48c-13 8-26 8-39 0-13 8-26 8-39 0-13 8-26 8-39 0-13 8-26 8-39 0-13 8-26 8-39 0-13 8-26 8-39 0-13 8-26 8-39 0-13 8-26 8-39 0z" fill="#fffbeb" />
+          <path d="M24 214h312" stroke="#d6b36a" stroke-width="3" />
+          <path d="M30 222c25 18 50 18 75 0s50-18 75 0 50 18 75 0 50-18 75 0" stroke="#d6b36a" stroke-width="2.5" fill="none" />
+          <circle cx="67" cy="235" r="5" fill="#f43f5e" /><circle cx="142" cy="235" r="5" fill="#f43f5e" /><circle cx="217" cy="235" r="5" fill="#f43f5e" /><circle cx="292" cy="235" r="5" fill="#f43f5e" />
+        </svg>
+        <div class="absolute top-4 -left-1 rounded-2xl bg-white px-4 py-3 shadow-xl sm:-left-6">
+          <p class="text-xs text-stone-500">Sejak 2016</p>
+          <p class="font-extrabold text-emerald-950">1.200+ acara</p>
+        </div>
+        <div class="absolute right-0 bottom-6 rounded-2xl bg-emerald-900 px-4 py-3 text-white shadow-xl sm:-right-4">
+          <p class="text-xs text-emerald-200">Gratis</p>
+          <p class="font-extrabold">Test food</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Reasons strip -->
+    <section class="border-y border-emerald-900/10 bg-white">
+      <div class="mx-auto grid max-w-6xl grid-cols-2 gap-6 px-4 py-10 sm:px-5 lg:grid-cols-4">
+        {
+          reasons.map((r) => (
+            <div>
+              <p class="font-serif text-2xl font-semibold text-emerald-950">{r.big}</p>
+              <p class="mt-1 text-sm">{r.label}</p>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Services -->
+    <section id="layanan" class="mx-auto max-w-6xl px-4 py-20 sm:px-5">
+      <p class="text-sm font-bold tracking-widest text-amber-600 uppercase">Layanan</p>
+      <h2 class="mt-2 max-w-xl font-serif text-3xl font-semibold text-emerald-950 sm:text-4xl">Dari resepsi sampai nasi box kantor</h2>
+      <div class="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          services.map((s) => (
+            <article class="flex flex-col rounded-3xl bg-white p-6 shadow-sm ring-1 ring-emerald-900/5">
+              <span class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-900 text-amber-300">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-6 w-6" aria-hidden="true"><path d={s.icon} /></svg>
+              </span>
+              <h3 class="mt-5 font-serif text-xl font-semibold text-emerald-950">{s.title}</h3>
+              <p class="mt-2 flex-1 text-sm leading-relaxed">{s.desc}</p>
+              <p class="mt-4 text-xs font-semibold text-amber-700">{s.tags}</p>
+              <a href={ask(`harga ${s.title.toLowerCase()}`)} target="_blank" rel="noopener" class="mt-5 inline-flex items-center gap-1 text-sm font-bold text-emerald-800 hover:text-emerald-600">Tanya harga →</a>
+            </article>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Piring terbang course order -->
+    <section id="hidangan" class="bg-white">
+      <div class="mx-auto grid max-w-6xl gap-12 px-4 py-20 sm:px-5 md:grid-cols-[2fr_3fr]">
+        <div>
+          <p class="text-sm font-bold tracking-widest text-amber-600 uppercase">Piring Terbang</p>
+          <h2 class="mt-2 font-serif text-3xl font-semibold text-emerald-950 sm:text-4xl">Tradisi resepsi Solo, kami yang atur ritmenya</h2>
+          <p class="mt-4 leading-relaxed">
+            Tamu duduk, hidangan datang bergantian dibawa sinoman. Kami menyusun urutan dan jedanya supaya tidak ada tamu yang menunggu terlalu lama, dan
+            dapur siap sampai sesi foto selesai.
+          </p>
+        </div>
+        <ol class="relative space-y-4 border-l-2 border-dashed border-amber-300 pl-6">
+          {
+            courses.map((c, i) => (
+              <li class="relative rounded-2xl bg-[#fbf7ef] p-5">
+                <span class="absolute top-5 -left-[2.35rem] flex h-7 w-7 items-center justify-center rounded-full bg-emerald-900 text-xs font-bold text-amber-300">{i + 1}</span>
+                <div class="flex flex-wrap items-baseline justify-between gap-2">
+                  <h3 class="font-serif text-lg font-semibold text-emerald-950">{c.name}</h3>
+                  <span class="text-xs font-semibold text-amber-700">{c.time}</span>
+                </div>
+                <p class="mt-1 text-sm">{c.dish}</p>
+              </li>
+            ))
+          }
+        </ol>
+      </div>
+    </section>
+
+    <!-- Packages -->
+    <section id="paket" class="bg-emerald-950 text-emerald-100">
+      <div class="mx-auto max-w-6xl px-4 py-20 sm:px-5">
+        <div class="text-center">
+          <p class="text-sm font-bold tracking-widest text-amber-300 uppercase">Paket & Harga</p>
+          <h2 class="mt-2 font-serif text-3xl font-semibold text-white sm:text-4xl">Harga jelas sejak awal</h2>
+          <p class="mx-auto mt-3 max-w-xl text-emerald-200">Menu bisa disesuaikan. Harga final setelah test food dan jumlah tamu pasti.</p>
+        </div>
+        <div class="mt-12 grid gap-6 md:grid-cols-3">
+          {
+            packages.map((p) => (
+              <div class={`relative flex flex-col rounded-3xl p-7 ${p.highlight ? 'bg-amber-50 text-stone-600 shadow-2xl md:-translate-y-3' : 'bg-white/5 ring-1 ring-white/10'}`}>
+                {p.highlight && (
+                  <span class="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-amber-400 px-3 py-1 text-xs font-extrabold text-amber-950">FAVORIT</span>
+                )}
+                <h3 class={`font-serif text-2xl font-semibold ${p.highlight ? 'text-emerald-950' : 'text-white'}`}>{p.name}</h3>
+                <p class="text-sm opacity-80">{p.sub}</p>
+                <p class={`mt-5 text-4xl font-extrabold ${p.highlight ? 'text-emerald-950' : 'text-white'}`}>{rupiah(p.price)}</p>
+                <p class="mt-1 text-sm opacity-80">mulai, {p.unit}</p>
+                <ul class="mt-6 flex-1 space-y-2.5 text-sm">
+                  {p.items.map((i) => (
+                    <li class="flex gap-2"><span class="text-amber-500">✓</span>{i}</li>
+                  ))}
+                </ul>
+                <a
+                  href={ask(`paket ${p.name}`)}
+                  target="_blank"
+                  rel="noopener"
+                  class={`mt-8 rounded-full px-6 py-3 text-center font-bold ${p.highlight ? 'bg-emerald-900 text-white hover:bg-emerald-800' : 'bg-white text-emerald-950 hover:bg-amber-100'}`}
+                >
+                  Tanya via WhatsApp
+                </a>
+              </div>
+            ))
+          }
+        </div>
+        <p class="mt-8 text-center text-sm text-emerald-300">Area layanan: {areas.join(' · ')}</p>
+      </div>
+    </section>
+
+    <!-- Reviews -->
+    <section id="ulasan" class="mx-auto max-w-6xl px-4 py-20 sm:px-5">
+      <p class="text-sm font-bold tracking-widest text-amber-600 uppercase">Ulasan</p>
+      <h2 class="mt-2 font-serif text-3xl font-semibold text-emerald-950 sm:text-4xl">Kata keluarga yang sudah pesta bersama kami</h2>
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        {
+          testimonials.map((t) => (
+            <figure class="flex flex-col rounded-3xl bg-white p-7 shadow-sm ring-1 ring-emerald-900/5">
+              <div class="text-amber-500" aria-label="5 bintang">★★★★★</div>
+              <blockquote class="mt-3 flex-1 leading-relaxed text-stone-700">“{t.text}”</blockquote>
+              <figcaption class="mt-5 text-sm"><span class="font-bold text-emerald-950">{t.name}</span><br />{t.role}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Steps -->
+    <section class="mx-auto max-w-6xl px-4 pb-20 sm:px-5">
+      <h2 class="text-center font-serif text-3xl font-semibold text-emerald-950 sm:text-4xl">Cara pesan</h2>
+      <ol class="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+        {
+          steps.map(([title, desc], i) => (
+            <li class="rounded-3xl bg-white p-6 shadow-sm ring-1 ring-emerald-900/5">
+              <span class="flex h-10 w-10 items-center justify-center rounded-full bg-amber-100 font-extrabold text-amber-700">{i + 1}</span>
+              <h3 class="mt-4 font-bold text-emerald-950">{title}</h3>
+              <p class="mt-1.5 text-sm leading-relaxed">{desc}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <!-- Date check form -> WhatsApp -->
+    <section id="cek-tanggal" class="px-4 pb-20 sm:px-5">
+      <div class="mx-auto grid max-w-5xl gap-10 rounded-[2rem] bg-emerald-900 px-6 py-12 text-emerald-100 shadow-2xl shadow-emerald-900/30 sm:px-10 md:grid-cols-2">
+        <div>
+          <p class="text-sm font-bold tracking-widest text-amber-300 uppercase">Cek Tanggal</p>
+          <h2 class="mt-2 font-serif text-3xl font-semibold text-white sm:text-4xl">Booking sebelum tanggalnya keduluan</h2>
+          <p class="mt-4 leading-relaxed text-emerald-200">Isi form ini. Pesannya langsung terkirim rapi ke WhatsApp admin, jadi Anda tidak perlu menjelaskan ulang.</p>
+        </div>
+        <form id="cek-form" class="space-y-4 rounded-3xl bg-white p-6 text-stone-700" data-biz={biz.name}>
+          <label class="block text-sm font-semibold">Jenis acara
+            <select name="acara" class="mt-1.5 w-full rounded-xl border border-stone-200 bg-white px-3 py-2.5 font-normal focus:border-emerald-700 focus:outline-none">
+              <option>Pernikahan</option>
+              <option>Lamaran / ngunduh mantu</option>
+              <option>Nasi box</option>
+              <option>Snack box</option>
+              <option>Acara lain</option>
+            </select>
+          </label>
+          <div class="grid gap-4 sm:grid-cols-2">
+            <label class="block text-sm font-semibold">Tanggal acara
+              <input name="tanggal" type="date" required class="mt-1.5 w-full rounded-xl border border-stone-200 px-3 py-2.5 font-normal focus:border-emerald-700 focus:outline-none" />
+            </label>
+            <label class="block text-sm font-semibold">Jumlah tamu / box
+              <input name="jumlah" type="number" min="1" inputmode="numeric" placeholder="mis. 300" class="mt-1.5 w-full rounded-xl border border-stone-200 px-3 py-2.5 font-normal focus:border-emerald-700 focus:outline-none" />
+            </label>
+          </div>
+          <label class="block text-sm font-semibold">Lokasi acara
+            <input name="lokasi" type="text" placeholder="mis. Gedung ..., Solo" class="mt-1.5 w-full rounded-xl border border-stone-200 px-3 py-2.5 font-normal focus:border-emerald-700 focus:outline-none" />
+          </label>
+          <label class="block text-sm font-semibold">Nama Anda
+            <input name="nama" type="text" placeholder="Nama" class="mt-1.5 w-full rounded-xl border border-stone-200 px-3 py-2.5 font-normal focus:border-emerald-700 focus:outline-none" />
+          </label>
+          <button type="submit" class="flex w-full items-center justify-center gap-2 rounded-full bg-[#25D366] px-6 py-3.5 font-bold text-white hover:brightness-95">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1112 20z" /></svg>
+            Kirim ke WhatsApp Admin
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="mx-auto max-w-3xl px-4 pb-20 sm:px-5">
+      <h2 class="text-center font-serif text-3xl font-semibold text-emerald-950">Pertanyaan umum</h2>
+      <div class="mt-10 space-y-3">
+        {
+          faqs.map(([q, a]) => (
+            <details class="group rounded-2xl bg-white p-5 shadow-sm ring-1 ring-emerald-900/5">
+              <summary class="flex items-center justify-between font-bold text-emerald-950">
+                {q}<span class="ml-4 text-xl text-amber-500 transition group-open:rotate-45">+</span>
+              </summary>
+              <p class="mt-3 text-sm leading-relaxed">{a}</p>
+            </details>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- Location -->
+    <section id="lokasi" class="bg-white">
+      <div class="mx-auto grid max-w-6xl gap-10 px-4 py-20 sm:px-5 md:grid-cols-2">
+        <div>
+          <p class="text-sm font-bold tracking-widest text-amber-600 uppercase">Lokasi</p>
+          <h2 class="mt-2 font-serif text-3xl font-semibold text-emerald-950 sm:text-4xl">Mampir untuk test food</h2>
+          <p class="mt-5 leading-relaxed">{biz.address}</p>
+          <table class="mt-6 w-full max-w-sm text-sm">
+            <tbody>
+              {
+                hours.map(([d, h]) => (
+                  <tr class="border-b border-stone-100">
+                    <td class="py-2.5 font-semibold text-emerald-950">{d}</td>
+                    <td class="py-2.5 text-right">{h}</td>
+                  </tr>
+                ))
+              }
+            </tbody>
+          </table>
+          <a href={ask('jadwal test food')} target="_blank" rel="noopener" class="mt-8 inline-flex rounded-full bg-emerald-900 px-6 py-3 text-sm font-bold text-white hover:bg-emerald-800">Atur jadwal test food</a>
+        </div>
+        <!-- In a client build this is a Google Maps embed. -->
+        <svg viewBox="0 0 400 280" class="w-full rounded-3xl bg-[#eef2e6]" role="img" aria-label="Ilustrasi peta lokasi">
+          <path d="M0 190C80 170 120 210 200 185S330 150 400 170" stroke="#bfdbfe" stroke-width="18" fill="none" />
+          <path d="M60 0v280M0 80h400M250 0l-60 280M0 240h400" stroke="#fff" stroke-width="12" />
+          <rect x="90" y="100" width="70" height="50" rx="6" fill="#d9e4c8" /><rect x="270" y="100" width="90" height="50" rx="6" fill="#d9e4c8" />
+          <rect x="90" y="20" width="120" height="44" rx="6" fill="#e2e8d5" /><rect x="285" y="200" width="80" height="26" rx="6" fill="#e2e8d5" />
+          <path d="M215 150c0-18 14-30 30-30s30 12 30 30c0 22-30 48-30 48s-30-26-30-48z" fill="#064e3b" />
+          <circle cx="245" cy="150" r="10" fill="#fcd34d" />
+        </svg>
+      </div>
+    </section>
+  </main>
+
+  <footer class="bg-emerald-950 text-sm text-emerald-200">
+    <div class="mx-auto flex max-w-6xl flex-col gap-2 px-4 py-8 sm:flex-row sm:justify-between sm:px-5">
+      <p><span class="font-serif text-base font-semibold text-white">{biz.name}</span> · Catering wedding & acara, Solo Raya</p>
+      <p>© 2026 · Situs demo, bisnis fiktif</p>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp button -->
+  <a href={general} target="_blank" rel="noopener" class="fixed right-4 bottom-4 z-40 flex items-center gap-2 rounded-full bg-[#25D366] py-3 pr-5 pl-4 font-bold text-white shadow-xl hover:scale-105">
+    <svg viewBox="0 0 24 24" class="h-6 w-6" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm0 18a8 8 0 01-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1112 20z" /></svg>
+    Chat Admin
+  </a>
+</Base>
+
+<script>
+  // Date check form: build one tidy WhatsApp message (demo: no number, the visitor picks the chat).
+  const form = document.getElementById('cek-form') as HTMLFormElement | null;
+  form?.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const data = new FormData(form);
+    const get = (k: string) => String(data.get(k) ?? '').trim();
+    const tgl = get('tanggal');
+    const tanggal = tgl
+      ? new Date(`${tgl}T00:00:00`).toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' })
+      : '-';
+    const nama = get('nama');
+    const lines = [
+      `Halo ${form.dataset.biz}${nama ? `, saya ${nama}` : ''}. Saya mau cek ketersediaan:`,
+      `• Acara: ${get('acara')}`,
+      `• Tanggal: ${tanggal}`,
+      `• Jumlah: ${get('jumlah') || '-'}`,
+      `• Lokasi: ${get('lokasi') || '-'}`,
+      'Apakah tanggalnya masih tersedia? Terima kasih.',
+    ];
+    window.open(`https://wa.me/?text=${encodeURIComponent(lines.join('\n'))}`, '_blank', 'noopener');
+  });
+</script>

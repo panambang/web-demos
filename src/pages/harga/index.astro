@@ -2,7 +2,7 @@
 import Base from '../../layouts/Base.astro';
 import Icon from '../../components/Icon.astro';
 import { url, rupiah, PORTFOLIO, BRAND, OWNER } from '../../lib/util';
-import { kategori, included, addons, maintenance, steps, faqs, waTo, EMAIL, mailto } from '../../data/harga';
+import { kategori, included, addons, maintenance, steps, faqs, waTo, EMAIL, mailto, freeSample } from '../../data/harga';
 
 const CHECK = 'M5 12.5l4.5 4.5L19 7.5';
 const ARROW = 'M5 12h14M13 6l6 6-6 6';
@@ -70,6 +70,22 @@ const order = (cat: string, name: string) =>
             </a>
           ))
         }
+      </div>
+
+      <!-- Free sample offer -->
+      <div class="mt-10 flex flex-col gap-4 rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-6 sm:flex-row sm:items-center sm:justify-between">
+        <p class="max-w-2xl text-sm leading-relaxed text-slate-300">
+          <strong class="text-white">Lihat dulu sebelum memutuskan.</strong> Kirim nama usaha dan link TikTok, Instagram, atau Google Maps Anda. Saya
+          buatkan contoh halaman untuk usaha Anda dalam 1–2 hari, gratis dan tanpa kewajiban.
+        </p>
+        <a
+          href={freeSample}
+          target="_blank"
+          rel="noopener"
+          class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-emerald-500 px-5 py-2.5 text-sm font-semibold whitespace-nowrap text-slate-950 hover:bg-emerald-400"
+        >
+          <Icon d={WA_ICON} class="h-4 w-4" /> Minta contoh gratis
+        </a>
       </div>
     </section>
 

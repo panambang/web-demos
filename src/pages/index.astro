@@ -1,6 +1,10 @@
 ---
 import Base from '../layouts/Base.astro';
 import { url, BRAND, OWNER } from '../lib/util';
+import { freeSample } from '../data/harga';
+
+const WA_ICON =
+  'M3.5 20.5l1.3-4.2A8.5 8.5 0 1 1 8 19.6l-4.5.9zM9 8.5c0 3.5 3 6.5 6.5 6.5l1.2-1.4-1.9-1-1 .8c-1.2-.5-2.2-1.5-2.7-2.7l.8-1-1-1.9z';
 
 const demos = [
   {
@@ -10,6 +14,14 @@ const demos = [
     desc: 'Website profil klinik: layanan & harga, dokter, jadwal praktik, lokasi, dan form janji temu yang langsung terkirim ke WhatsApp.',
     features: ['Jadwal praktik', 'Form janji → WhatsApp', 'Harga layanan', 'FAQ'],
     swatch: 'from-teal-500 to-cyan-600',
+  },
+  {
+    href: 'wedding',
+    name: 'Laras Rasa Catering',
+    type: 'Catering Wedding',
+    desc: 'Website catering pernikahan: paket piring terbang & prasmanan, urutan hidangan, ulasan, dan form cek tanggal yang langsung terkirim ke WhatsApp.',
+    features: ['Paket & harga', 'Urutan piring terbang', 'Form cek tanggal → WA', 'Test food'],
+    swatch: 'from-emerald-800 to-amber-500',
   },
   {
     href: 'catering',
@@ -50,18 +62,29 @@ const demos = [
       Website cepat dan aman untuk bisnis Indonesia
     </h1>
     <p class="mt-5 max-w-2xl text-lg leading-relaxed text-slate-400">
-      Empat contoh situs untuk bisnis dan komunitas fiktif. Semua dibuat ringan untuk HP Android dan internet seluler, dengan
+      Lima contoh situs untuk bisnis dan komunitas fiktif. Semua dibuat ringan untuk HP Android dan internet seluler, dengan
       Cloudflare di depannya, dan bisa terhubung ke WhatsApp, QRIS, Virtual Account, serta ongkir kurir lokal.
     </p>
 
-    <a
-      href={url('harga')}
-      class="mt-8 inline-flex items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-sm font-semibold text-slate-950 hover:bg-amber-300"
-    >
-      Lihat daftar harga →
-    </a>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a
+        href={url('harga')}
+        class="inline-flex items-center gap-2 rounded-full bg-amber-400 px-5 py-2.5 text-sm font-semibold text-slate-950 hover:bg-amber-300"
+      >
+        Lihat daftar harga →
+      </a>
+      <a
+        href={freeSample}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex items-center gap-2 rounded-full border border-emerald-400/60 px-5 py-2.5 text-sm font-semibold text-emerald-300 hover:border-emerald-300 hover:text-emerald-200"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true"><path d={WA_ICON} /></svg>
+        Minta contoh gratis untuk usaha Anda
+      </a>
+    </div>
 
-    <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+    <div class="mt-14 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
       {
         demos.map((d) => (
           <a
@@ -86,8 +109,27 @@ const demos = [
       }
     </div>
 
+    <!-- Free sample offer -->
+    <section class="mt-16 flex flex-col gap-6 rounded-3xl border border-emerald-500/30 bg-emerald-500/10 p-8 sm:p-10 md:flex-row md:items-center md:justify-between">
+      <div class="max-w-2xl">
+        <h2 class="text-2xl font-bold text-white sm:text-3xl">Mau lihat contoh untuk usaha Anda sendiri?</h2>
+        <p class="mt-3 leading-relaxed text-slate-300">
+          Kirim nama usaha dan link TikTok, Instagram, atau Google Maps Anda. Saya buatkan contoh halamannya dalam 1–2 hari, gratis dan tanpa kewajiban.
+        </p>
+      </div>
+      <a
+        href={freeSample}
+        target="_blank"
+        rel="noopener"
+        class="inline-flex shrink-0 items-center justify-center gap-2 rounded-full bg-emerald-500 px-6 py-3 font-semibold text-slate-950 hover:bg-emerald-400"
+      >
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5" aria-hidden="true"><path d={WA_ICON} /></svg>
+        Minta contoh gratis
+      </a>
+    </section>
+
     <p class="mt-16 text-sm text-slate-500">
-      Semua nama bisnis, orang, harga, dan ulasan di keempat demo ini fiktif. Foto dan video komunitas mancing dari Unsplash dan Pexels. Dibuat oleh
+      Semua nama bisnis, orang, harga, dan ulasan di kelima demo ini fiktif. Foto dan video komunitas mancing dari Unsplash dan Pexels. Dibuat oleh{' '}
       <a href={url('harga')} class="text-slate-300 underline-offset-2 hover:underline">{BRAND}</a> ({OWNER}).
     </p>
   </main>
